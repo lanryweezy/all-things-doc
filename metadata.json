@@ -1,0 +1,7 @@
+{
+  "name": "All Things Doc",
+  "description": "A comprehensive suite of document and file tools including AI-powered summarization, translation, OCR, and client-side image conversion.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
