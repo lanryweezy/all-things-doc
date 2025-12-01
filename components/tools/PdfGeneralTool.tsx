@@ -547,4 +547,101 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       </div>
     </div>
   );
+};      <div className="flex justify-center space-x-4">
+            <Button 
+            onClick={handleReset} 
+            variant="outline"
+          >
+            Process Another
+          </Button>
+          <Button 
+            className="bg-emerald-600 hover:bg-emerald-700"
+            icon={<Download size={18} />}
+            onClick={handleDownload}
+            disabled={!resultData}
+          >
+            Download File
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <button 
+          onClick={onBack}
+          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+        >
+          <ArrowLeft size={16} className="mr-1" /> Back to Tools
+        </button>
+        <div className="flex items-center space-x-3">
+          <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
+            <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
+          </div>
+          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        {toolId === ToolID.HTML_TO_PDF ? (
+           <div className="mt-4">
+              {renderConfiguration()}
+              <div className="flex justify-end mt-6">
+                 <Button 
+                  onClick={handleProcess} 
+                  isLoading={isProcessing}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                  icon={getActionButtonIcon()}
+                >
+                  Convert URL
+                </Button>
+              </div>
+           </div>
+        ) : (!file && toolId !== ToolID.PDF_MERGE && toolId !== ToolID.MERGE_WORD) ? (
+           <FileUpload 
+            accept={getAcceptType()}
+            selectedFile={file}
+            onFileSelect={setFile}
+            onClear={() => setFile(null)}
+            label={getUploadLabel()}
+            capture={toolId === ToolID.PDF_SCAN ? 'environment' : undefined}
+          />
+        ) : (
+          <div>
+            {(toolId !== ToolID.PDF_MERGE && toolId !== ToolID.MERGE_WORD) && (
+              <FileUpload 
+                accept={getAcceptType()}
+                selectedFile={file}
+                onFileSelect={setFile}
+                onClear={() => setFile(null)}
+              />
+            )}
+            
+            <div className="mt-8">
+              {renderConfiguration()}
+              
+              <div className="flex justify-end mt-6">
+                 <Button 
+                  onClick={handleProcess} 
+                  isLoading={isProcessing}
+                  className={`${toolInfo.color.replace('text-', 'bg-').replace('600', '600')} hover:opacity-90 text-white`}
+                  icon={getActionButtonIcon()}
+                >
+                  {getActionLabel()}
+                </Button>
+              </div>
+              
+              {(toolId === ToolID.PDF_EDIT || toolId === ToolID.PDF_REDACT || toolId === ToolID.PDF_ORGANIZE) && (
+                <p className="text-xs text-center text-slate-400 mt-4">
+                  * Note: For this demo, we simulate the complex interactive editor load time.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };

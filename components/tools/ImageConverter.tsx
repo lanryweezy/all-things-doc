@@ -3,6 +3,7 @@ import { ArrowLeft, Download, RefreshCcw, Image as ImageIcon } from 'lucide-reac
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { convertImage } from '../../services/imageService';
+import * as pdfService from '../../services/pdfService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -12,9 +13,10 @@ interface ImageConverterProps {
 
 export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
   const [file, setFile] = useState<File | null>(null);
-  const [targetFormat, setTargetFormat] = useState<'jpeg' | 'png' | 'webp'>('png');
+  const [targetFormat, setTargetFormat] = useState<'jpeg' | 'png' | 'webp' | 'pdf'>('png');
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [resultData, setResultData] = useState<Uint8Array | null>(null);
 
   const handleConvert = async () => {
     if (!file) return;
@@ -22,9 +24,19 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
     try {
       // Small delay to allow UI to update
       await new Promise(r => setTimeout(r, 500));
-      const mimeType = `image/${targetFormat}` as 'image/jpeg' | 'image/png' | 'image/webp';
-      const url = await convertImage(file, mimeType);
-      setResultUrl(url);
+      
+      if (targetFormat === 'pdf') {
+        // Convert image to PDF
+        const pdfData = await pdfService.imageToPdf(file);
+        setResultData(pdfData);
+        setResultUrl(null); // We'll use resultData for PDF download
+      } else {
+        // Convert image to another image format
+        const mimeType = `image/${targetFormat}` as 'image/jpeg' | 'image/png' | 'image/webp';
+        const url = await convertImage(file, mimeType);
+        setResultUrl(url);
+        setResultData(null); // We'll use resultUrl for image download
+      }
     } catch (error) {
       console.error(error);
       alert('Failed to convert image');
@@ -36,6 +48,30 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
   const handleReset = () => {
     setFile(null);
     setResultUrl(null);
+    setResultData(null);
+  };
+
+  const handleDownload = () => {
+    if (targetFormat === 'pdf' && resultData) {
+      // Download PDF
+      const blob = new Blob([resultData], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `converted-image.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } else if (resultUrl) {
+      // Download image
+      const a = document.createElement('a');
+      a.href = resultUrl;
+      a.download = `converted-image.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   };
 
   const toolInfo = TOOLS[ToolID.IMAGE_CONVERTER];
@@ -58,7 +94,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        {!resultUrl ? (
+        {!resultUrl && !resultData ? (
           <div className="space-y-6">
             <FileUpload 
               accept="image/*"
@@ -75,11 +111,11 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                     <label className="block text-sm font-medium text-doc-slate mb-2">
                       Convert to
                     </label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {['jpeg', 'png', 'webp'].map((fmt) => (
+                    <div className="grid grid-cols-4 gap-3">
+                      {['jpeg', 'png', 'webp', 'pdf'].map((fmt) => (
                         <button
                           key={fmt}
-                          onClick={() => setTargetFormat(fmt as 'jpeg' | 'png' | 'webp')}
+                          onClick={() => setTargetFormat(fmt as 'jpeg' | 'png' | 'webp' | 'pdf')}
                           className={`
                             py-3 px-4 rounded-lg text-sm font-semibold uppercase transition-all
                             ${targetFormat === fmt 
@@ -88,7 +124,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                             }
                           `}
                         >
-                          {fmt === 'jpeg' ? 'JPG' : fmt}
+                          {fmt === 'jpeg' ? 'JPG' : fmt === 'pdf' ? 'PDF' : fmt}
                         </button>
                       ))}
                     </div>
@@ -111,7 +147,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
               <ImageIcon size={32} />
             </div>
             <h2 className="text-2xl font-bold text-doc-slate mb-2">Conversion Complete!</h2>
-            <p className="text-slate-500 mb-8">Your image is ready to download.</p>
+            <p className="text-slate-500 mb-8">Your {targetFormat === 'pdf' ? 'PDF' : 'image'} is ready to download.</p>
             
             <div className="flex justify-center space-x-4">
                <Button 
@@ -120,13 +156,12 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
               >
                 Convert Another
               </Button>
-              <a 
-                href={resultUrl} 
-                download={`converted-image.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`}
+              <Button 
+                onClick={handleDownload}
                 className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-doc-red text-white hover:bg-[#c0392b] shadow-sm hover:shadow"
               >
-                <Download size={18} className="mr-2" /> Download Image
-              </a>
+                <Download size={18} className="mr-2" /> Download {targetFormat === 'pdf' ? 'PDF' : 'Image'}
+              </Button>
             </div>
           </div>
         )}
