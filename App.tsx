@@ -9,7 +9,9 @@ import { PdfGeneralTool } from './components/tools/PdfGeneralTool';
 import { DocChat } from './components/tools/DocChat';
 import { TextToSpeech } from './components/tools/TextToSpeech';
 import { DataConverter } from './components/tools/DataConverter';
+import { SeoHelmet } from './components/SeoHelmet';
 import { ToolID } from './types';
+import { TOOLS } from './constants';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ToolID | null>(null);
@@ -111,6 +113,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
+      <SeoHelmet tool={activeTool ? TOOLS[activeTool] : undefined} />
       <Header 
         goHome={() => setActiveTool(null)} 
         activeTool={activeTool}
@@ -120,6 +123,11 @@ const App: React.FC = () => {
       </main>
       <footer className="bg-slate-900 text-slate-400 py-6 text-center text-sm">
         <p>&copy; {new Date().getFullYear()} All Things Doc. Powered by Gemini.</p>
+        <div className="mt-2 text-xs text-slate-600 flex justify-center space-x-4">
+          <span>Privacy Policy</span>
+          <span>Terms of Use</span>
+          <span>Sitemap</span>
+        </div>
       </footer>
     </div>
   );

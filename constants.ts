@@ -48,6 +48,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.AI_TOOLS,
+    keywords: ['chat with pdf', 'ask document questions', 'ai document analysis', 'summarize pdf chat']
   },
   [ToolID.MAGIC_SUMMARIZER]: {
     id: ToolID.MAGIC_SUMMARIZER,
@@ -57,6 +58,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-doc-red',
     bgColor: 'bg-red-100',
     category: ToolCategory.AI_TOOLS,
+    keywords: ['summarize text', 'text summarizer', 'ai summary generator', 'shorten article']
   },
   [ToolID.SMART_OCR]: {
     id: ToolID.SMART_OCR,
@@ -66,6 +68,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-cyan-600',
     bgColor: 'bg-cyan-100',
     category: ToolCategory.AI_TOOLS,
+    keywords: ['image to text', 'online ocr', 'extract text from image', 'scanned document to text']
   },
   [ToolID.UNIVERSAL_TRANSLATOR]: {
     id: ToolID.UNIVERSAL_TRANSLATOR,
@@ -75,6 +78,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-purple-600',
     bgColor: 'bg-purple-100',
     category: ToolCategory.AI_TOOLS,
+    keywords: ['translate document', 'language translator', 'free text translator']
   },
   [ToolID.CODE_MORPH]: {
     id: ToolID.CODE_MORPH,
@@ -84,6 +88,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-amber-600',
     bgColor: 'bg-amber-100',
     category: ToolCategory.AI_TOOLS,
+    keywords: ['code converter', 'convert python to javascript', 'code translator']
   },
   [ToolID.GRAMMAR_POLISH]: {
     id: ToolID.GRAMMAR_POLISH,
@@ -93,6 +98,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-rose-500',
     bgColor: 'bg-rose-100',
     category: ToolCategory.AI_TOOLS,
+    keywords: ['grammar checker', 'fix spelling', 'improve writing ai']
   },
 
   // --- PDF TOOLS (Merged Utilities & Converters) ---
@@ -104,6 +110,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-fuchsia-600',
     bgColor: 'bg-fuchsia-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['merge pdf', 'combine pdf files', 'pdf joiner', 'merge pdf online free']
   },
   [ToolID.PDF_SPLIT]: {
     id: ToolID.PDF_SPLIT,
@@ -113,6 +120,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-fuchsia-600',
     bgColor: 'bg-fuchsia-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['split pdf', 'extract pdf pages', 'separate pdf pages']
   },
   [ToolID.PDF_COMPRESS]: {
     id: ToolID.PDF_COMPRESS,
@@ -122,6 +130,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-green-600',
     bgColor: 'bg-green-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['compress pdf', 'reduce pdf size', 'shrink pdf', 'optimize pdf']
   },
   [ToolID.PDF_EDIT]: {
     id: ToolID.PDF_EDIT,
@@ -131,6 +140,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-blue-500',
     bgColor: 'bg-blue-50',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['edit pdf', 'pdf editor online', 'annotate pdf']
   },
   [ToolID.PDF_SIGN]: {
     id: ToolID.PDF_SIGN,
@@ -140,6 +150,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-slate-700',
     bgColor: 'bg-slate-200',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['sign pdf', 'esignature', 'digital signature pdf']
   },
   [ToolID.PDF_ORGANIZE]: {
     id: ToolID.PDF_ORGANIZE,
@@ -158,6 +169,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-fuchsia-600',
     bgColor: 'bg-fuchsia-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['scan to pdf', 'mobile scanner', 'document scanner']
   },
   [ToolID.PDF_PROTECT]: {
     id: ToolID.PDF_PROTECT,
@@ -167,6 +179,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-slate-700',
     bgColor: 'bg-slate-200',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['password protect pdf', 'encrypt pdf', 'lock pdf']
   },
   [ToolID.PDF_UNLOCK]: {
     id: ToolID.PDF_UNLOCK,
@@ -176,6 +189,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-slate-700',
     bgColor: 'bg-slate-200',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['unlock pdf', 'remove pdf password', 'decrypt pdf']
   },
   [ToolID.PDF_ROTATE]: {
     id: ToolID.PDF_ROTATE,
@@ -248,6 +262,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-blue-600',
     bgColor: 'bg-blue-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['pdf to word', 'convert pdf to docx', 'pdf to doc converter']
   },
   [ToolID.PDF_TO_EXCEL]: {
     id: ToolID.PDF_TO_EXCEL,
@@ -257,6 +272,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['pdf to excel', 'convert pdf to xlsx', 'extract table from pdf']
   },
   [ToolID.PDF_TO_POWERPOINT]: {
     id: ToolID.PDF_TO_POWERPOINT,
@@ -266,6 +282,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-orange-600',
     bgColor: 'bg-orange-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['pdf to ppt', 'convert pdf to powerpoint']
   },
   [ToolID.PDF_OCR]: {
     id: ToolID.PDF_OCR,
@@ -275,6 +292,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-cyan-600',
     bgColor: 'bg-cyan-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['ocr pdf', 'make pdf searchable', 'recognize text in pdf']
   },
   [ToolID.GENERIC_TO_PDF]: {
     id: ToolID.GENERIC_TO_PDF,
@@ -284,6 +302,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['convert to pdf', 'file to pdf', 'create pdf']
   },
   [ToolID.WORD_TO_PDF]: {
     id: ToolID.WORD_TO_PDF,
@@ -293,6 +312,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['word to pdf', 'docx to pdf']
   },
   [ToolID.POWERPOINT_TO_PDF]: {
     id: ToolID.POWERPOINT_TO_PDF,
@@ -302,6 +322,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['ppt to pdf', 'powerpoint to pdf']
   },
   [ToolID.EXCEL_TO_PDF]: {
     id: ToolID.EXCEL_TO_PDF,
@@ -311,6 +332,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['excel to pdf', 'xls to pdf']
   },
   [ToolID.JPG_TO_PDF]: {
     id: ToolID.JPG_TO_PDF,
@@ -320,6 +342,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['jpg to pdf', 'image to pdf', 'convert photo to pdf']
   },
   [ToolID.HTML_TO_PDF]: {
     id: ToolID.HTML_TO_PDF,
@@ -329,6 +352,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['html to pdf', 'webpage to pdf', 'url to pdf']
   },
   [ToolID.PDF_TO_JPG]: {
     id: ToolID.PDF_TO_JPG,
@@ -338,6 +362,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-100',
     category: ToolCategory.PDF_TOOLS,
+    keywords: ['pdf to jpg', 'pdf to image']
   },
   [ToolID.PDF_TO_PNG]: {
     id: ToolID.PDF_TO_PNG,
@@ -466,6 +491,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-blue-700',
     bgColor: 'bg-blue-100',
     category: ToolCategory.OFFICE_TOOLS,
+    keywords: ['merge word documents', 'combine docx']
   },
   [ToolID.COMPRESS_WORD]: {
     id: ToolID.COMPRESS_WORD,
@@ -475,6 +501,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-blue-700',
     bgColor: 'bg-blue-100',
     category: ToolCategory.OFFICE_TOOLS,
+    keywords: ['compress word', 'reduce docx size', 'shrink word document']
   },
   [ToolID.COMPRESS_EXCEL]: {
     id: ToolID.COMPRESS_EXCEL,
@@ -484,6 +511,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-emerald-700',
     bgColor: 'bg-emerald-100',
     category: ToolCategory.OFFICE_TOOLS,
+    keywords: ['compress excel', 'reduce xlsx size', 'shrink excel file']
   },
   [ToolID.COMPRESS_PPT]: {
     id: ToolID.COMPRESS_PPT,
@@ -493,6 +521,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-orange-700',
     bgColor: 'bg-orange-100',
     category: ToolCategory.OFFICE_TOOLS,
+    keywords: ['compress powerpoint', 'reduce ppt size', 'shrink presentation']
   },
 
   // --- DEVELOPER TOOLS ---
@@ -504,6 +533,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-cyan-700',
     bgColor: 'bg-cyan-100',
     category: ToolCategory.DEVELOPER_TOOLS,
+    keywords: ['json to csv', 'convert json']
   },
   [ToolID.CSV_TO_JSON]: {
     id: ToolID.CSV_TO_JSON,
@@ -542,6 +572,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-pink-600',
     bgColor: 'bg-pink-100',
     category: ToolCategory.MEDIA_TOOLS,
+    keywords: ['text to speech', 'free tts', 'read text aloud']
   },
   [ToolID.IMAGE_CONVERTER]: {
     id: ToolID.IMAGE_CONVERTER,
@@ -551,6 +582,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-teal-600',
     bgColor: 'bg-teal-100',
     category: ToolCategory.MEDIA_TOOLS,
+    keywords: ['image converter', 'jpg to png', 'png to jpg', 'webp converter']
   },
 };
 

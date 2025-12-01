@@ -101,6 +101,7 @@ export interface ToolConfig {
   color: string; // Tailwind text color class
   bgColor: string; // Tailwind bg color class
   category: ToolCategory;
+  keywords?: string[]; // New SEO field
 }
 
 export interface ProcessingState {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Download, RefreshCcw, Lock, Stamp, Layers, FileOutput, PenTool, CheckCircle, RotateCw, RotateCcw, Unlock, Link, Image as ImageIcon, Scan, Scissors, GitCompare, EyeOff, FilePlus, FileSpreadsheet, FileType2, Presentation, Minimize2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
@@ -18,6 +18,20 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const [isComplete, setIsComplete] = useState(false);
 
   const toolInfo = TOOLS[toolId];
+
+  // Initialize defaults based on tool type
+  useEffect(() => {
+    if (
+      toolId === ToolID.PDF_COMPRESS || 
+      toolId === ToolID.COMPRESS_WORD || 
+      toolId === ToolID.COMPRESS_EXCEL || 
+      toolId === ToolID.COMPRESS_PPT
+    ) {
+      setParamValue('Recommended');
+    } else {
+      setParamValue('');
+    }
+  }, [toolId]);
 
   const handleProcess = async () => {
     // Validation
@@ -44,7 +58,18 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const handleReset = () => {
     setFile(null);
     setSecondaryFiles([]);
-    setParamValue('');
+    // Re-initialize default if needed, or clear. useEffect will handle switching tools, 
+    // but for reset we might want to keep the default.
+    if (
+      toolId === ToolID.PDF_COMPRESS || 
+      toolId === ToolID.COMPRESS_WORD || 
+      toolId === ToolID.COMPRESS_EXCEL || 
+      toolId === ToolID.COMPRESS_PPT
+    ) {
+      setParamValue('Recommended');
+    } else {
+      setParamValue('');
+    }
     setIsComplete(false);
   };
 
