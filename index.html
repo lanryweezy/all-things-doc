@@ -3,23 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>All Things Doc - Free Online PDF & Document Tools</title>
-    <meta name="description" content="All-in-one free online document tools. Merge PDF, Split PDF, Compress PDF, convert PDF to Word, Excel, PowerPoint, and more. No installation required.">
-    <meta name="keywords" content="pdf converter, free pdf tools, merge pdf, split pdf, pdf to word, ocr, image converter, text to speech, ai document tools">
-    <meta name="author" content="All Things Doc">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://allthingsdoc.com/">
-    <meta property="og:title" content="All Things Doc - Free Online PDF & Document Tools">
-    <meta property="og:description" content="Manage your documents efficiently. Convert, edit, and optimize PDF, Word, Excel, and images with AI-powered tools.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="All Things Doc - Free Online PDF & Document Tools">
-    <meta property="twitter:description" content="Manage your documents efficiently. Convert, edit, and optimize PDF, Word, Excel, and images with AI-powered tools.">
-    
+    <title>All Things Doc - AI-Powered Document Processing Tools</title>
+    <meta name="description" content="A comprehensive suite of document and file tools including AI-powered summarization, translation, OCR, and client-side image conversion.">
+    <meta name="keywords" content="PDF tools, document processing, AI tools, OCR, text conversion, file conversion">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -77,20 +63,21 @@
     }
     </script>
 
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1"
+    "react": "https://esm.sh/react@19.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.2.0/client",
+    "react-dom": "https://esm.sh/react-dom@19.2.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.555.0",
+    "@google/genai": "https://esm.sh/@google/generative-ai@1.30.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1"
   }
 }
 </script>
 </head>
   <body class="bg-slate-50 text-doc-slate antialiased">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
