@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Download, RefreshCcw, Lock, Stamp, Layers, FileOutput, PenTool, CheckCircle, RotateCw, RotateCcw, Unlock, Link, Image as ImageIcon, Scan, Scissors, GitCompare, EyeOff } from 'lucide-react';
+import { ArrowLeft, Download, RefreshCcw, Lock, Stamp, Layers, FileOutput, PenTool, CheckCircle, RotateCw, RotateCcw, Unlock, Link, Image as ImageIcon, Scan, Scissors, GitCompare, EyeOff, FilePlus } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { TOOLS } from '../../constants';
@@ -56,6 +56,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
     if (toolId === ToolID.EXCEL_TO_PDF) return ".xls,.xlsx";
     if (toolId === ToolID.POWERPOINT_TO_PDF) return ".ppt,.pptx";
     if (toolId === ToolID.JPG_TO_PDF || toolId === ToolID.PDF_SCAN) return "image/*";
+    if (toolId === ToolID.GENERIC_TO_PDF) return "*/*";
     return "application/pdf";
   };
 
@@ -63,8 +64,10 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
     if (toolId === ToolID.WORD_TO_PDF) return "Upload Word Document";
     if (toolId === ToolID.EXCEL_TO_PDF) return "Upload Excel Spreadsheet";
     if (toolId === ToolID.POWERPOINT_TO_PDF) return "Upload PowerPoint Presentation";
-    if (toolId === ToolID.JPG_TO_PDF || toolId === ToolID.PDF_SCAN) return "Upload Image";
+    if (toolId === ToolID.JPG_TO_PDF) return "Upload Image";
+    if (toolId === ToolID.PDF_SCAN) return "Capture or Upload Document";
     if (toolId === ToolID.PDF_COMPARE) return "Upload First PDF";
+    if (toolId === ToolID.GENERIC_TO_PDF) return "Upload Any File";
     return "Upload PDF Document";
   };
 
@@ -257,8 +260,10 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       case ToolID.PDF_SPLIT: return <Scissors size={18} />;
       case ToolID.PDF_COMPARE: return <GitCompare size={18} />;
       case ToolID.PDF_REDACT: return <EyeOff size={18} />;
+      case ToolID.GENERIC_TO_PDF: return <FilePlus size={18} />;
       case ToolID.JPG_TO_PDF:
       case ToolID.PDF_TO_JPG: 
+      case ToolID.PDF_TO_PNG:
       case ToolID.PDF_SCAN: return <ImageIcon size={18} />;
       default: return <FileOutput size={18} />;
     }
@@ -268,6 +273,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
     if (toolId === ToolID.PDF_EDIT) return "Open Editor";
     if (toolId === ToolID.PDF_SCAN) return "Save as PDF";
     if (toolId === ToolID.HTML_TO_PDF) return "Convert URL";
+    if (toolId === ToolID.GENERIC_TO_PDF) return "Convert to PDF";
     return `Process ${toolInfo.title.replace('PDF', '').replace('to', '')}`;
   };
 
@@ -345,6 +351,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
             onFileSelect={setFile}
             onClear={() => setFile(null)}
             label={getUploadLabel()}
+            capture={toolId === ToolID.PDF_SCAN ? 'environment' : undefined}
           />
         ) : (
           <div>

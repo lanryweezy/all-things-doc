@@ -7,6 +7,7 @@ import { fileToBase64 } from '../../services/imageService';
 import { processPdf } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import { jsPDF } from "jspdf";
 
 interface PdfAiToolProps {
   toolId: ToolID.PDF_TO_WORD | ToolID.PDF_TO_EXCEL | ToolID.PDF_TO_POWERPOINT | ToolID.PDF_OCR;
@@ -18,6 +19,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<'markdown' | 'text'>('markdown');
+  const [progress, setProgress] = useState<number | undefined>(undefined);
   
   const toolInfo = TOOLS[toolId];
 
@@ -25,6 +27,19 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
     if (!file) return;
     setIsProcessing(true);
     setResult(null);
+    setProgress(0);
+
+    // Simulate progress while waiting for API
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev === undefined) return 0;
+        // Cap artificial progress at 90% until real response comes back
+        if (prev >= 90) return prev;
+        // Random increment between 5-15%
+        return prev + Math.floor(Math.random() * 10) + 5;
+      });
+    }, 600);
+
     try {
       const base64 = await fileToBase64(file);
       let mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' = 'WORD';
@@ -33,12 +48,21 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       if (toolId === ToolID.PDF_OCR) mode = 'OCR';
 
       const output = await processPdf(base64, mode, outputFormat);
+      
+      clearInterval(progressInterval);
+      setProgress(100);
+      
+      // Small delay to let user see 100% completion
+      await new Promise(r => setTimeout(r, 500));
+      
       setResult(output);
     } catch (error) {
       console.error(error);
       setResult("Error processing PDF. Please ensure it is a valid PDF file and try again.");
     } finally {
       setIsProcessing(false);
+      clearInterval(progressInterval);
+      setProgress(undefined);
     }
   };
 
@@ -64,6 +88,36 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  };
+
+  const handleDownloadPdf = () => {
+    if (!result) return;
+    
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 20;
+    const maxWidth = pageWidth - (margin * 2);
+    
+    doc.setFont("helvetica");
+    doc.setFontSize(12);
+    
+    // Split text into lines that fit the page width
+    const splitText = doc.splitTextToSize(result, maxWidth);
+    
+    let y = margin;
+    const lineHeight = 7;
+    
+    splitText.forEach((line: string) => {
+      if (y > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    });
+    
+    doc.save("searchable_document.pdf");
   };
 
   const getActionIcon = () => {
@@ -117,9 +171,10 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
           onFileSelect={(f) => { setFile(f); setResult(null); }}
           onClear={() => { setFile(null); setResult(null); }}
           label="Upload a PDF Document"
+          processingProgress={progress}
         />
 
-        {file && !result && (
+        {file && !result && !isProcessing && (
           <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
              <div className="flex-grow">
                {(toolId === ToolID.PDF_TO_WORD || toolId === ToolID.PDF_OCR) && (
@@ -138,7 +193,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                           />
                           <div className="absolute w-2 h-2 bg-white rounded-full opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></div>
                         </div>
-                        <span className="ml-2 text-sm text-slate-700 font-medium group-hover:text-doc-slate">Markdown (Structured)</span>
+                        <span className="ml-2 text-sm text-slate-700 font-medium group-hover:text-doc-slate">Markdown</span>
                       </label>
                       <label className="flex items-center cursor-pointer group">
                          <div className="relative flex items-center justify-center">
@@ -177,12 +232,6 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
           </div>
         )}
 
-        {isProcessing && (
-           <div className="mt-8 text-center text-slate-500 animate-pulse">
-             <p>Analyzing document structure with AI...</p>
-           </div>
-        )}
-
         {result && (
           <>
             <ResultDisplay 
@@ -211,6 +260,18 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                     icon={<Download size={18} />}
                   >
                     Download Outline (.MD)
+                  </Button>
+               </div>
+            )}
+
+            {toolId === ToolID.PDF_OCR && (
+               <div className="mt-4 flex justify-end">
+                  <Button 
+                    onClick={handleDownloadPdf}
+                    className="bg-cyan-600 hover:bg-cyan-700"
+                    icon={<Download size={18} />}
+                  >
+                    Download Searchable PDF
                   </Button>
                </div>
             )}

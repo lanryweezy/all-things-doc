@@ -28,6 +28,7 @@ export enum ToolID {
   PDF_REPAIR = 'pdf-repair',
 
   // Convert TO PDF
+  GENERIC_TO_PDF = 'generic-to-pdf', // New generic converter
   WORD_TO_PDF = 'word-to-pdf',
   POWERPOINT_TO_PDF = 'powerpoint-to-pdf',
   EXCEL_TO_PDF = 'excel-to-pdf',
@@ -36,6 +37,7 @@ export enum ToolID {
 
   // Convert FROM PDF (Binary/Simulated)
   PDF_TO_JPG = 'pdf-to-jpg',
+  PDF_TO_PNG = 'pdf-to-png',
   PDF_TO_PDFA = 'pdf-to-pdfa',
 
   // PDF Edit

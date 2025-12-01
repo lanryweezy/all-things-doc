@@ -55,12 +55,14 @@ const App: React.FC = () => {
       case ToolID.PDF_COMPARE:
       case ToolID.PDF_SCAN:
       // Binary Conversions
+      case ToolID.GENERIC_TO_PDF:
       case ToolID.WORD_TO_PDF:
       case ToolID.EXCEL_TO_PDF:
       case ToolID.POWERPOINT_TO_PDF:
       case ToolID.JPG_TO_PDF:
       case ToolID.HTML_TO_PDF:
       case ToolID.PDF_TO_JPG:
+      case ToolID.PDF_TO_PNG:
       case ToolID.PDF_TO_PDFA:
         return activeTool ? (
           <PdfGeneralTool toolId={activeTool} onBack={() => setActiveTool(null)} />

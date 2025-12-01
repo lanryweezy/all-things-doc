@@ -26,7 +26,8 @@ import {
   Scan,
   GitCompare,
   FileArchive,
-  ArrowRightLeft
+  ArrowRightLeft,
+  FilePlus
 } from 'lucide-react';
 import { ToolID, ToolConfig, ToolCategory } from './types';
 
@@ -126,6 +127,15 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     bgColor: 'bg-yellow-100',
     category: ToolCategory.CONVERT_FROM_PDF,
   },
+  [ToolID.PDF_TO_PNG]: {
+    id: ToolID.PDF_TO_PNG,
+    title: 'PDF to PNG',
+    description: 'Convert PDFs to PNG or other image formats.',
+    icon: ImageIcon,
+    color: 'text-yellow-600',
+    bgColor: 'bg-yellow-100',
+    category: ToolCategory.CONVERT_FROM_PDF,
+  },
   [ToolID.PDF_TO_PDFA]: {
     id: ToolID.PDF_TO_PDFA,
     title: 'PDF to PDF/A',
@@ -137,6 +147,15 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   },
 
   // --- CONVERT TO PDF ---
+  [ToolID.GENERIC_TO_PDF]: {
+    id: ToolID.GENERIC_TO_PDF,
+    title: 'Convert to PDF',
+    description: 'Turn almost any file (Doc, Images, etc) into a PDF.',
+    icon: FilePlus,
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-100',
+    category: ToolCategory.CONVERT_TO_PDF,
+  },
   [ToolID.WORD_TO_PDF]: {
     id: ToolID.WORD_TO_PDF,
     title: 'Word to PDF',
