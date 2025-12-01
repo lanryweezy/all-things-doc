@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import * as pdfService from '../../services/pdfService';
 
 interface PdfGeneralToolProps {
   toolId: ToolID;
@@ -16,6 +17,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const [paramValue, setParamValue] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [resultData, setResultData] = useState<Uint8Array | null>(null);
 
   const toolInfo = TOOLS[toolId];
 
@@ -48,8 +50,90 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
 
     setIsProcessing(true);
     
-    // Simulating backend processing for binary operations
-    await new Promise(r => setTimeout(r, 2000));
+    try {
+      let result: Uint8Array | undefined;
+      
+      // Process based on tool type
+      switch (toolId) {
+        case ToolID.PDF_MERGE:
+          if (file) {
+            const filesToMerge = [file, ...secondaryFiles];
+            result = await pdfService.mergePdfs(filesToMerge);
+          }
+          break;
+          
+        case ToolID.PDF_COMPRESS:
+          if (file) {
+            result = await pdfService.compressPdf(file, paramValue as any);
+          }
+          break;
+          
+        case ToolID.PDF_PROTECT:
+          if (file && paramValue) {
+            result = await pdfService.protectPdf(file, paramValue);
+          }
+          break;
+          
+        case ToolID.PDF_UNLOCK:
+          if (file && paramValue) {
+            result = await pdfService.unlockPdf(file, paramValue);
+          }
+          break;
+          
+        case ToolID.PDF_WATERMARK:
+          if (file && paramValue) {
+            result = await pdfService.addWatermark(file, paramValue);
+          }
+          break;
+          
+        case ToolID.PDF_ROTATE:
+          if (file) {
+            result = await pdfService.rotatePdf(file, 90); // Default to 90 degrees
+          }
+          break;
+          
+        case ToolID.PDF_PAGE_NUMBERS:
+          if (file) {
+            result = await pdfService.addPageNumbers(file, paramValue as any);
+          }
+          break;
+          
+        case ToolID.PDF_REDACT:
+          if (file) {
+            // For demo purposes, we'll redact a fixed area
+            result = await pdfService.redactPdf(file, [
+              { pageIndex: 0, x: 100, y: 100, width: 200, height: 50 }
+            ]);
+          }
+          break;
+          
+        case ToolID.PDF_COMPARE:
+          if (file && secondaryFiles.length > 0) {
+            // For demo purposes, we'll just show a comparison message
+            alert("In a production app, this would compare the two PDFs and show differences.");
+            result = new Uint8Array(); // Placeholder
+          }
+          break;
+          
+        case ToolID.JPG_TO_PDF:
+          if (file) {
+            result = await pdfService.imageToPdf(file);
+          }
+          break;
+          
+        default:
+          // Simulating backend processing for binary operations
+          await new Promise(r => setTimeout(r, 2000));
+          break;
+      }
+      
+      if (result) {
+        setResultData(result);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+      alert("Error processing file. Please try again.");
+    }
     
     setIsProcessing(false);
     setIsComplete(true);
@@ -58,6 +142,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const handleReset = () => {
     setFile(null);
     setSecondaryFiles([]);
+    setResultData(null);
     // Re-initialize default if needed, or clear. useEffect will handle switching tools, 
     // but for reset we might want to keep the default.
     if (
@@ -71,6 +156,20 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       setParamValue('');
     }
     setIsComplete(false);
+  };
+
+  const handleDownload = () => {
+    if (!resultData) return;
+    
+    const blob = new Blob([resultData], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${toolInfo.title.replace(/\s+/g, '_')}_result.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleSecondaryUpload = (newFile: File) => {
@@ -361,10 +460,8 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           <Button 
             className="bg-emerald-600 hover:bg-emerald-700"
             icon={<Download size={18} />}
-            onClick={() => {
-              // Mock download
-              alert("In a production app, the processed file download would start here.");
-            }}
+            onClick={handleDownload}
+            disabled={!resultData}
           >
             Download File
           </Button>
