@@ -84,7 +84,7 @@ const App: React.FC = () => {
       </main>
       <footer className="bg-slate-900 text-slate-400 py-6 text-center text-sm">
         {/* Updated footer */}
-        <p>&copy; {new Date().getFullYear()} All Things Doc. Powered by Gemini.</p>
+        <p>&copy; {new Date().getFullYear()} All Things Doc.</p>
       </footer>
     </div>
   );
