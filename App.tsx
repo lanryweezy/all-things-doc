@@ -6,6 +6,9 @@ import { SmartOCR } from './components/tools/SmartOCR';
 import { TextAiTool } from './components/tools/TextAiTool';
 import { PdfAiTool } from './components/tools/PdfAiTool';
 import { PdfGeneralTool } from './components/tools/PdfGeneralTool';
+import { DocChat } from './components/tools/DocChat';
+import { TextToSpeech } from './components/tools/TextToSpeech';
+import { DataConverter } from './components/tools/DataConverter';
 import { ToolID } from './types';
 
 const App: React.FC = () => {
@@ -13,6 +16,23 @@ const App: React.FC = () => {
 
   const renderToolWorkspace = () => {
     switch (activeTool) {
+      // Intelligent Document
+      case ToolID.CHAT_WITH_DOC:
+        return <DocChat onBack={() => setActiveTool(null)} />;
+      
+      // Audio Tools
+      case ToolID.TEXT_TO_SPEECH:
+        return <TextToSpeech onBack={() => setActiveTool(null)} />;
+
+      // Data Tools
+      case ToolID.JSON_TO_CSV:
+      case ToolID.CSV_TO_JSON:
+      case ToolID.XML_TO_JSON:
+      case ToolID.JSON_TO_XML:
+        return activeTool ? (
+          <DataConverter toolId={activeTool} onBack={() => setActiveTool(null)} />
+        ) : null;
+
       // Client/Image Tools
       case ToolID.IMAGE_CONVERTER:
         return <ImageConverter onBack={() => setActiveTool(null)} />;
@@ -37,7 +57,7 @@ const App: React.FC = () => {
           <TextAiTool toolId={activeTool} onBack={() => setActiveTool(null)} />
         ) : null;
 
-      // General PDF Utilities (Simulated/Binary)
+      // General PDF & File Utilities (Simulated/Binary)
       case ToolID.PDF_MERGE:
       case ToolID.PDF_SPLIT:
       case ToolID.PDF_COMPRESS:
@@ -64,6 +84,22 @@ const App: React.FC = () => {
       case ToolID.PDF_TO_JPG:
       case ToolID.PDF_TO_PNG:
       case ToolID.PDF_TO_PDFA:
+      // Office Tools (Binary/Simulated)
+      case ToolID.WORD_TO_EXCEL:
+      case ToolID.EXCEL_TO_WORD:
+      case ToolID.PPT_TO_WORD:
+      case ToolID.WORD_TO_PPT:
+      case ToolID.EXCEL_TO_CSV:
+      case ToolID.CSV_TO_EXCEL:
+      case ToolID.TEXT_TO_WORD:
+      case ToolID.WORD_TO_TEXT:
+      case ToolID.WORD_TO_JPG:
+      case ToolID.PPT_TO_JPG:
+      case ToolID.EXCEL_TO_JPG:
+      case ToolID.COMPRESS_WORD:
+      case ToolID.COMPRESS_EXCEL:
+      case ToolID.COMPRESS_PPT:
+      case ToolID.MERGE_WORD:
         return activeTool ? (
           <PdfGeneralTool toolId={activeTool} onBack={() => setActiveTool(null)} />
         ) : null;
@@ -83,8 +119,7 @@ const App: React.FC = () => {
         {renderToolWorkspace()}
       </main>
       <footer className="bg-slate-900 text-slate-400 py-6 text-center text-sm">
-        {/* Updated footer */}
-        <p>&copy; {new Date().getFullYear()} All Things Doc.</p>
+        <p>&copy; {new Date().getFullYear()} All Things Doc. Powered by Gemini.</p>
       </footer>
     </div>
   );

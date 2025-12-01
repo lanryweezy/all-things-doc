@@ -1,18 +1,20 @@
-# Document AI Tool Studio
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-An AI-powered document processing studio app featuring tools for PDFs, images, and text. Includes SmartOCR, PDF AI analysis, image conversion, and text processing. Built as a local frontend interface connecting to Gemini AI via API.
+# Run and deploy your AI Studio app
 
-## Features
-- SmartOCR for extracting text from images
-- PDF AI analysis tools
-- Image conversion utilities
-- Text processing with AI assistance
+This contains everything you need to run your app locally.
 
-## Setup
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Set your GEMINI_API_KEY in the environment variables
-4. Run locally using `npm run dev`
+View your app in AI Studio: https://ai.studio/apps/drive/1kNnHgMA3ZqOEjzLsZobNkL_U6qtzQaHH
 
-## Deployment
-This project is configured for deployment on Vercel. Make sure to set the GEMINI_API_KEY environment variable in your Vercel project settings.
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

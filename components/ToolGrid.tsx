@@ -9,14 +9,11 @@ interface ToolGridProps {
 
 export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
   const categories = [
-    ToolCategory.ORGANIZE_PDF,
-    ToolCategory.CONVERT_FROM_PDF,
-    ToolCategory.CONVERT_TO_PDF,
-    ToolCategory.OPTIMIZE_PDF,
-    ToolCategory.EDIT_PDF,
-    ToolCategory.SECURITY_PDF,
-    ToolCategory.AI_INTELLIGENCE,
-    ToolCategory.IMAGE_TOOLS,
+    ToolCategory.AI_TOOLS,
+    ToolCategory.PDF_TOOLS,
+    ToolCategory.OFFICE_TOOLS,
+    ToolCategory.DEVELOPER_TOOLS,
+    ToolCategory.MEDIA_TOOLS,
   ];
 
   const [activeCategory, setActiveCategory] = useState<ToolCategory>(categories[0]);
@@ -35,15 +32,14 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
         </p>
       </div>
 
-      <div className="sticky top-16 z-40 bg-slate-50/95 backdrop-blur-sm py-2 border-b border-slate-200 mb-8">
-        <div className="flex overflow-x-auto pb-2 md:justify-center gap-2 no-scrollbar px-2">
+      <div className="sticky top-16 z-40 bg-slate-50/95 backdrop-blur-sm py-4 border-b border-slate-200 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 px-2">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
               className={`
                 whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
-                flex-shrink-0
                 ${activeCategory === category 
                   ? 'bg-doc-red text-white shadow-md transform scale-105' 
                   : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-doc-slate border border-slate-200'

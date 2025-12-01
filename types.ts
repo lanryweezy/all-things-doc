@@ -8,6 +8,12 @@ export enum ToolID {
   CODE_MORPH = 'code-morph',
   GRAMMAR_POLISH = 'grammar-polish',
 
+  // Intelligent Document
+  CHAT_WITH_DOC = 'chat-with-doc',
+
+  // Audio Tools
+  TEXT_TO_SPEECH = 'text-to-speech',
+
   // AI PDF Conversion (Extraction)
   PDF_TO_WORD = 'pdf-to-word',
   PDF_TO_EXCEL = 'pdf-to-excel',
@@ -16,6 +22,30 @@ export enum ToolID {
 
   // Client/Image Tools
   IMAGE_CONVERTER = 'image-converter',
+
+  // Data Tools
+  JSON_TO_CSV = 'json-to-csv',
+  CSV_TO_JSON = 'csv-to-json',
+  XML_TO_JSON = 'xml-to-json',
+  JSON_TO_XML = 'json-to-xml',
+
+  // Office Tools
+  WORD_TO_EXCEL = 'word-to-excel',
+  EXCEL_TO_WORD = 'excel-to-word',
+  // New Office Tools
+  PPT_TO_WORD = 'ppt-to-word',
+  WORD_TO_PPT = 'word-to-ppt',
+  EXCEL_TO_CSV = 'excel-to-csv',
+  CSV_TO_EXCEL = 'csv-to-excel',
+  TEXT_TO_WORD = 'text-to-word',
+  WORD_TO_TEXT = 'word-to-text',
+  WORD_TO_JPG = 'word-to-jpg',
+  PPT_TO_JPG = 'ppt-to-jpg',
+  EXCEL_TO_JPG = 'excel-to-jpg',
+  COMPRESS_WORD = 'compress-word',
+  COMPRESS_EXCEL = 'compress-excel',
+  COMPRESS_PPT = 'compress-ppt',
+  MERGE_WORD = 'merge-word',
 
   // PDF Organize
   PDF_MERGE = 'pdf-merge',
@@ -56,14 +86,11 @@ export enum ToolID {
 }
 
 export enum ToolCategory {
-  ORGANIZE_PDF = 'Organize PDF',
-  CONVERT_FROM_PDF = 'Convert from PDF',
-  CONVERT_TO_PDF = 'Convert to PDF',
-  OPTIMIZE_PDF = 'Optimize PDF',
-  EDIT_PDF = 'Edit PDF',
-  SECURITY_PDF = 'PDF Security',
-  AI_INTELLIGENCE = 'AI Intelligence',
-  IMAGE_TOOLS = 'Image Tools',
+  AI_TOOLS = 'AI Intelligence',
+  PDF_TOOLS = 'PDF Tools',
+  OFFICE_TOOLS = 'Office Tools',
+  DEVELOPER_TOOLS = 'Developer Tools',
+  MEDIA_TOOLS = 'Image & Audio',
 }
 
 export interface ToolConfig {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Download, RefreshCcw, Lock, Stamp, Layers, FileOutput, PenTool, CheckCircle, RotateCw, RotateCcw, Unlock, Link, Image as ImageIcon, Scan, Scissors, GitCompare, EyeOff, FilePlus } from 'lucide-react';
+import { ArrowLeft, Download, RefreshCcw, Lock, Stamp, Layers, FileOutput, PenTool, CheckCircle, RotateCw, RotateCcw, Unlock, Link, Image as ImageIcon, Scan, Scissors, GitCompare, EyeOff, FilePlus, FileSpreadsheet, FileType2, Presentation, Minimize2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { TOOLS } from '../../constants';
@@ -25,11 +25,12 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
        if (!paramValue) return;
     } else if (toolId === ToolID.PDF_COMPARE) {
        if (!file || secondaryFiles.length === 0) return;
+    } else if (toolId === ToolID.PDF_MERGE || toolId === ToolID.MERGE_WORD) {
+        if (!file && secondaryFiles.length === 0) return;
+        if (file && secondaryFiles.length === 0) return; // Need at least two
     } else {
-       if (!file && toolId !== ToolID.PDF_MERGE) return;
+       if (!file) return;
     }
-    
-    if (toolId === ToolID.PDF_MERGE && secondaryFiles.length === 0) return;
 
     setIsProcessing(true);
     
@@ -52,18 +53,29 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   };
 
   const getAcceptType = () => {
-    if (toolId === ToolID.WORD_TO_PDF) return ".doc,.docx";
-    if (toolId === ToolID.EXCEL_TO_PDF) return ".xls,.xlsx";
-    if (toolId === ToolID.POWERPOINT_TO_PDF) return ".ppt,.pptx";
+    // Office to PDF / Office Conversions
+    if (toolId === ToolID.WORD_TO_PDF || toolId === ToolID.WORD_TO_EXCEL || toolId === ToolID.WORD_TO_PPT || toolId === ToolID.WORD_TO_TEXT || toolId === ToolID.WORD_TO_JPG || toolId === ToolID.COMPRESS_WORD || toolId === ToolID.MERGE_WORD) return ".doc,.docx";
+    if (toolId === ToolID.EXCEL_TO_PDF || toolId === ToolID.EXCEL_TO_WORD || toolId === ToolID.EXCEL_TO_CSV || toolId === ToolID.EXCEL_TO_JPG || toolId === ToolID.COMPRESS_EXCEL) return ".xls,.xlsx";
+    if (toolId === ToolID.POWERPOINT_TO_PDF || toolId === ToolID.PPT_TO_WORD || toolId === ToolID.PPT_TO_JPG || toolId === ToolID.COMPRESS_PPT) return ".ppt,.pptx";
+    if (toolId === ToolID.TEXT_TO_WORD) return ".txt";
+    if (toolId === ToolID.CSV_TO_EXCEL) return ".csv";
+    
+    // Images
     if (toolId === ToolID.JPG_TO_PDF || toolId === ToolID.PDF_SCAN) return "image/*";
+    
+    // Generic
     if (toolId === ToolID.GENERIC_TO_PDF) return "*/*";
+    
+    // Default PDF
     return "application/pdf";
   };
 
   const getUploadLabel = () => {
-    if (toolId === ToolID.WORD_TO_PDF) return "Upload Word Document";
-    if (toolId === ToolID.EXCEL_TO_PDF) return "Upload Excel Spreadsheet";
-    if (toolId === ToolID.POWERPOINT_TO_PDF) return "Upload PowerPoint Presentation";
+    if (toolId === ToolID.WORD_TO_PDF || toolId === ToolID.WORD_TO_EXCEL || toolId === ToolID.WORD_TO_PPT || toolId === ToolID.WORD_TO_TEXT || toolId === ToolID.WORD_TO_JPG || toolId === ToolID.COMPRESS_WORD || toolId === ToolID.MERGE_WORD) return "Upload Word Document";
+    if (toolId === ToolID.EXCEL_TO_PDF || toolId === ToolID.EXCEL_TO_WORD || toolId === ToolID.EXCEL_TO_CSV || toolId === ToolID.EXCEL_TO_JPG || toolId === ToolID.COMPRESS_EXCEL) return "Upload Excel Spreadsheet";
+    if (toolId === ToolID.POWERPOINT_TO_PDF || toolId === ToolID.PPT_TO_WORD || toolId === ToolID.PPT_TO_JPG || toolId === ToolID.COMPRESS_PPT) return "Upload PowerPoint Presentation";
+    if (toolId === ToolID.TEXT_TO_WORD) return "Upload Text File";
+    if (toolId === ToolID.CSV_TO_EXCEL) return "Upload CSV File";
     if (toolId === ToolID.JPG_TO_PDF) return "Upload Image";
     if (toolId === ToolID.PDF_SCAN) return "Capture or Upload Document";
     if (toolId === ToolID.PDF_COMPARE) return "Upload First PDF";
@@ -74,6 +86,9 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const renderConfiguration = () => {
     switch (toolId) {
       case ToolID.PDF_COMPRESS:
+      case ToolID.COMPRESS_WORD:
+      case ToolID.COMPRESS_EXCEL:
+      case ToolID.COMPRESS_PPT:
         return (
           <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
             <label className="block text-sm font-semibold text-doc-slate mb-3">Compression Level</label>
@@ -190,6 +205,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
         );
         
       case ToolID.PDF_MERGE:
+      case ToolID.MERGE_WORD:
         return (
           <div className="mb-6 space-y-4">
              <div className="flex items-center justify-between">
@@ -211,9 +227,9 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
                 ))}
              </div>
              <FileUpload 
-               accept="application/pdf"
+               accept={getAcceptType()}
                onFileSelect={handleSecondaryUpload}
-               label="Add another PDF"
+               label={`Add another ${toolId === ToolID.MERGE_WORD ? 'Word Doc' : 'PDF'}`}
              />
           </div>
         );
@@ -251,7 +267,8 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
 
   const getActionButtonIcon = () => {
     switch(toolId) {
-      case ToolID.PDF_MERGE: return <Layers size={18} />;
+      case ToolID.PDF_MERGE: 
+      case ToolID.MERGE_WORD: return <Layers size={18} />;
       case ToolID.PDF_PROTECT: return <Lock size={18} />;
       case ToolID.PDF_UNLOCK: return <Unlock size={18} />;
       case ToolID.PDF_WATERMARK: return <Stamp size={18} />;
@@ -261,9 +278,28 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       case ToolID.PDF_COMPARE: return <GitCompare size={18} />;
       case ToolID.PDF_REDACT: return <EyeOff size={18} />;
       case ToolID.GENERIC_TO_PDF: return <FilePlus size={18} />;
+      case ToolID.COMPRESS_WORD:
+      case ToolID.COMPRESS_EXCEL:
+      case ToolID.COMPRESS_PPT:
+      case ToolID.PDF_COMPRESS: return <Minimize2 size={18} />;
+      case ToolID.WORD_TO_EXCEL:
+      case ToolID.EXCEL_TO_WORD:
+      case ToolID.PDF_TO_EXCEL:
+      case ToolID.PDF_TO_WORD:
+      case ToolID.WORD_TO_PDF:
+      case ToolID.EXCEL_TO_PDF: 
+      case ToolID.PPT_TO_WORD:
+      case ToolID.WORD_TO_PPT:
+      case ToolID.EXCEL_TO_CSV:
+      case ToolID.CSV_TO_EXCEL:
+      case ToolID.TEXT_TO_WORD:
+      case ToolID.WORD_TO_TEXT: return <RefreshCcw size={18} />;
       case ToolID.JPG_TO_PDF:
       case ToolID.PDF_TO_JPG: 
       case ToolID.PDF_TO_PNG:
+      case ToolID.WORD_TO_JPG:
+      case ToolID.PPT_TO_JPG:
+      case ToolID.EXCEL_TO_JPG:
       case ToolID.PDF_SCAN: return <ImageIcon size={18} />;
       default: return <FileOutput size={18} />;
     }
@@ -287,7 +323,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
         <p className="text-slate-600 mb-8 max-w-md mx-auto">
           Your file has been processed successfully. 
           {toolId === ToolID.PDF_PROTECT && " It is now encrypted."}
-          {toolId === ToolID.PDF_COMPRESS && " We reduced the file size by 45%."}
+          {(toolId === ToolID.PDF_COMPRESS || toolId === ToolID.COMPRESS_WORD || toolId === ToolID.COMPRESS_EXCEL || toolId === ToolID.COMPRESS_PPT) && " We reduced the file size by 45%."}
         </p>
         
         <div className="flex justify-center space-x-4">
@@ -344,7 +380,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
                 </Button>
               </div>
            </div>
-        ) : (!file && toolId !== ToolID.PDF_MERGE) ? (
+        ) : (!file && toolId !== ToolID.PDF_MERGE && toolId !== ToolID.MERGE_WORD) ? (
            <FileUpload 
             accept={getAcceptType()}
             selectedFile={file}
@@ -355,7 +391,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           />
         ) : (
           <div>
-            {(toolId !== ToolID.PDF_MERGE) && (
+            {(toolId !== ToolID.PDF_MERGE && toolId !== ToolID.MERGE_WORD) && (
               <FileUpload 
                 accept={getAcceptType()}
                 selectedFile={file}
