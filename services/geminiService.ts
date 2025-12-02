@@ -1,10 +1,16 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY });
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
+const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 const MODEL_NAME = 'gemini-2.5-flash';
+
+export const isApiAvailable = () => !!ai;
 
 export const summarizeText = async (text: string): Promise<string> => {
   if (!text) return "";
+  if (!ai) {
+    return "Demo mode: AI summarization requires API key. Please add your Gemini API key to use this feature.";
+  }
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Please summarize the following text concisely, highlighting the key points:\n\n${text}`,
@@ -14,6 +20,9 @@ export const summarizeText = async (text: string): Promise<string> => {
 
 export const translateText = async (text: string, targetLanguage: string): Promise<string> => {
   if (!text) return "";
+  if (!ai) {
+    return `Demo mode: AI translation requires API key. In real mode, this would translate to: ${targetLanguage}`;
+  }
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Translate the following text into ${targetLanguage}. Only provide the translated text, no preamble:\n\n${text}`,
@@ -23,6 +32,9 @@ export const translateText = async (text: string, targetLanguage: string): Promi
 
 export const correctGrammar = async (text: string): Promise<string> => {
   if (!text) return "";
+  if (!ai) {
+    return "Demo mode: AI grammar correction requires API key. Please add your Gemini API key to use this feature.";
+  }
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Correct the grammar and spelling of the following text. Improve clarity where necessary but maintain the original meaning. Only provide the corrected text:\n\n${text}`,
@@ -32,6 +44,9 @@ export const correctGrammar = async (text: string): Promise<string> => {
 
 export const convertCode = async (code: string, targetLang: string): Promise<string> => {
   if (!code) return "";
+  if (!ai) {
+    return `Demo mode: AI code conversion requires API key. In real mode, this would convert to: ${targetLang}`;
+  }
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Convert the following code to ${targetLang}. Provide only the code block, no explanations:\n\n${code}`,
@@ -40,6 +55,9 @@ export const convertCode = async (code: string, targetLang: string): Promise<str
 };
 
 export const performOCR = async (imageBase64: string, mimeType: string): Promise<string> => {
+  if (!ai) {
+    return "Demo mode: AI OCR requires API key. Please add your Gemini API key to use this feature.";
+  }
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: {
@@ -64,6 +82,10 @@ export const processPdf = async (
   mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR',
   outputFormat: 'markdown' | 'text' = 'markdown'
 ): Promise<string> => {
+  if (!ai) {
+    return `Demo mode: AI PDF processing requires API key. In real mode, this would process PDF as: ${mode}`;
+  }
+  
   let prompt = "";
   
   switch(mode) {
@@ -109,6 +131,9 @@ export const processPdf = async (
 };
 
 export const generateSpeech = async (text: string) => {
+  if (!ai) {
+    return null; // Return null for demo mode - text-to-speech requires API key
+  }
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
     contents: [{ parts: [{ text }] }],
@@ -126,6 +151,9 @@ export const generateSpeech = async (text: string) => {
 };
 
 export const createChatSession = (systemInstruction: string) => {
+  if (!ai) {
+    return null; // Return null for demo mode
+  }
   return ai.chats.create({
     model: MODEL_NAME,
     config: { systemInstruction }
