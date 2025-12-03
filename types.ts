@@ -19,6 +19,7 @@ export enum ToolID {
   PDF_TO_EXCEL = 'pdf-to-excel',
   PDF_TO_POWERPOINT = 'pdf-to-powerpoint',
   PDF_OCR = 'pdf-ocr',
+  PDF_BANK_STATEMENT_CONVERTER = 'pdf-bank-statement-converter',
 
   // Client/Image Tools
   IMAGE_CONVERTER = 'image-converter',
@@ -101,7 +102,10 @@ export interface ToolConfig {
   color: string; // Tailwind text color class
   bgColor: string; // Tailwind bg color class
   category: ToolCategory;
-  keywords?: string[]; // New SEO field
+  keywords?: string[]; // SEO keywords for better discoverability
+  seoTitle?: string; // SEO-optimized page title
+  seoDescription?: string; // SEO-optimized meta description
+  longDescription?: string; // Extended description for SEO and detailed views
 }
 
 export interface ProcessingState {

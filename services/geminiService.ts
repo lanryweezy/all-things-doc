@@ -79,7 +79,7 @@ export const performOCR = async (imageBase64: string, mimeType: string): Promise
 
 export const processPdf = async (
   pdfBase64: string, 
-  mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR',
+  mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' | 'BANK_STATEMENT',
   outputFormat: 'markdown' | 'text' = 'markdown'
 ): Promise<string> => {
   if (!ai) {
@@ -104,6 +104,9 @@ export const processPdf = async (
       break;
     case 'OCR':
       prompt = "This is a scanned document in PDF format. Perform OCR to extract all readable text. Preserve the original layout and line breaks as much as possible. Return the extracted text.";
+      break;
+    case 'BANK_STATEMENT':
+      prompt = "Extract all transaction data from this bank statement PDF. Convert it to CSV format with columns for: Date, Description, Debit, Credit, Balance. Ensure proper formatting and handle different transaction types. Return ONLY the CSV data with headers, no other text or markdown code blocks.";
       break;
   }
 

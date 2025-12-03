@@ -48,6 +48,7 @@ const App: React.FC = () => {
       case ToolID.PDF_TO_EXCEL:
       case ToolID.PDF_TO_POWERPOINT:
       case ToolID.PDF_OCR:
+      case ToolID.PDF_BANK_STATEMENT_CONVERTER:
         return <PdfAiTool toolId={activeTool} onBack={() => setActiveTool(null)} />;
       
       // Text Analysis Tools (AI)

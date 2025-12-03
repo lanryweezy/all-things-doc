@@ -37,6 +37,7 @@ import {
   File
 } from 'lucide-react';
 import { ToolID, ToolConfig, ToolCategory } from './types';
+import { TOOL_SEO_ENHANCEMENTS } from './seo-constants';
 
 export const TOOLS: Record<ToolID, ToolConfig> = {
   // --- AI INTELLIGENCE ---
@@ -48,7 +49,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
     category: ToolCategory.AI_TOOLS,
-    keywords: ['chat with pdf', 'ask document questions', 'ai document analysis', 'summarize pdf chat']
+    keywords: ['chat with pdf', 'ask document questions', 'ai document analysis', 'summarize pdf chat'],
+    seoTitle: 'Chat with PDF Documents - AI Document Assistant | All Things Doc',
+    seoDescription: 'Upload any PDF document and chat with AI to get instant answers, summaries, and insights. Free online document Q&A tool with no signup required.',
+    longDescription: 'Transform your document reading experience with our AI-powered chat tool. Upload PDFs, Word documents, or text files and ask questions in natural language. Get instant summaries, extract key information, and understand complex documents faster than ever.'
   },
   [ToolID.MAGIC_SUMMARIZER]: {
     id: ToolID.MAGIC_SUMMARIZER,
@@ -58,7 +62,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-doc-red',
     bgColor: 'bg-red-100',
     category: ToolCategory.AI_TOOLS,
-    keywords: ['summarize text', 'text summarizer', 'ai summary generator', 'shorten article']
+    keywords: ['summarize text', 'text summarizer', 'ai summary generator', 'shorten article'],
+    seoTitle: 'AI Text Summarizer - Summarize Documents & Articles Free | All Things Doc',
+    seoDescription: 'Summarize long documents, articles, and text instantly with AI. Free online text summarization tool that creates concise summaries while preserving key information.',
+    longDescription: 'Our AI Magic Summarizer uses advanced natural language processing to condense lengthy documents into clear, concise summaries. Perfect for students, researchers, and professionals who need to quickly understand large amounts of text.'
   },
   [ToolID.SMART_OCR]: {
     id: ToolID.SMART_OCR,
@@ -68,7 +75,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-cyan-600',
     bgColor: 'bg-cyan-100',
     category: ToolCategory.AI_TOOLS,
-    keywords: ['image to text', 'online ocr', 'extract text from image', 'scanned document to text']
+    keywords: ['image to text', 'online ocr', 'extract text from image', 'scanned document to text'],
+    seoTitle: 'Free Online OCR - Extract Text from Images & PDFs | All Things Doc',
+    seoDescription: 'Convert images and scanned documents to editable text with our free online OCR tool. Extract text from JPG, PNG, PDF files with high accuracy.',
+    longDescription: 'Transform scanned documents, photos, and images into editable text with our advanced OCR technology. Support for multiple languages and various image formats including JPG, PNG, and PDF. Perfect for digitizing printed documents.'
   },
   [ToolID.UNIVERSAL_TRANSLATOR]: {
     id: ToolID.UNIVERSAL_TRANSLATOR,
@@ -78,7 +88,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-purple-600',
     bgColor: 'bg-purple-100',
     category: ToolCategory.AI_TOOLS,
-    keywords: ['translate document', 'language translator', 'free text translator']
+    keywords: ['translate document', 'language translator', 'free text translator'],
+    seoTitle: TOOL_SEO_ENHANCEMENTS[ToolID.UNIVERSAL_TRANSLATOR].seoTitle,
+    seoDescription: TOOL_SEO_ENHANCEMENTS[ToolID.UNIVERSAL_TRANSLATOR].seoDescription,
+    longDescription: TOOL_SEO_ENHANCEMENTS[ToolID.UNIVERSAL_TRANSLATOR].longDescription
   },
   [ToolID.CODE_MORPH]: {
     id: ToolID.CODE_MORPH,
@@ -88,7 +101,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-amber-600',
     bgColor: 'bg-amber-100',
     category: ToolCategory.AI_TOOLS,
-    keywords: ['code converter', 'convert python to javascript', 'code translator']
+    keywords: ['code converter', 'convert python to javascript', 'code translator'],
+    seoTitle: TOOL_SEO_ENHANCEMENTS[ToolID.CODE_MORPH].seoTitle,
+    seoDescription: TOOL_SEO_ENHANCEMENTS[ToolID.CODE_MORPH].seoDescription,
+    longDescription: TOOL_SEO_ENHANCEMENTS[ToolID.CODE_MORPH].longDescription
   },
   [ToolID.GRAMMAR_POLISH]: {
     id: ToolID.GRAMMAR_POLISH,
@@ -98,7 +114,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-rose-500',
     bgColor: 'bg-rose-100',
     category: ToolCategory.AI_TOOLS,
-    keywords: ['grammar checker', 'fix spelling', 'improve writing ai']
+    keywords: ['grammar checker', 'fix spelling', 'improve writing ai'],
+    seoTitle: TOOL_SEO_ENHANCEMENTS[ToolID.GRAMMAR_POLISH].seoTitle,
+    seoDescription: TOOL_SEO_ENHANCEMENTS[ToolID.GRAMMAR_POLISH].seoDescription,
+    longDescription: TOOL_SEO_ENHANCEMENTS[ToolID.GRAMMAR_POLISH].longDescription
   },
 
   // --- PDF TOOLS (Merged Utilities & Converters) ---
@@ -110,7 +129,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-fuchsia-600',
     bgColor: 'bg-fuchsia-100',
     category: ToolCategory.PDF_TOOLS,
-    keywords: ['merge pdf', 'combine pdf files', 'pdf joiner', 'merge pdf online free']
+    keywords: ['merge pdf', 'combine pdf files', 'pdf joiner', 'merge pdf online free'],
+    seoTitle: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_MERGE].seoTitle,
+    seoDescription: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_MERGE].seoDescription,
+    longDescription: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_MERGE].longDescription
   },
   [ToolID.PDF_SPLIT]: {
     id: ToolID.PDF_SPLIT,
@@ -120,7 +142,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-fuchsia-600',
     bgColor: 'bg-fuchsia-100',
     category: ToolCategory.PDF_TOOLS,
-    keywords: ['split pdf', 'extract pdf pages', 'separate pdf pages']
+    keywords: ['split pdf', 'extract pdf pages', 'separate pdf pages'],
+    seoTitle: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_SPLIT].seoTitle,
+    seoDescription: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_SPLIT].seoDescription,
+    longDescription: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_SPLIT].longDescription
   },
   [ToolID.PDF_COMPRESS]: {
     id: ToolID.PDF_COMPRESS,
@@ -130,7 +155,10 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-green-600',
     bgColor: 'bg-green-100',
     category: ToolCategory.PDF_TOOLS,
-    keywords: ['compress pdf', 'reduce pdf size', 'shrink pdf', 'optimize pdf']
+    keywords: ['compress pdf', 'reduce pdf size', 'shrink pdf', 'optimize pdf'],
+    seoTitle: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_COMPRESS].seoTitle,
+    seoDescription: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_COMPRESS].seoDescription,
+    longDescription: TOOL_SEO_ENHANCEMENTS[ToolID.PDF_COMPRESS].longDescription
   },
   [ToolID.PDF_EDIT]: {
     id: ToolID.PDF_EDIT,
@@ -293,6 +321,19 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     bgColor: 'bg-cyan-100',
     category: ToolCategory.PDF_TOOLS,
     keywords: ['ocr pdf', 'make pdf searchable', 'recognize text in pdf']
+  },
+  [ToolID.PDF_BANK_STATEMENT_CONVERTER]: {
+    id: ToolID.PDF_BANK_STATEMENT_CONVERTER,
+    title: 'Bank Statement Converter',
+    description: 'AI-powered PDF bank statement to Excel/CSV converter. No login required.',
+    icon: FileSpreadsheet,
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-100',
+    category: ToolCategory.PDF_TOOLS,
+    keywords: ['bank statement converter', 'pdf to excel bank statement', 'convert bank statement to csv', 'ai bank statement extraction'],
+    seoTitle: 'AI PDF Bank Statement Converter - PDF to Excel/CSV Free | All Things Doc',
+    seoDescription: 'Convert PDF bank statements to Excel or CSV using AI. Extract transaction data from bank statements with privacy-focused no-login tool.',
+    longDescription: 'Transform PDF bank statements into structured Excel or CSV files using AI-powered data extraction. Our intelligent tool understands bank statement formats and accurately extracts transaction data, dates, amounts, and descriptions. No login required - completely private and secure for your financial data.'
   },
   [ToolID.GENERIC_TO_PDF]: {
     id: ToolID.GENERIC_TO_PDF,

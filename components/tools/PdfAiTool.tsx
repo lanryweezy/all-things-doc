@@ -10,7 +10,7 @@ import { ToolID } from '../../types';
 import { jsPDF } from "jspdf";
 
 interface PdfAiToolProps {
-  toolId: ToolID.PDF_TO_WORD | ToolID.PDF_TO_EXCEL | ToolID.PDF_TO_POWERPOINT | ToolID.PDF_OCR;
+  toolId: ToolID.PDF_TO_WORD | ToolID.PDF_TO_EXCEL | ToolID.PDF_TO_POWERPOINT | ToolID.PDF_OCR | ToolID.PDF_BANK_STATEMENT_CONVERTER;
   onBack: () => void;
 }
 
@@ -42,10 +42,11 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
     try {
       const base64 = await fileToBase64(file);
-      let mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' = 'WORD';
+      let mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' | 'BANK_STATEMENT' = 'WORD';
       if (toolId === ToolID.PDF_TO_EXCEL) mode = 'EXCEL';
       if (toolId === ToolID.PDF_TO_POWERPOINT) mode = 'PPT';
       if (toolId === ToolID.PDF_OCR) mode = 'OCR';
+      if (toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) mode = 'BANK_STATEMENT';
 
       const output = await processPdf(base64, mode, outputFormat);
       
@@ -125,6 +126,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       case ToolID.PDF_TO_EXCEL: return <FileSpreadsheet size={18} />;
       case ToolID.PDF_TO_POWERPOINT: return <Presentation size={18} />;
       case ToolID.PDF_OCR: return <ScanLine size={18} />;
+      case ToolID.PDF_BANK_STATEMENT_CONVERTER: return <FileSpreadsheet size={18} />;
       default: return <FileText size={18} />;
     }
   };
@@ -134,6 +136,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       case ToolID.PDF_TO_EXCEL: return "Convert to Excel/CSV";
       case ToolID.PDF_TO_POWERPOINT: return "Generate Slide Outline";
       case ToolID.PDF_OCR: return "Recognize Text";
+      case ToolID.PDF_BANK_STATEMENT_CONVERTER: return "Extract Bank Statement Data";
       default: return "Convert Document";
     }
   };
@@ -143,6 +146,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       case ToolID.PDF_TO_EXCEL: return "bg-emerald-600 hover:bg-emerald-700";
       case ToolID.PDF_TO_POWERPOINT: return "bg-orange-600 hover:bg-orange-700";
       case ToolID.PDF_OCR: return "bg-cyan-600 hover:bg-cyan-700";
+      case ToolID.PDF_BANK_STATEMENT_CONVERTER: return "bg-emerald-600 hover:bg-emerald-700";
       default: return "bg-blue-600 hover:bg-blue-700";
     }
   };
@@ -235,12 +239,12 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
         {result && (
           <>
             <ResultDisplay 
-              title={toolId === ToolID.PDF_TO_EXCEL ? "Extracted CSV Data" : toolId === ToolID.PDF_TO_POWERPOINT ? "Generated Slide Outline" : "Extracted Content"} 
+              title={toolId === ToolID.PDF_TO_EXCEL ? "Extracted CSV Data" : toolId === ToolID.PDF_TO_POWERPOINT ? "Generated Slide Outline" : toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER ? "Extracted Bank Statement Data" : "Extracted Content"} 
               content={result}
               isCode={toolId === ToolID.PDF_TO_EXCEL} 
             />
             
-            {toolId === ToolID.PDF_TO_EXCEL && (
+            {(toolId === ToolID.PDF_TO_EXCEL || toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) && (
                <div className="mt-4 flex justify-end">
                   <Button 
                     onClick={handleDownloadCsv}

@@ -1,0 +1,55 @@
+# All Things Doc - Robots.txt
+# https://allthingsdoc.com
+
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://allthingsdoc.com/sitemap.xml
+
+# Crawl-delay for aggressive crawlers (optional)
+# User-agent: *
+# Crawl-delay: 1
+
+# Block access to certain directories (if any)
+# Disallow: /private/
+# Disallow: /admin/
+# Disallow: /api/
+
+# Allow access to static assets
+Allow: /assets/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /fonts/
+Allow: *.css$
+Allow: *.js$
+Allow: *.png$
+Allow: *.jpg$
+Allow: *.jpeg$
+Allow: *.gif$
+Allow: *.svg$
+Allow: *.ico$
+Allow: *.woff$
+Allow: *.woff2$
+Allow: *.ttf$
+Allow: *.eot$
