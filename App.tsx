@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { ToolGrid } from './components/ToolGrid';
 import { ImageConverter } from './components/tools/ImageConverter';
@@ -9,14 +9,69 @@ import { PdfGeneralTool } from './components/tools/PdfGeneralTool';
 import { DocChat } from './components/tools/DocChat';
 import { TextToSpeech } from './components/tools/TextToSpeech';
 import { DataConverter } from './components/tools/DataConverter';
+import { PrivacyPolicy } from './components/legal/PrivacyPolicy';
+import { TermsOfUse } from './components/legal/TermsOfUse';
+import { Sitemap } from './components/legal/Sitemap';
 import { SeoHelmet } from './components/SeoHelmet';
 import { ToolID } from './types';
 import { TOOLS } from './constants';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ToolID | null>(null);
+  const [currentPage, setCurrentPage] = useState<'home' | 'privacy-policy' | 'terms-of-use' | 'sitemap'>('home');
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      const path = window.location.pathname;
+      switch (path) {
+        case '/privacy-policy':
+          setCurrentPage('privacy-policy');
+          setActiveTool(null);
+          break;
+        case '/terms-of-use':
+          setCurrentPage('terms-of-use');
+          setActiveTool(null);
+          break;
+        case '/sitemap':
+          setCurrentPage('sitemap');
+          setActiveTool(null);
+          break;
+        default:
+          setCurrentPage('home');
+          break;
+      }
+    };
+
+    handleRouteChange();
+    window.addEventListener('popstate', handleRouteChange);
+    return () => window.removeEventListener('popstate', handleRouteChange);
+  }, []);
+
+  const navigateTo = (path: string) => {
+    window.history.pushState({}, '', path);
+    const event = new PopStateEvent('popstate');
+    window.dispatchEvent(event);
+  };
+
+  const goHome = () => {
+    setActiveTool(null);
+    navigateTo('/');
+  };
 
   const renderToolWorkspace = () => {
+    // Handle legal pages
+    switch (currentPage) {
+      case 'privacy-policy':
+        return <PrivacyPolicy onBack={goHome} />;
+      case 'terms-of-use':
+        return <TermsOfUse onBack={goHome} />;
+      case 'sitemap':
+        return <Sitemap onBack={goHome} />;
+      default:
+        break;
+    }
+
+    // Handle tool pages
     switch (activeTool) {
       // Intelligent Document
       case ToolID.CHAT_WITH_DOC:
@@ -116,18 +171,36 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-50">
       <SeoHelmet tool={activeTool ? TOOLS[activeTool] : undefined} />
       <Header 
-        goHome={() => setActiveTool(null)} 
+        goHome={goHome} 
         activeTool={activeTool}
       />
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
         {renderToolWorkspace()}
       </main>
       <footer className="bg-slate-900 text-slate-400 py-6 text-center text-sm">
-        <p>&copy; {new Date().getFullYear()} All Things Doc. Powered by Gemini.</p>
+        <p>&copy; {new Date().getFullYear()} All Things Doc.</p>
         <div className="mt-2 text-xs text-slate-600 flex justify-center space-x-4">
-          <span>Privacy Policy</span>
-          <span>Terms of Use</span>
-          <span>Sitemap</span>
+          <a 
+            href="/privacy-policy" 
+            onClick={(e) => { e.preventDefault(); navigateTo('/privacy-policy'); }}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Privacy Policy
+          </a>
+          <a 
+            href="/terms-of-use" 
+            onClick={(e) => { e.preventDefault(); navigateTo('/terms-of-use'); }}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Terms of Use
+          </a>
+          <a 
+            href="/sitemap" 
+            onClick={(e) => { e.preventDefault(); navigateTo('/sitemap'); }}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Sitemap
+          </a>
         </div>
       </footer>
     </div>
