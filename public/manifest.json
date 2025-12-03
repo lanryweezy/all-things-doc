@@ -1,0 +1,51 @@
+{
+  "name": "All Things Doc - File Tools Suite",
+  "short_name": "All Things Doc",
+  "description": "Comprehensive file tools suite for PDF, Office, and media files. 100% free and easy to use.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DC2626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "PDF Tools",
+      "url": "/",
+      "description": "Access PDF tools quickly"
+    },
+    {
+      "name": "AI Tools",
+      "url": "/",
+      "description": "Use AI-powered document tools"
+    }
+  ]
+}

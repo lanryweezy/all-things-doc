@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { ToolCategory } from '../../types';
-import { TOOLS_CONFIG } from '../../constants';
+import { TOOLS } from '../../constants';
 
 interface SitemapProps {
   onBack: () => void;
@@ -11,7 +11,7 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
   const categories = Object.values(ToolCategory);
   
   const getToolsByCategory = (category: ToolCategory) => {
-    return Object.values(TOOLS_CONFIG).filter(tool => tool.category === category);
+    return Object.values(TOOLS).filter(tool => tool.category === category);
   };
 
   return (

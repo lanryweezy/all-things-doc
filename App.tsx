@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { ToolGrid } from './components/ToolGrid';
+import { DarkModeToggle } from './components/DarkModeToggle';
 import { ImageConverter } from './components/tools/ImageConverter';
 import { SmartOCR } from './components/tools/SmartOCR';
 import { TextAiTool } from './components/tools/TextAiTool';
@@ -12,12 +13,19 @@ import { DataConverter } from './components/tools/DataConverter';
 import { PrivacyPolicy } from './components/legal/PrivacyPolicy';
 import { TermsOfUse } from './components/legal/TermsOfUse';
 import { Sitemap } from './components/legal/Sitemap';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { analytics } from './services/analytics';
 import { SeoHelmet } from './components/SeoHelmet';
 import { ToolID } from './types';
 import { TOOLS } from './constants';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ToolID | null>(null);
+
+  const handleToolSelect = (toolId: ToolID) => {
+    setActiveTool(toolId);
+    analytics.trackToolUsage(toolId, 'Selected');
+  };
   const [currentPage, setCurrentPage] = useState<'home' | 'privacy-policy' | 'terms-of-use' | 'sitemap'>('home');
 
   useEffect(() => {
@@ -27,17 +35,21 @@ const App: React.FC = () => {
         case '/privacy-policy':
           setCurrentPage('privacy-policy');
           setActiveTool(null);
+          analytics.trackPageView('privacy-policy');
           break;
         case '/terms-of-use':
           setCurrentPage('terms-of-use');
           setActiveTool(null);
+          analytics.trackPageView('terms-of-use');
           break;
         case '/sitemap':
           setCurrentPage('sitemap');
           setActiveTool(null);
+          analytics.trackPageView('sitemap');
           break;
         default:
           setCurrentPage('home');
+          analytics.trackPageView('home');
           break;
       }
     };
@@ -163,13 +175,14 @@ const App: React.FC = () => {
         ) : null;
 
       default:
-        return <ToolGrid onSelectTool={setActiveTool} />;
+        return <ToolGrid onSelectTool={handleToolSelect} />;
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <SeoHelmet tool={activeTool ? TOOLS[activeTool] : undefined} />
+      <DarkModeToggle />
       <Header 
         goHome={goHome} 
         activeTool={activeTool}
@@ -177,13 +190,13 @@ const App: React.FC = () => {
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
         {renderToolWorkspace()}
       </main>
-      <footer className="bg-slate-900 text-slate-400 py-6 text-center text-sm">
+      <footer className="bg-slate-900 dark:bg-slate-950 text-slate-400 py-6 text-center text-sm transition-colors">
         <p>&copy; {new Date().getFullYear()} All Things Doc.</p>
         <div className="mt-2 text-xs text-slate-600 flex justify-center space-x-4">
           <a 
             href="/privacy-policy" 
             onClick={(e) => { e.preventDefault(); navigateTo('/privacy-policy'); }}
-            className="hover:text-white transition-colors cursor-pointer"
+            className="hover:text-white dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
             Privacy Policy
           </a>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { ArrowLeft, FileSpreadsheet, FileText, Download, Presentation, ScanLine } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { FileUpload } from '../ui/FileUpload';
+import { FileUpload } from '../FileUpload';
 import { ResultDisplay } from '../ui/ResultDisplay';
+import { LoadingSpinner, ProcessingProgress } from '../LoadingSpinner';
 import { fileToBase64 } from '../../services/imageService';
 import { processPdf } from '../../services/geminiService';
+import { analytics } from '../../services/analytics';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { jsPDF } from "jspdf";
@@ -28,6 +30,9 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
     setIsProcessing(true);
     setResult(null);
     setProgress(0);
+
+    // Track tool usage
+    analytics.trackToolUsage(toolId, 'Started');
 
     // Simulate progress while waiting for API
     const progressInterval = setInterval(() => {
@@ -58,8 +63,24 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       
       setResult(output);
     } catch (error) {
-      console.error(error);
-      setResult("Error processing PDF. Please ensure it is a valid PDF file and try again.");
+      console.error('PDF Processing Error:', error);
+      let errorMessage = "Error processing PDF. ";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('network')) {
+          errorMessage += "Network error. Please check your connection and try again.";
+        } else if (error.message.includes('timeout')) {
+          errorMessage += "Request timed out. Please try again with a smaller file.";
+        } else if (error.message.includes('invalid')) {
+          errorMessage += "Invalid PDF format. Please ensure it's a valid PDF file.";
+        } else {
+          errorMessage += "Please ensure it is a valid PDF file and try again.";
+        }
+      } else {
+        errorMessage += "An unexpected error occurred. Please try again.";
+      }
+      
+      setResult(errorMessage);
     } finally {
       setIsProcessing(false);
       clearInterval(progressInterval);
@@ -170,13 +191,23 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         <FileUpload 
-          accept="application/pdf"
-          selectedFile={file}
+          accept={['application/pdf', '.pdf']}
+          maxSizeInMB={50}
           onFileSelect={(f) => { setFile(f); setResult(null); }}
-          onClear={() => { setFile(null); setResult(null); }}
           label="Upload a PDF Document"
-          processingProgress={progress}
         />
+
+        {isProcessing && (
+          <div className="mt-6">
+            <ProcessingProgress 
+              progress={progress}
+              message={toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER 
+                ? "Extracting bank statement data with AI..." 
+                : "Processing PDF with AI..."
+              }
+            />
+          </div>
+        )}
 
         {file && !result && !isProcessing && (
           <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
