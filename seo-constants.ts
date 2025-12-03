@@ -1,6 +1,8 @@
 // Enhanced SEO data for All Things Doc tools
 // This file extends the constants with SEO-optimized content
 
+import { ToolID } from './types';
+
 export const TOOL_SEO_ENHANCEMENTS = {
   // AI Intelligence Tools
   [ToolID.CHAT_WITH_DOC]: {
