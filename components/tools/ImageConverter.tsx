@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Download, RefreshCcw, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Download, RefreshCcw, Image as ImageIcon, Link } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { convertImage } from '../../services/imageService';
 import * as pdfService from '../../services/pdfService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import { downloadBinary, downloadBlob } from '../../utils/downloadUtils';
 
 interface ImageConverterProps {
   onBack: () => void;
@@ -17,6 +18,22 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [resultData, setResultData] = useState<Uint8Array | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (resultData) {
+      const blob = new Blob([resultData], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      setDownloadUrl(url);
+      return () => {
+        if (url) URL.revokeObjectURL(url);
+      };
+    } else if (resultUrl) {
+      setDownloadUrl(resultUrl);
+    } else {
+      setDownloadUrl(null);
+    }
+  }, [resultData, resultUrl]);
 
   const handleConvert = async () => {
     if (!file) return;
@@ -52,25 +69,25 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
   };
 
   const handleDownload = () => {
-    if (targetFormat === 'pdf' && resultData) {
-      // Download PDF
-      const blob = new Blob([resultData], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `converted-image.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } else if (resultUrl) {
-      // Download image
-      const a = document.createElement('a');
-      a.href = resultUrl;
-      a.download = `converted-image.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    try {
+      if (targetFormat === 'pdf' && resultData) {
+        // Download PDF using utility
+        const filename = `converted-image.pdf`;
+        downloadBinary(resultData, filename, 'application/pdf');
+      } else if (targetFormat !== 'pdf' && resultUrl) {
+        // Download image using utility
+        const filename = `converted-image.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`;
+        fetch(resultUrl)
+          .then(response => response.blob())
+          .then(blob => downloadBlob(blob, filename))
+          .catch(error => {
+            console.error('Download failed:', error);
+            alert('Download failed. Please try again or check your browser settings.');
+          });
+      }
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again or check your browser settings.');
     }
   };
 
@@ -162,6 +179,17 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
               >
                 <Download size={18} className="mr-2" /> Download {targetFormat === 'pdf' ? 'PDF' : 'Image'}
               </Button>
+              {downloadUrl && (
+                <a 
+                  href={downloadUrl} 
+                  download={`converted-image.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`}
+                  className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
+                  title="Right-click and select 'Save link as...' if direct download doesn't work"
+                >
+                  <Link size={18} className="mr-2" />
+                  Alternative Download
+                </a>
+              )}
             </div>
           </div>
         )}

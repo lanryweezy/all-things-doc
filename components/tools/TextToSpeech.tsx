@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Mic, Play, Download } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Mic, Play, Download, Link } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { generateSpeech } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import { downloadBinary } from '../../utils/downloadUtils';
 
 interface TextToSpeechProps {
   onBack: () => void;
@@ -13,8 +14,23 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const [text, setText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [audioData, setAudioData] = useState<Uint8Array | null>(null);
   
   const toolInfo = TOOLS[ToolID.TEXT_TO_SPEECH];
+
+  useEffect(() => {
+    if (audioData) {
+      const blob = new Blob([audioData], { type: 'audio/wav' });
+      const url = URL.createObjectURL(blob);
+      setDownloadUrl(url);
+      return () => {
+        if (url) URL.revokeObjectURL(url);
+      };
+    } else {
+      setDownloadUrl(null);
+    }
+  }, [audioData]);
 
   const handleGenerate = async () => {
     if (!text.trim()) return;
@@ -49,6 +65,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
         const wavBlob = new Blob([wavHeader, byteArray], { type: 'audio/wav' });
         const url = URL.createObjectURL(wavBlob);
         setAudioUrl(url);
+        setAudioData(new Uint8Array([...new Uint8Array(wavHeader), ...byteArray]));
       }
     } catch (error) {
       console.error(error);
@@ -88,6 +105,17 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const writeString = (view: DataView, offset: number, string: string) => {
     for (let i = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  };
+
+  const handleDownload = () => {
+    if (!audioData) return;
+    try {
+      const filename = 'speech.wav';
+      downloadBinary(audioData, filename, 'audio/wav');
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again or check your browser settings.');
     }
   };
 
@@ -138,14 +166,25 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
           <div className="mt-8 bg-slate-50 p-6 rounded-xl border border-slate-200 animate-fade-in">
             <h3 className="text-sm font-bold text-slate-700 mb-4">Generated Audio</h3>
             <audio controls className="w-full mb-4" src={audioUrl} />
-            <div className="flex justify-end">
-               <a 
-                href={audioUrl} 
-                download="speech.wav"
-                className="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+            <div className="flex justify-end space-x-3">
+               <Button 
+                onClick={handleDownload}
+                className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-700"
+                icon={<Download size={16} />}
                >
-                 <Download size={16} className="mr-2" /> Download WAV
-               </a>
+                 Download WAV
+               </Button>
+               {downloadUrl && (
+                 <a 
+                  href={downloadUrl} 
+                  download="speech.wav"
+                  className="inline-flex items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
+                  title="Right-click and select 'Save link as...' if direct download doesn't work"
+                 >
+                   <Link size={16} className="mr-2" />
+                   Alternative Download
+                 </a>
+               )}
             </div>
           </div>
         )}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowLeft, FileSpreadsheet, FileText, Download, Presentation, ScanLine } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, FileSpreadsheet, FileText, Download, Presentation, ScanLine, Link } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../FileUpload';
 import { ResultDisplay } from '../ui/ResultDisplay';
@@ -10,6 +10,7 @@ import { analytics } from '../../services/analytics';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { jsPDF } from "jspdf";
+import { downloadText, downloadBinary } from '../../utils/downloadUtils';
 
 interface PdfAiToolProps {
   toolId: ToolID.PDF_TO_WORD | ToolID.PDF_TO_EXCEL | ToolID.PDF_TO_POWERPOINT | ToolID.PDF_OCR | ToolID.PDF_BANK_STATEMENT_CONVERTER;
@@ -22,8 +23,39 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
   const [result, setResult] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<'markdown' | 'text'>('markdown');
   const [progress, setProgress] = useState<number | undefined>(undefined);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   
   const toolInfo = TOOLS[toolId];
+
+  // Manage download URLs for different content types
+  useEffect(() => {
+    if (result) {
+      if (toolId === ToolID.PDF_TO_EXCEL || toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) {
+        // CSV content
+        const blob = new Blob([result], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        setDownloadUrl(url);
+        return () => {
+          if (url) URL.revokeObjectURL(url);
+        };
+      } else if (toolId === ToolID.PDF_TO_POWERPOINT) {
+        // Markdown content
+        const blob = new Blob([result], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        setDownloadUrl(url);
+        return () => {
+          if (url) URL.revokeObjectURL(url);
+        };
+      } else if (toolId === ToolID.PDF_OCR) {
+        // For PDF OCR, we'll handle the PDF generation in the download function
+        setDownloadUrl(null);
+      } else {
+        setDownloadUrl(null);
+      }
+    } else {
+      setDownloadUrl(null);
+    }
+  }, [result, toolId]);
 
   const handleProcess = async () => {
     if (!file) return;
@@ -90,56 +122,62 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
   const handleDownloadCsv = () => {
     if (!result) return;
-    const blob = new Blob([result], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `converted_data.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      const filename = `converted_data.csv`;
+      downloadText(result, filename);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again or check your browser settings.');
+    }
   };
 
   const handleDownloadOutline = () => {
     if (!result) return;
-    const blob = new Blob([result], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `presentation_outline.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      const filename = `presentation_outline.md`;
+      downloadText(result, filename);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again or check your browser settings.');
+    }
   };
 
   const handleDownloadPdf = () => {
     if (!result) return;
     
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 20;
-    const maxWidth = pageWidth - (margin * 2);
-    
-    doc.setFont("helvetica");
-    doc.setFontSize(12);
-    
-    // Split text into lines that fit the page width
-    const splitText = doc.splitTextToSize(result, maxWidth);
-    
-    let y = margin;
-    const lineHeight = 7;
-    
-    splitText.forEach((line: string) => {
-      if (y > pageHeight - margin) {
-        doc.addPage();
-        y = margin;
-      }
-      doc.text(line, margin, y);
-      y += lineHeight;
-    });
-    
-    doc.save("searchable_document.pdf");
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 20;
+      const maxWidth = pageWidth - (margin * 2);
+      
+      doc.setFont("helvetica");
+      doc.setFontSize(12);
+      
+      // Split text into lines that fit the page width
+      const splitText = doc.splitTextToSize(result, maxWidth);
+      
+      let y = margin;
+      const lineHeight = 7;
+      
+      splitText.forEach((line: string) => {
+        if (y > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+        }
+        doc.text(line, margin, y);
+        y += lineHeight;
+      });
+      
+      // Get the PDF data as Uint8Array and download using utility
+      const pdfData = doc.output('arraybuffer');
+      const uint8Array = new Uint8Array(pdfData);
+      downloadBinary(uint8Array, 'searchable_document.pdf', 'application/pdf');
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert('Failed to generate PDF. Please try again or check your browser settings.');
+    }
   };
 
   const getActionIcon = () => {
@@ -284,6 +322,17 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                   >
                     Download .CSV
                   </Button>
+                  {downloadUrl && (
+                    <a 
+                      href={downloadUrl} 
+                      download={`converted_data.csv`}
+                      className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
+                      title="Right-click and select 'Save link as...' if direct download doesn't work"
+                    >
+                      <Link size={18} className="mr-2" />
+                      Alternative Download
+                    </a>
+                  )}
                </div>
             )}
 
@@ -296,6 +345,17 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                   >
                     Download Outline (.MD)
                   </Button>
+                  {downloadUrl && (
+                    <a 
+                      href={downloadUrl} 
+                      download={`presentation_outline.md`}
+                      className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
+                      title="Right-click and select 'Save link as...' if direct download doesn't work"
+                    >
+                      <Link size={18} className="mr-2" />
+                      Alternative Download
+                    </a>
+                  )}
                </div>
             )}
 
@@ -308,6 +368,53 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                   >
                     Download Searchable PDF
                   </Button>
+                  {result && (
+                    <a 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        try {
+                          const doc = new jsPDF();
+                          const pageWidth = doc.internal.pageSize.getWidth();
+                          const pageHeight = doc.internal.pageSize.getHeight();
+                          const margin = 20;
+                          const maxWidth = pageWidth - (margin * 2);
+                          
+                          doc.setFont("helvetica");
+                          doc.setFontSize(12);
+                          
+                          const splitText = doc.splitTextToSize(result, maxWidth);
+                          let y = margin;
+                          const lineHeight = 7;
+                          
+                          splitText.forEach((line: string) => {
+                            if (y > pageHeight - margin) {
+                              doc.addPage();
+                              y = margin;
+                            }
+                            doc.text(line, margin, y);
+                            y += lineHeight;
+                          });
+                          
+                          const pdfData = doc.output('blob');
+                          const url = URL.createObjectURL(pdfData);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = 'searchable_document.pdf';
+                          a.click();
+                          setTimeout(() => URL.revokeObjectURL(url), 100);
+                        } catch (error) {
+                          console.error('Alternative download failed:', error);
+                          alert('Alternative download failed. Please try the main download button.');
+                        }
+                      }}
+                      className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
+                      title="Right-click and select 'Save link as...' if direct download doesn't work"
+                    >
+                      <Link size={18} className="mr-2" />
+                      Alternative Download
+                    </a>
+                  )}
                </div>
             )}
           </>

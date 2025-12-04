@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Copy, Check, Download } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Copy, Check, Download, Link } from 'lucide-react';
 import { Button } from './Button';
+import { downloadText } from '../../utils/downloadUtils';
 
 interface ResultDisplayProps {
   title: string;
@@ -10,6 +11,20 @@ interface ResultDisplayProps {
 
 export const ResultDisplay: React.FC<ResultDisplayProps> = ({ title, content, isCode = false }) => {
   const [copied, setCopied] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (content) {
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      setDownloadUrl(url);
+      return () => {
+        if (url) URL.revokeObjectURL(url);
+      };
+    } else {
+      setDownloadUrl(null);
+    }
+  }, [content]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(content);
@@ -18,15 +33,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ title, content, is
   };
 
   const handleDownload = () => {
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `result-${Date.now()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const filename = `result-${Date.now()}.txt`;
+    downloadText(content, filename);
   };
 
   return (
@@ -50,6 +58,17 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ title, content, is
           >
             Download
           </Button>
+          {downloadUrl && (
+            <a 
+              href={downloadUrl} 
+              download={`result-${Date.now()}.txt`}
+              className="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md text-xs font-medium text-slate-700 transition-colors"
+              title="Right-click and select 'Save link as...' if direct download doesn't work"
+            >
+              <Link size={12} className="mr-1" />
+              Alt
+            </a>
+          )}
         </div>
       </div>
       <div className="p-0">

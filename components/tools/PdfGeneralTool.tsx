@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Download, RefreshCcw, Lock, Stamp, Layers, FileOutput, PenTool, CheckCircle, RotateCw, RotateCcw, Unlock, Link, Image as ImageIcon, Scan, Scissors, GitCompare, EyeOff, FilePlus, FileSpreadsheet, FileType2, Presentation, Minimize2 } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { FileUpload } from '../ui/FileUpload';
+import { FileUpload } from '../FileUpload';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import * as pdfService from '../../services/pdfService';
+import { downloadBinary } from '../../utils/downloadUtils';
 
 interface PdfGeneralToolProps {
   toolId: ToolID;
@@ -18,6 +20,8 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [resultData, setResultData] = useState<Uint8Array | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const toolInfo = TOOLS[toolId];
 
@@ -160,17 +164,25 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
 
   const handleDownload = () => {
     if (!resultData) return;
-    
-    const blob = new Blob([resultData], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${toolInfo.title.replace(/\s+/g, '_')}_result.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const filename = `${toolInfo.title.replace(/\s+/g, '_')}_result.pdf`;
+    downloadBinary(resultData, filename, 'application/pdf');
   };
+
+  // Create download URL when resultData changes
+  useEffect(() => {
+    if (resultData) {
+      const blob = new Blob([resultData], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      setDownloadUrl(url);
+      
+      // Cleanup URL when component unmounts or resultData changes
+      return () => {
+        if (url) URL.revokeObjectURL(url);
+      };
+    } else {
+      setDownloadUrl(null);
+    }
+  }, [resultData]);
 
   const handleSecondaryUpload = (newFile: File) => {
     setSecondaryFiles(prev => [...prev, newFile]);
@@ -465,6 +477,17 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           >
             Download File
           </Button>
+          {downloadUrl && (
+            <a
+              href={downloadUrl}
+              download={`${toolInfo.title.replace(/\s+/g, '_')}_result.pdf`}
+              className="inline-flex items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
+              title="Right-click and select 'Save link as...' if direct download doesn't work"
+            >
+              <Link size={16} className="mr-2" />
+              Alternative Download
+            </a>
+          )}
         </div>
       </div>
     );
