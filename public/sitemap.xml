@@ -196,6 +196,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://allthingsdoc.com/jwt-secret-generator</loc>
+    <lastmod>2024-12-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://allthingsdoc.com/uuid-generator</loc>
     <lastmod>2024-12-02</lastmod>
     <changefreq>monthly</changefreq>
