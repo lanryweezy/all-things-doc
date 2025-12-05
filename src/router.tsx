@@ -1,19 +1,32 @@
+import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter, useParams } from 'react-router-dom';
 import App from './App';
 import { ToolGrid } from './components/ToolGrid';
-import { ImageConverter } from './components/tools/ImageConverter';
-import { SmartOCR } from './components/tools/SmartOCR';
-import { TextAiTool } from './components/tools/TextAiTool';
-import { PdfAiTool } from './components/tools/PdfAiTool';
-import { PdfGeneralTool } from './components/tools/PdfGeneralTool';
-import { DocChat } from './components/tools/DocChat';
-import { TextToSpeech } from './components/tools/TextToSpeech';
-import { DataConverter } from './components/tools/DataConverter';
-import { JwtSecretGenerator } from './components/tools/JwtSecretGenerator';
-import { PrivacyPolicy } from './components/legal/PrivacyPolicy';
-import { TermsOfUse } from './components/legal/TermsOfUse';
-import { Sitemap } from './components/legal/Sitemap';
+import { LoadingSpinner } from './components/LoadingSpinner';
 import { ToolID } from './types';
+
+// Lazy load tool components
+const ImageConverter = lazy(() => import('./components/tools/ImageConverter').then(module => ({ default: module.ImageConverter })));
+const SmartOCR = lazy(() => import('./components/tools/SmartOCR').then(module => ({ default: module.SmartOCR })));
+const TextAiTool = lazy(() => import('./components/tools/TextAiTool').then(module => ({ default: module.TextAiTool })));
+const PdfAiTool = lazy(() => import('./components/tools/PdfAiTool').then(module => ({ default: module.PdfAiTool })));
+const PdfGeneralTool = lazy(() => import('./components/tools/PdfGeneralTool').then(module => ({ default: module.PdfGeneralTool })));
+const DocChat = lazy(() => import('./components/tools/DocChat').then(module => ({ default: module.DocChat })));
+const TextToSpeech = lazy(() => import('./components/tools/TextToSpeech').then(module => ({ default: module.TextToSpeech })));
+const DataConverter = lazy(() => import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter })));
+const JwtSecretGenerator = lazy(() => import('./components/tools/JwtSecretGenerator').then(module => ({ default: module.JwtSecretGenerator })));
+
+// Lazy load legal pages
+const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
+const TermsOfUse = lazy(() => import('./components/legal/TermsOfUse').then(module => ({ default: module.TermsOfUse })));
+const Sitemap = lazy(() => import('./components/legal/Sitemap').then(module => ({ default: module.Sitemap })));
+
+// Loading fallback
+const PageLoader = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <LoadingSpinner size="lg" message="Loading..." />
+  </div>
+);
 
 // Wrapper components that handle navigation
 const ToolGridWrapper = () => (
@@ -104,8 +117,9 @@ function getToolPath(toolId: ToolID): string | null {
     return `/tools/text-ai/${toolId}`;
   }
 
-  // General PDF & File Utilities (Simulated/Binary)
-  return `/tools/pdf-general/${toolId}`;
+  // General PDF Tools (Client-side)
+  // All other PDF tools go to generic PDF tool
+  return `/tools/pdf/${toolId}`;
 }
 
 export const router = createBrowserRouter([
@@ -118,53 +132,100 @@ export const router = createBrowserRouter([
         element: <ToolGridWrapper />,
       },
       {
-        path: 'privacy-policy',
-        element: <PrivacyPolicy onBack={() => window.history.back()} />,
+        path: 'privacy',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PrivacyPolicy />
+          </Suspense>
+        ),
       },
       {
-        path: 'terms-of-use',
-        element: <TermsOfUse onBack={() => window.history.back()} />,
+        path: 'terms',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <TermsOfUse />
+          </Suspense>
+        ),
       },
       {
         path: 'sitemap',
-        element: <Sitemap onBack={() => window.history.back()} />,
-      },
-      // Tool routes
-      {
-        path: 'tools/chat-with-doc',
-        element: <DocChat onBack={() => window.history.back()} />,
-      },
-      {
-        path: 'tools/text-to-speech',
-        element: <TextToSpeech onBack={() => window.history.back()} />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Sitemap />
+          </Suspense>
+        ),
       },
       {
         path: 'tools/image-converter',
-        element: <ImageConverter onBack={() => window.history.back()} />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ImageConverter onBack={() => window.history.back()} />
+          </Suspense>
+        ),
       },
       {
         path: 'tools/smart-ocr',
-        element: <SmartOCR onBack={() => window.history.back()} />,
-      },
-      {
-        path: 'tools/data-converter/:toolId',
-        element: <DataConverterWrapper />,
-      },
-      {
-        path: 'tools/jwt-secret-generator',
-        element: <JwtSecretGeneratorWrapper />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <SmartOCR onBack={() => window.history.back()} />
+          </Suspense>
+        ),
       },
       {
         path: 'tools/text-ai/:toolId',
-        element: <TextAiToolWrapper />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <TextAiToolWrapper />
+          </Suspense>
+        ),
       },
       {
         path: 'tools/pdf-ai/:toolId',
-        element: <PdfAiToolWrapper />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PdfAiToolWrapper />
+          </Suspense>
+        ),
       },
       {
-        path: 'tools/pdf-general/:toolId',
-        element: <PdfGeneralToolWrapper />,
+        path: 'tools/pdf/:toolId',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PdfGeneralToolWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/chat-with-doc',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <DocChat onBack={() => window.history.back()} />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/text-to-speech',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <TextToSpeech onBack={() => window.history.back()} />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/data-converter/:toolId',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <DataConverterWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/jwt-secret-generator',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <JwtSecretGeneratorWrapper />
+          </Suspense>
+        ),
       },
     ],
   },

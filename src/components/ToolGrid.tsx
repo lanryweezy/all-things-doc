@@ -68,6 +68,13 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
     [ToolID.IMAGE_CONVERT]: 'Convert between different image formats (PNG, JPG, WebP, etc.)',
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent, toolId: ToolID) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onSelectTool(toolId);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="text-center space-y-3 mb-10">
@@ -81,11 +88,15 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
       </div>
 
       <div className="sticky top-16 z-40 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm py-4 border-b border-slate-200 dark:border-slate-700 mb-8 transition-colors">
-        <div className="flex flex-wrap justify-center gap-2 px-2">
+        <div className="flex flex-wrap justify-center gap-2 px-2" role="tablist" aria-label="Tool Categories">
           {categories.map(category => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
+              role="tab"
+              aria-selected={activeCategory === category}
+              aria-controls={`panel-${category.replace(/\s+/g, '-').toLowerCase()}`}
+              id={`tab-${category.replace(/\s+/g, '-').toLowerCase()}`}
               className={`
                 whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
                 ${
@@ -101,7 +112,12 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
         </div>
       </div>
 
-      <div className="animate-fade-in min-h-[400px]">
+      <div 
+        className="animate-fade-in min-h-[400px]"
+        role="tabpanel"
+        id={`panel-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`}
+        aria-labelledby={`tab-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`}
+      >
         <div className="flex items-center space-x-4 mb-6 px-2">
           <h2 className="text-2xl font-bold text-doc-slate dark:text-white transition-colors">
             {activeCategory}
@@ -119,12 +135,16 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
               <div
                 key={tool.id}
                 onClick={() => onSelectTool(tool.id)}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full"
+                onKeyDown={(e) => handleKeyDown(e, tool.id)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Open ${tool.title}: ${tool.description}`}
+                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-doc-red focus:ring-offset-2 dark:focus:ring-offset-slate-900"
               >
                 <div
                   className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 ${tool.bgColor} group-hover:scale-110 transition-transform duration-300`}
                 >
-                  <tool.icon className={`w-7 h-7 ${tool.color}`} />
+                  <tool.icon className={`w-7 h-7 ${tool.color}`} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-doc-slate dark:text-white mb-2 group-hover:text-doc-red transition-colors">
                   {tool.title}
@@ -133,7 +153,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                   {tool.description}
                 </p>
                 <div className="flex items-center text-sm font-bold text-doc-red opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                  Open Tool <ChevronRight size={16} className="ml-1" />
+                  Open Tool <ChevronRight size={16} className="ml-1" aria-hidden="true" />
                 </div>
               </div>
             );
