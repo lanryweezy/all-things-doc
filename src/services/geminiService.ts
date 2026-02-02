@@ -1,16 +1,37 @@
 import { GoogleGenAI, Modality } from '@google/genai';
+import {
+  summarizeText as backendSummarize,
+  translateText as backendTranslate,
+  performOcrImage as backendOcrImage,
+  performOcrPdf as backendOcrPdf,
+} from './backendService';
+
+// Check if we have a backend available
+const BACKEND_AVAILABLE = !!import.meta.env.VITE_BACKEND_URL;
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
 const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 const MODEL_NAME = 'gemini-2.5-flash';
 
-export const isApiAvailable = () => !!ai;
+export const isApiAvailable = () => !!ai || BACKEND_AVAILABLE;
 
+// Use backend for summarization if available, otherwise Gemini
 export const summarizeText = async (text: string): Promise<string> => {
   if (!text) return '';
-  if (!ai) {
-    return 'Demo mode: AI summarization requires API key. Please add your Gemini API key to use this feature.';
+
+  if (BACKEND_AVAILABLE) {
+    try {
+      return await backendSummarize(text);
+    } catch (error) {
+      console.warn('Backend summarization failed, falling back to demo mode:', error);
+      return `Backend processing error. In real mode, this would summarize: ${text.substring(0, 50)}...`;
+    }
   }
+
+  if (!ai) {
+    return 'Demo mode: AI summarization requires API key or backend service. Please add your Gemini API key or configure backend service to use this feature.';
+  }
+
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Please summarize the following text concisely, highlighting the key points:\n\n${text}`,
@@ -18,11 +39,23 @@ export const summarizeText = async (text: string): Promise<string> => {
   return response.text || 'No summary generated.';
 };
 
+// Use backend for translation if available, otherwise Gemini
 export const translateText = async (text: string, targetLanguage: string): Promise<string> => {
   if (!text) return '';
-  if (!ai) {
-    return `Demo mode: AI translation requires API key. In real mode, this would translate to: ${targetLanguage}`;
+
+  if (BACKEND_AVAILABLE) {
+    try {
+      return await backendTranslate(text, targetLanguage);
+    } catch (error) {
+      console.warn('Backend translation failed, falling back to demo mode:', error);
+      return `Backend processing error. In real mode, this would translate to: ${targetLanguage}`;
+    }
   }
+
+  if (!ai) {
+    return `Demo mode: AI translation requires API key or backend service. In real mode, this would translate to: ${targetLanguage}`;
+  }
+
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Translate the following text into ${targetLanguage}. Only provide the translated text, no preamble:\n\n${text}`,
@@ -30,6 +63,51 @@ export const translateText = async (text: string, targetLanguage: string): Promi
   return response.text || 'Translation failed.';
 };
 
+// Use backend for OCR if available, otherwise Gemini
+export const performOCR = async (imageBase64: string, mimeType: string): Promise<string> => {
+  if (BACKEND_AVAILABLE) {
+    try {
+      // Convert base64 to blob for backend processing
+      const byteCharacters = atob(imageBase64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: mimeType });
+      const file = new File([blob], 'image', { type: mimeType });
+
+      return await backendOcrImage(file);
+    } catch (error) {
+      console.warn('Backend OCR failed, falling back to demo mode:', error);
+      return 'Backend processing error. In real mode, this would perform OCR.';
+    }
+  }
+
+  if (!ai) {
+    return 'Demo mode: AI OCR requires API key or backend service. Please add your Gemini API key or configure backend service to use this feature.';
+  }
+
+  const response = await ai.models.generateContent({
+    model: MODEL_NAME,
+    contents: {
+      parts: [
+        {
+          inlineData: {
+            mimeType: mimeType,
+            data: imageBase64,
+          },
+        },
+        {
+          text: 'Extract all text visible in this image. Preserve the formatting as much as possible.',
+        },
+      ],
+    },
+  });
+  return response.text || 'No text found in image.';
+};
+
+// Placeholder functions for other operations
 export const correctGrammar = async (text: string): Promise<string> => {
   if (!text) return '';
   if (!ai) {
@@ -54,34 +132,30 @@ export const convertCode = async (code: string, targetLang: string): Promise<str
   return response.text || 'Code conversion failed.';
 };
 
-export const performOCR = async (imageBase64: string, mimeType: string): Promise<string> => {
-  if (!ai) {
-    return 'Demo mode: AI OCR requires API key. Please add your Gemini API key to use this feature.';
-  }
-  const response = await ai.models.generateContent({
-    model: MODEL_NAME,
-    contents: {
-      parts: [
-        {
-          inlineData: {
-            mimeType: mimeType,
-            data: imageBase64,
-          },
-        },
-        {
-          text: 'Extract all text visible in this image. Preserve the formatting as much as possible.',
-        },
-      ],
-    },
-  });
-  return response.text || 'No text found in image.';
-};
-
 export const processPdf = async (
   pdfBase64: string,
   mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' | 'BANK_STATEMENT',
   outputFormat: 'markdown' | 'text' = 'markdown'
 ): Promise<string> => {
+  if (mode === 'OCR' && BACKEND_AVAILABLE) {
+    try {
+      // Convert base64 to blob for backend processing
+      const byteCharacters = atob(pdfBase64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const file = new File([blob], 'document.pdf', { type: 'application/pdf' });
+
+      return await backendOcrPdf(file);
+    } catch (error) {
+      console.warn('Backend PDF OCR failed, falling back to demo mode:', error);
+      return 'Backend processing error. In real mode, this would process PDF with OCR.';
+    }
+  }
+
   if (!ai) {
     return `Demo mode: AI PDF processing requires API key. In real mode, this would process PDF as: ${mode}`;
   }

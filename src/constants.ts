@@ -35,6 +35,7 @@ import {
   Table,
   Key as KeyIcon,
   QrCode,
+  Hash,
 } from 'lucide-react';
 import { ToolID, ToolConfig, ToolCategory } from './types';
 import { TOOL_SEO_ENHANCEMENTS } from './seo-constants';
@@ -635,6 +636,16 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     bgColor: 'bg-purple-100',
     category: ToolCategory.DEVELOPER_TOOLS,
     keywords: ['jwt secret', 'token generator', 'jwt signing', 'secret key', 'authentication'],
+  },
+  [ToolID.UUID_GENERATOR]: {
+    id: ToolID.UUID_GENERATOR,
+    title: 'UUID Generator',
+    description: 'Generate random Version 4 UUIDs instantly.',
+    icon: Hash,
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-100',
+    category: ToolCategory.DEVELOPER_TOOLS,
+    keywords: ['uuid generator', 'guid generator', 'v4 uuid', 'random id', 'unique identifier'],
   },
 
   // --- IMAGE & AUDIO ---

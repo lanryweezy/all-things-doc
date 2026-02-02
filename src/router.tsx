@@ -15,6 +15,7 @@ const DocChat = lazy(() => import('./components/tools/DocChat').then(module => (
 const TextToSpeech = lazy(() => import('./components/tools/TextToSpeech').then(module => ({ default: module.TextToSpeech })));
 const DataConverter = lazy(() => import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter })));
 const JwtSecretGenerator = lazy(() => import('./components/tools/JwtSecretGenerator').then(module => ({ default: module.JwtSecretGenerator })));
+const UuidGenerator = lazy(() => import('./components/tools/UuidGenerator').then(module => ({ default: module.UuidGenerator })));
 
 // Lazy load legal pages
 const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
@@ -64,6 +65,10 @@ const JwtSecretGeneratorWrapper = () => {
   return <JwtSecretGenerator onBack={() => window.history.back()} />;
 };
 
+const UuidGeneratorWrapper = () => {
+  return <UuidGenerator onBack={() => window.history.back()} />;
+};
+
 // Helper function to map tool IDs to paths
 function getToolPath(toolId: ToolID): string | null {
   // Intelligent Document
@@ -84,6 +89,9 @@ function getToolPath(toolId: ToolID): string | null {
   // Developer Tools
   if (toolId === ToolID.JWT_SECRET_GENERATOR) {
     return '/tools/jwt-secret-generator';
+  }
+  if (toolId === ToolID.UUID_GENERATOR) {
+    return '/tools/uuid-generator';
   }
 
   // Client/Image Tools
@@ -224,6 +232,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <JwtSecretGeneratorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/uuid-generator',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <UuidGeneratorWrapper />
           </Suspense>
         ),
       },

@@ -1,8 +1,31 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
+  "builds": [
+    {
+      "src": "backend/main.py",
+      "use": "@vercel/python",
+      "config": { "runtime": "python3.11" }
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
   "routes": [
+    {
+      "src": "/pdf/(.*)",
+      "dest": "/backend/main.py"
+    },
+    {
+      "src": "/ai/(.*)",
+      "dest": "/backend/main.py"
+    },
+    {
+      "src": "/health",
+      "dest": "/backend/main.py"
+    },
     {
       "src": "/assets/(.*)",
       "headers": {

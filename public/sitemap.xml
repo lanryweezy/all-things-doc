@@ -196,16 +196,16 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://allthingsdoc.com/jwt-secret-generator</loc>
-    <lastmod>2024-12-02</lastmod>
+    <loc>https://allthingsdoc.com/tools/jwt-secret-generator</loc>
+    <lastmod>2025-12-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://allthingsdoc.com/uuid-generator</loc>
-    <lastmod>2024-12-02</lastmod>
+    <loc>https://allthingsdoc.com/tools/uuid-generator</loc>
+    <lastmod>2025-12-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://allthingsdoc.com/qr-generator</loc>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TOOLS } from '../constants';
 import { ToolID, ToolCategory } from '../types';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Search } from 'lucide-react';
 
 interface ToolTipProps {
   text: string;
@@ -40,10 +40,36 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
     ToolCategory.DEVELOPER_TOOLS,
     ToolCategory.MEDIA_TOOLS,
   ];
+  
+  // Tools to highlight as new
+  const newTools = [ToolID.JWT_SECRET_GENERATOR, ToolID.UUID_GENERATOR];
 
-  const [activeCategory, setActiveCategory] = useState<ToolCategory>(categories[0]);
+  const [activeCategory, setActiveCategory] = useState<ToolCategory | 'featured'>('featured');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const activeTools = Object.values(TOOLS).filter(tool => tool.category === activeCategory);
+  const allTools = Object.values(TOOLS);
+  
+  // Tools to display in Featured section
+  const featuredTools = allTools.filter(tool => 
+    [
+      ToolID.PDF_AI_SUMMARIZER, 
+      ToolID.PDF_OCR, 
+      ToolID.JWT_SECRET_GENERATOR, 
+      ToolID.UUID_GENERATOR,
+      ToolID.IMAGE_CONVERT
+    ].includes(tool.id)
+  );
+
+  const activeTools = searchQuery
+    ? allTools.filter(
+        tool =>
+          tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          tool.keywords?.some(keyword => keyword.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    : activeCategory === 'featured' 
+      ? featuredTools 
+      : allTools.filter(tool => tool.category === activeCategory);
 
   // Tool tips for complex tools that need additional explanation
   const toolTips: Record<string, string> = {
@@ -85,10 +111,41 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
           Manage your documents efficiently with our suite of client-side and AI-powered tools. 100%
           free and easy to use.
         </p>
+        
+        <div className="max-w-md mx-auto mt-8 relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-slate-400" />
+          </div>
+          <input
+            type="text"
+            className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-800 placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-doc-red focus:border-doc-red sm:text-sm transition-colors shadow-sm"
+            placeholder="Search for tools (e.g., PDF to Word, OCR, JSON...)"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
+      {!searchQuery && (
       <div className="sticky top-16 z-40 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm py-4 border-b border-slate-200 dark:border-slate-700 mb-8 transition-colors">
         <div className="flex flex-wrap justify-center gap-2 px-2" role="tablist" aria-label="Tool Categories">
+          <button
+            onClick={() => setActiveCategory('featured')}
+            role="tab"
+            aria-selected={activeCategory === 'featured'}
+            aria-controls="panel-featured"
+            id="tab-featured"
+            className={`
+              whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center
+              ${
+                activeCategory === 'featured'
+                  ? 'bg-doc-red text-white shadow-md transform scale-105'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-doc-red dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors'
+              }
+            `}
+          >
+            <span className="mr-1">🔥</span> Popular
+          </button>
           {categories.map(category => (
             <button
               key={category}
@@ -111,16 +168,21 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
           ))}
         </div>
       </div>
+      )}
 
       <div 
         className="animate-fade-in min-h-[400px]"
         role="tabpanel"
-        id={`panel-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`}
-        aria-labelledby={`tab-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`}
+        id={!searchQuery ? (activeCategory === 'featured' ? 'panel-featured' : `panel-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`) : undefined}
+        aria-labelledby={!searchQuery ? (activeCategory === 'featured' ? 'tab-featured' : `tab-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`) : undefined}
       >
         <div className="flex items-center space-x-4 mb-6 px-2">
           <h2 className="text-2xl font-bold text-doc-slate dark:text-white transition-colors">
-            {activeCategory}
+            {searchQuery 
+              ? `Search Results for "${searchQuery}"` 
+              : activeCategory === 'featured' 
+                ? 'Popular & Featured Tools' 
+                : activeCategory}
           </h2>
           <div className="h-px bg-slate-200 flex-grow"></div>
           <span className="text-sm text-slate-400 dark:text-slate-500 font-medium transition-colors">
@@ -128,9 +190,27 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
           </span>
         </div>
 
+        {activeTools.length === 0 ? (
+          <div className="text-center py-16 px-4">
+            <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <Search className="h-10 w-10 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">No tools found</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-lg max-w-md mx-auto mb-8">
+              We couldn't find any tools matching "{searchQuery}". Try adjusting your search terms or browse by category.
+            </p>
+            <button 
+              onClick={() => setSearchQuery('')}
+              className="inline-flex items-center px-6 py-3 bg-doc-red text-white rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
+            >
+              Clear search & view all tools
+            </button>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {activeTools.map(tool => {
             const hasToolTip = toolTips[tool.id];
+            const isNew = newTools.includes(tool.id);
             const toolCard = (
               <div
                 key={tool.id}
@@ -139,8 +219,13 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                 role="button"
                 tabIndex={0}
                 aria-label={`Open ${tool.title}: ${tool.description}`}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-doc-red focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-doc-red focus:ring-offset-2 dark:focus:ring-offset-slate-900 relative overflow-hidden"
               >
+                {isNew && (
+                  <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm animate-pulse">
+                    NEW
+                  </div>
+                )}
                 <div
                   className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 ${tool.bgColor} group-hover:scale-110 transition-transform duration-300`}
                 >
@@ -167,6 +252,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
             );
           })}
         </div>
+        )}
       </div>
     </div>
   );
