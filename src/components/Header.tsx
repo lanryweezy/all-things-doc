@@ -11,7 +11,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ goHome, activeTool }) => {
   return (
     <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 transition-colors duration-300">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl">
+      <div className="container mx-auto px-2 sm:px-6 lg:px-8 h-16 flex items-center justify-between max-w-7xl">
         <div onClick={goHome} className="flex items-center space-x-2 cursor-pointer group">
           <div className="bg-doc-red text-white p-1.5 rounded-lg group-hover:opacity-90 transition-opacity">
             <Layers size={24} />
@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ goHome, activeTool }) => {
               <span className="font-semibold text-doc-red">{TOOLS[activeTool].title}</span>
             </div>
           ) : (
-            <div className="text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors">
+            <div className="text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors hidden sm:block">
               The comprehensive file tool suite
             </div>
           )}

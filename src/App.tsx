@@ -23,7 +23,7 @@ const App: React.FC = () => {
       <SeoHelmet />
       <DarkModeToggle />
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+      <main className="flex-grow container mx-auto px-2 sm:px-6 lg:px-8 py-8 max-w-7xl">
         <Outlet />
       </main>
       <footer className="bg-slate-900 dark:bg-slate-950 text-slate-400 py-6 text-center text-sm transition-colors">

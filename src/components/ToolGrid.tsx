@@ -176,7 +176,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
         id={!searchQuery ? (activeCategory === 'featured' ? 'panel-featured' : `panel-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`) : undefined}
         aria-labelledby={!searchQuery ? (activeCategory === 'featured' ? 'tab-featured' : `tab-${activeCategory.replace(/\s+/g, '-').toLowerCase()}`) : undefined}
       >
-        <div className="flex items-center space-x-4 mb-6 px-2">
+        <div className="flex items-center space-x-4 mb-6 px-2 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-doc-slate dark:text-white transition-colors">
             {searchQuery 
               ? `Search Results for "${searchQuery}"` 
@@ -207,7 +207,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
             </button>
           </div>
         ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2 sm:px-6 lg:px-8">
           {activeTools.map(tool => {
             const hasToolTip = toolTips[tool.id];
             const isNew = newTools.includes(tool.id);
