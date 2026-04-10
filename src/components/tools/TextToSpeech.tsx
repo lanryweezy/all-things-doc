@@ -18,6 +18,8 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const [audioData, setAudioData] = useState<Uint8Array | null>(null);
   const [mode, setMode] = useState<'local' | 'ai'>('local');
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<string>('');
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const toolInfo = TOOLS[ToolID.TEXT_TO_SPEECH];
@@ -35,6 +37,20 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
     }
   }, [audioData]);
 
+  useEffect(() => {
+    const loadVoices = () => {
+      const availableVoices = window.speechSynthesis.getVoices();
+      setVoices(availableVoices);
+      if (availableVoices.length > 0 && !selectedVoice) {
+        const defaultVoice = availableVoices.find(v => v.default) || availableVoices[0];
+        setSelectedVoice(defaultVoice.name);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }, []);
+
   const handleStopLocal = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
@@ -46,6 +62,9 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
     if (mode === 'local') {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
+      const voice = voices.find(v => v.name === selectedVoice);
+      if (voice) utterance.voice = voice;
+
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -185,7 +204,19 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
             {mode === 'ai' ? (
               <span>Voice: <span className="font-medium text-slate-700">Kore (Balanced)</span></span>
             ) : (
-              <span>Using system default voice</span>
+              <div className="flex items-center space-x-2">
+                <label htmlFor="voice-select" className="sr-only">Choose Voice</label>
+                <select
+                  id="voice-select"
+                  value={selectedVoice}
+                  onChange={(e) => setSelectedVoice(e.target.value)}
+                  className="p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500 max-w-[200px]"
+                >
+                  {voices.map(v => (
+                    <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
           <div className="flex space-x-3">

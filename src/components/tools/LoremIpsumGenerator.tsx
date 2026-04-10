@@ -87,8 +87,9 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Count</label>
+            <label htmlFor="lorem-count" className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Count</label>
             <input
+              id="lorem-count"
               type="number"
               min="1"
               max="100"
@@ -98,8 +99,9 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
             />
           </div>
           <div>
-            <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Type</label>
+            <label htmlFor="lorem-type" className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Type</label>
             <select
+              id="lorem-type"
               value={type}
               onChange={(e) => setType(e.target.value as any)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-bold"
@@ -110,8 +112,9 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
             </select>
           </div>
           <div className="flex flex-col justify-end">
-            <label className="flex items-center space-x-3 cursor-pointer group mb-1 select-none">
+            <label htmlFor="start-with-lorem" className="flex items-center space-x-3 cursor-pointer group mb-1 select-none">
               <input
+                id="start-with-lorem"
                 type="checkbox"
                 checked={startWithLorem}
                 onChange={() => setStartWithLorem(!startWithLorem)}
@@ -123,7 +126,9 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
         </div>
 
         <div className="relative">
+          <label htmlFor="lorem-output" className="sr-only">Generated Lorem Ipsum</label>
           <textarea
+            id="lorem-output"
             readOnly
             value={output}
             className="w-full h-80 p-6 bg-slate-50 border border-slate-200 rounded-2xl outline-none resize-none font-serif text-slate-700 leading-relaxed"

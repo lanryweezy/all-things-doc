@@ -18,6 +18,7 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<string | null>(null);
   const [mode, setMode] = useState<'local' | 'ai'>('local');
+  const [localLang, setLocalLang] = useState('eng');
   const toolInfo = TOOLS[ToolID.SMART_OCR];
 
   const handleExtract = async () => {
@@ -41,6 +42,8 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
           }
         });
 
+        await worker.loadLanguage(localLang);
+        await worker.initialize(localLang);
         const { data: { text } } = await worker.recognize(file);
         await worker.terminate();
         setResult(text);
@@ -114,6 +117,25 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
                 </button>
               </div>
             </div>
+
+            {mode === 'local' && (
+              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                <label htmlFor="local-lang" className="block text-sm font-bold text-slate-700 mb-2">OCR Language</label>
+                <select
+                  id="local-lang"
+                  value={localLang}
+                  onChange={(e) => setLocalLang(e.target.value)}
+                  className="w-full md:w-64 p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-medium"
+                >
+                  <option value="eng">English</option>
+                  <option value="spa">Spanish</option>
+                  <option value="fra">French</option>
+                  <option value="deu">German</option>
+                  <option value="chi_sim">Chinese (Simplified)</option>
+                  <option value="jpn">Japanese</option>
+                </select>
+              </div>
+            )}
 
             <div className="flex justify-end">
               <Button

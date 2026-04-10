@@ -133,15 +133,18 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-500">From</label>
+            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">From</label>
             <div className="space-y-3">
               <input
+                id="unit-input"
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-doc-slate focus:ring-2 focus:ring-doc-red outline-none"
               />
+              <label htmlFor="from-unit-select" className="sr-only">From Unit</label>
               <select
+                id="from-unit-select"
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
                 className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-doc-red"
@@ -156,15 +159,17 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-500">To</label>
             <div className="space-y-3">
-              <div className="w-full p-4 bg-doc-red/5 border border-doc-red/10 rounded-xl text-2xl font-bold text-doc-red min-h-[64px] flex items-center justify-between">
+              <div className="w-full p-4 bg-doc-red/5 border border-doc-red/10 rounded-xl text-2xl font-bold text-doc-red min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
                 <span>{result || '0'}</span>
                 {result && (
-                  <button onClick={handleCopy} className="text-doc-red/60 hover:text-doc-red">
+                  <button onClick={handleCopy} className="text-doc-red/60 hover:text-doc-red" aria-label="Copy result">
                     {copied ? <Check size={20} /> : <Copy size={20} />}
                   </button>
                 )}
               </div>
+              <label htmlFor="to-unit-select" className="sr-only">To Unit</label>
               <select
+                id="to-unit-select"
                 value={toUnit}
                 onChange={(e) => setToUnit(e.target.value)}
                 className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-doc-red"

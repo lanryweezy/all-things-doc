@@ -165,6 +165,12 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           }
           break;
 
+        case ToolID.PDF_REPAIR:
+          if (file) {
+            result = await pdfService.repairPdf(file);
+          }
+          break;
+
         default:
           // Simulating backend processing for binary operations
           await new Promise(r => setTimeout(r, 2000));

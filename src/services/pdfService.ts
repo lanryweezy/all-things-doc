@@ -166,6 +166,14 @@ export const addPageNumbers = async (file: File, position: string): Promise<Uint
   return await pdfDoc.save();
 };
 
+export const repairPdf = async (file: File): Promise<Uint8Array> => {
+  const { PDFDocument } = await import('pdf-lib');
+  const arrayBuffer = await file.arrayBuffer();
+  // Simply loading and saving often fixes structural issues
+  const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+  return await pdfDoc.save();
+};
+
 export const watermarkPdf = async (file: File, text: string): Promise<Uint8Array> => {
   const { PDFDocument, rgb, StandardFonts, degrees } = await import('pdf-lib');
   const arrayBuffer = await file.arrayBuffer();
