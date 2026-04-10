@@ -16,6 +16,11 @@ const TextToSpeech = lazy(() => import('./components/tools/TextToSpeech').then(m
 const DataConverter = lazy(() => import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter })));
 const JwtSecretGenerator = lazy(() => import('./components/tools/JwtSecretGenerator').then(module => ({ default: module.JwtSecretGenerator })));
 const UuidGenerator = lazy(() => import('./components/tools/UuidGenerator').then(module => ({ default: module.UuidGenerator })));
+const JsonFormatter = lazy(() => import('./components/tools/JsonFormatter').then(module => ({ default: module.JsonFormatter })));
+const Base64Tool = lazy(() => import('./components/tools/Base64Tool').then(module => ({ default: module.Base64Tool })));
+const HashGenerator = lazy(() => import('./components/tools/HashGenerator').then(module => ({ default: module.HashGenerator })));
+const UnitConverter = lazy(() => import('./components/tools/UnitConverter').then(module => ({ default: module.UnitConverter })));
+const TextCaseConverter = lazy(() => import('./components/tools/TextCaseConverter').then(module => ({ default: module.TextCaseConverter })));
 
 // Lazy load legal pages
 const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
@@ -69,6 +74,26 @@ const UuidGeneratorWrapper = () => {
   return <UuidGenerator onBack={() => window.history.back()} />;
 };
 
+const JsonFormatterWrapper = () => {
+  return <JsonFormatter onBack={() => window.history.back()} />;
+};
+
+const Base64ToolWrapper = () => {
+  return <Base64Tool onBack={() => window.history.back()} />;
+};
+
+const HashGeneratorWrapper = () => {
+  return <HashGenerator onBack={() => window.history.back()} />;
+};
+
+const UnitConverterWrapper = () => {
+  return <UnitConverter onBack={() => window.history.back()} />;
+};
+
+const TextCaseConverterWrapper = () => {
+  return <TextCaseConverter onBack={() => window.history.back()} />;
+};
+
 // Helper function to map tool IDs to paths
 function getToolPath(toolId: ToolID): string | null {
   // Intelligent Document
@@ -92,6 +117,21 @@ function getToolPath(toolId: ToolID): string | null {
   }
   if (toolId === ToolID.UUID_GENERATOR) {
     return '/tools/uuid-generator';
+  }
+  if (toolId === ToolID.JSON_FORMATTER) {
+    return '/tools/json-formatter';
+  }
+  if (toolId === ToolID.BASE64_ENCODER) {
+    return '/tools/base64-tool';
+  }
+  if (toolId === ToolID.HASH_GENERATOR) {
+    return '/tools/hash-generator';
+  }
+  if (toolId === ToolID.UNIT_CONVERTER) {
+    return '/tools/unit-converter';
+  }
+  if (toolId === ToolID.TEXT_CASE_CONVERTER) {
+    return '/tools/text-case-converter';
   }
 
   // Client/Image Tools
@@ -240,6 +280,46 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <UuidGeneratorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/json-formatter',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <JsonFormatterWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/base64-tool',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Base64ToolWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/hash-generator',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <HashGeneratorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/unit-converter',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <UnitConverterWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/text-case-converter',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <TextCaseConverterWrapper />
           </Suspense>
         ),
       },

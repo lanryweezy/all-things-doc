@@ -589,10 +589,10 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       case ToolID.JPG_TO_PDF:
       case ToolID.PDF_TO_JPG:
       case ToolID.PDF_TO_PNG:
-      case ToolId === ToolID.WORD_TO_JPG:
+      case ToolID.WORD_TO_JPG:
       case ToolID.PPT_TO_JPG:
-      case ToolId === ToolID.EXCEL_TO_JPG:
-      case ToolId === ToolID.PDF_SCAN:
+      case ToolID.EXCEL_TO_JPG:
+      case ToolID.PDF_SCAN:
         return <ImageIcon size={18} />;
       default:
         return <FileOutput size={18} />;

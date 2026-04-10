@@ -37,6 +37,39 @@ export const splitPdf = async (file: File, splitPoints: number[]): Promise<Blob>
   throw new Error('Backend service not available and client-side processing not implemented');
 };
 
+export const imageToPdf = async (file: File): Promise<Uint8Array> => {
+  const { jsPDF } = await import('jspdf');
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+        const pdf = new jsPDF({
+          orientation: img.width > img.height ? 'l' : 'p',
+          unit: 'px',
+          format: [img.width, img.height]
+        });
+
+        pdf.addImage(imgData, 'JPEG', 0, 0, img.width, img.height);
+        const arrayBuffer = pdf.output('arraybuffer');
+        resolve(new Uint8Array(arrayBuffer));
+      };
+      img.onerror = reject;
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
 export const compressPdf = async (file: File): Promise<Blob> => {
   if (BACKEND_AVAILABLE) {
     try {
