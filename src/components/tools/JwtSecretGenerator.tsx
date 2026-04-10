@@ -37,8 +37,11 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
     }
 
     let generatedSecret = '';
+    const array = new Uint32Array(length);
+    window.crypto.getRandomValues(array);
+
     for (let i = 0; i < length; i++) {
-      generatedSecret += charset.charAt(Math.floor(Math.random() * charset.length));
+      generatedSecret += charset.charAt(array[i] % charset.length);
     }
 
     setSecret(generatedSecret);
@@ -96,10 +99,11 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
             
             {/* Length Slider */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="jwt-length" className="block text-sm font-medium text-slate-700 mb-2">
                 Secret Length: {length} characters
               </label>
               <input
+                id="jwt-length"
                 type="range"
                 min="16"
                 max="128"
@@ -115,41 +119,41 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
 
             {/* Character Type Options */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeLowercase}
                   onChange={(e) => setIncludeLowercase(e.target.checked)}
-                  className="rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                  className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
-                <span className="text-sm text-slate-700">Lowercase</span>
+                <span className="text-sm text-slate-700 select-none">Lowercase</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeUppercase}
                   onChange={(e) => setIncludeUppercase(e.target.checked)}
-                  className="rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                  className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
-                <span className="text-sm text-slate-700">Uppercase</span>
+                <span className="text-sm text-slate-700 select-none">Uppercase</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeNumbers}
                   onChange={(e) => setIncludeNumbers(e.target.checked)}
-                  className="rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                  className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
-                <span className="text-sm text-slate-700">Numbers</span>
+                <span className="text-sm text-slate-700 select-none">Numbers</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeSymbols}
                   onChange={(e) => setIncludeSymbols(e.target.checked)}
-                  className="rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                  className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
-                <span className="text-sm text-slate-700">Symbols</span>
+                <span className="text-sm text-slate-700 select-none">Symbols</span>
               </label>
             </div>
 

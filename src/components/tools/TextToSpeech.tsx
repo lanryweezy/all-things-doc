@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Play, Download, Link } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Play, Download, Link, Cpu, Zap, Pause } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { generateSpeech } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
@@ -16,6 +16,11 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [audioData, setAudioData] = useState<Uint8Array | null>(null);
+  const [mode, setMode] = useState<'local' | 'ai'>('local');
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<string>('');
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const toolInfo = TOOLS[ToolID.TEXT_TO_SPEECH];
 
@@ -32,34 +37,53 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
     }
   }, [audioData]);
 
+  useEffect(() => {
+    const loadVoices = () => {
+      const availableVoices = window.speechSynthesis.getVoices();
+      setVoices(availableVoices);
+      if (availableVoices.length > 0 && !selectedVoice) {
+        const defaultVoice = availableVoices.find(v => v.default) || availableVoices[0];
+        setSelectedVoice(defaultVoice.name);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }, []);
+
+  const handleStopLocal = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  };
+
   const handleGenerate = async () => {
     if (!text.trim()) return;
+
+    if (mode === 'local') {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voice = voices.find(v => v.name === selectedVoice);
+      if (voice) utterance.voice = voice;
+
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+      return;
+    }
+
     setIsProcessing(true);
     setAudioUrl(null);
     try {
       const base64Audio = await generateSpeech(text);
       if (base64Audio) {
-        // Convert base64 to blob url
         const byteCharacters = atob(base64Audio);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
           byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
         const byteArray = new Uint8Array(byteNumbers);
-        // The API returns raw audio usually. Let's create a WAV header if needed or assume browser can handle the raw stream in a blob?
-        // Actually the prompt guide says "The audio bytes returned by the API is raw PCM data."
-        // We need to decode it.
-
-        // Wait, the prompt instruction said: "Transform text input into single-speaker or multi-speaker audio."
-        // And provided code for AudioContext decoding.
-        // For simple playback in <audio> tag, we might need a WAV header if it's raw PCM.
-        // However, standard `generateContent` with `Modality.AUDIO` usually returns a usable audio file format if configured or raw.
-        // The prompt instructions say: "The audio bytes returned by the API is raw PCM data. It is not a standard file format... contains no header information."
-
-        // To play raw PCM in a simple <audio> tag is hard. We need to wrap it in a WAV container or use AudioContext.
-        // For this demo, let's use the provided AudioContext method to play it, but to "Download" we need a file.
-        // Let's implement a simple WAV header generator for the PCM data (1 channel, 24kHz usually for standard voice).
-
         const wavHeader = getWavHeader(byteArray.length, 24000, 1);
         const wavBlob = new Blob([wavHeader, byteArray], { type: 'audio/wav' });
         const url = URL.createObjectURL(wavBlob);
@@ -136,6 +160,33 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div className="mb-8 flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-50 p-6 rounded-2xl border border-slate-200">
+          <div className="space-y-1 text-center md:text-left">
+            <h3 className="font-bold text-slate-900">Voice Quality</h3>
+            <p className="text-xs text-slate-500">Fast local playback or high-fidelity AI</p>
+          </div>
+          <div className="inline-flex p-1.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+            <button
+              onClick={() => setMode('local')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                mode === 'local' ? 'bg-pink-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'
+              }`}
+            >
+              <Cpu size={16} />
+              <span>Local (Instant)</span>
+            </button>
+            <button
+              onClick={() => setMode('ai')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                mode === 'ai' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'
+              }`}
+            >
+              <Zap size={16} />
+              <span>AI Studio Voice</span>
+            </button>
+          </div>
+        </div>
+
         <div className="mb-6">
           <label className="block text-sm font-medium text-doc-slate mb-2">
             Enter Text to Speak
@@ -150,17 +201,45 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
 
         <div className="flex items-center justify-between">
           <div className="text-sm text-slate-500">
-            Voice: <span className="font-medium text-slate-700">Kore (Balanced)</span>
+            {mode === 'ai' ? (
+              <span>Voice: <span className="font-medium text-slate-700">Kore (Balanced)</span></span>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <label htmlFor="voice-select" className="sr-only">Choose Voice</label>
+                <select
+                  id="voice-select"
+                  value={selectedVoice}
+                  onChange={(e) => setSelectedVoice(e.target.value)}
+                  className="p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500 max-w-[200px]"
+                >
+                  {voices.map(v => (
+                    <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
-          <Button
-            onClick={handleGenerate}
-            isLoading={isProcessing}
-            disabled={!text.trim()}
-            className="bg-pink-600 hover:bg-pink-700"
-            icon={<Play size={18} />}
-          >
-            Generate Audio
-          </Button>
+          <div className="flex space-x-3">
+            {mode === 'local' && isSpeaking && (
+              <Button
+                onClick={handleStopLocal}
+                variant="outline"
+                className="border-red-200 text-red-600 hover:bg-red-50"
+                icon={<Pause size={18} />}
+              >
+                Stop
+              </Button>
+            )}
+            <Button
+              onClick={handleGenerate}
+              isLoading={isProcessing}
+              disabled={!text.trim()}
+              className={mode === 'ai' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-pink-600 hover:bg-pink-700'}
+              icon={<Play size={18} />}
+            >
+              {mode === 'local' ? (isSpeaking ? 'Restart' : 'Play Text') : 'Generate AI Audio'}
+            </Button>
+          </div>
         </div>
 
         {audioUrl && (

@@ -92,6 +92,13 @@ export enum ToolID {
   BASE64_ENCODER = 'base64-encoder',
   JSON_FORMATTER = 'json-formatter',
   QR_GENERATOR = 'qr-generator',
+  UNIT_CONVERTER = 'unit-converter',
+  TEXT_CASE_CONVERTER = 'text-case-converter',
+  PASSWORD_GENERATOR = 'password-generator',
+  LOREM_IPSUM_GENERATOR = 'lorem-ipsum-generator',
+  IMAGE_RESIZER = 'image-resizer',
+  IMAGE_COMPRESSOR = 'image-compressor',
+  MARKDOWN_TOOL = 'markdown-tool',
 }
 
 export enum ToolCategory {

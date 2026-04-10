@@ -42,7 +42,16 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
   ];
   
   // Tools to highlight as new
-  const newTools = [ToolID.JWT_SECRET_GENERATOR, ToolID.UUID_GENERATOR];
+  const newTools = [
+    ToolID.JWT_SECRET_GENERATOR,
+    ToolID.UUID_GENERATOR,
+    ToolID.UNIT_CONVERTER,
+    ToolID.TEXT_CASE_CONVERTER,
+    ToolID.HASH_GENERATOR,
+    ToolID.QR_GENERATOR,
+    ToolID.PASSWORD_GENERATOR,
+    ToolID.LOREM_IPSUM_GENERATOR,
+  ];
 
   const [activeCategory, setActiveCategory] = useState<ToolCategory | 'featured'>('featured');
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,13 +59,14 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
   const allTools = Object.values(TOOLS);
   
   // Tools to display in Featured section
-  const featuredTools = allTools.filter(tool => 
+  const featuredTools = allTools.filter(tool =>
     [
-      ToolID.PDF_AI_SUMMARIZER, 
-      ToolID.PDF_OCR, 
-      ToolID.JWT_SECRET_GENERATOR, 
-      ToolID.UUID_GENERATOR,
-      ToolID.IMAGE_CONVERT
+      ToolID.MAGIC_SUMMARIZER,
+      ToolID.PDF_OCR,
+      ToolID.UNIT_CONVERTER,
+      ToolID.TEXT_CASE_CONVERTER,
+      ToolID.QR_GENERATOR,
+      ToolID.PASSWORD_GENERATOR,
     ].includes(tool.id)
   );
 
@@ -67,13 +77,13 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
           tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
           tool.keywords?.some(keyword => keyword.toLowerCase().includes(searchQuery.toLowerCase()))
       )
-    : activeCategory === 'featured' 
-      ? featuredTools 
+    : activeCategory === 'featured'
+      ? featuredTools
       : allTools.filter(tool => tool.category === activeCategory);
 
   // Tool tips for complex tools that need additional explanation
   const toolTips: Record<string, string> = {
-    [ToolID.PDF_AI_SUMMARIZER]:
+    [ToolID.MAGIC_SUMMARIZER]:
       'Uses AI to extract key insights and create concise summaries from PDF documents',
     [ToolID.PDF_BANK_STATEMENT_CONVERTER]:
       'AI-powered extraction of transaction data from bank statements into CSV format',
@@ -85,13 +95,11 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
     [ToolID.PDF_COMPRESS]: 'Reduce file size while maintaining document quality and readability',
     [ToolID.EXCEL_TO_PDF]: 'Convert Excel spreadsheets to PDF format with formatting preserved',
     [ToolID.WORD_TO_PDF]: 'Transform Word documents to PDF while maintaining layout and styling',
-    [ToolID.PPT_TO_PDF]: 'Convert PowerPoint presentations to PDF format',
+    [ToolID.POWERPOINT_TO_PDF]: 'Convert PowerPoint presentations to PDF format',
     [ToolID.JSON_TO_CSV]: 'Transform JSON data structures into CSV format for analysis',
     [ToolID.CSV_TO_JSON]: 'Convert CSV data into structured JSON format',
     [ToolID.XML_TO_JSON]: 'Parse XML documents and convert to JSON structure',
-    [ToolID.IMAGE_COMPRESS]: 'Reduce image file sizes while maintaining visual quality',
-    [ToolID.IMAGE_RESIZE]: 'Adjust image dimensions and resolution for different use cases',
-    [ToolID.IMAGE_CONVERT]: 'Convert between different image formats (PNG, JPG, WebP, etc.)',
+    [ToolID.IMAGE_CONVERTER]: 'Convert between different image formats (PNG, JPG, WebP, etc.)',
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, toolId: ToolID) => {

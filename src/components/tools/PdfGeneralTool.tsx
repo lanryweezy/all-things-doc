@@ -104,43 +104,35 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
 
         case ToolID.PDF_PROTECT:
           if (file && paramValue) {
-            // This is a placeholder for actual backend implementation
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('PDF Protect functionality is a placeholder. Backend integration needed.');
+            result = await pdfService.protectPdf(file, paramValue);
           }
           break;
 
         case ToolID.PDF_UNLOCK:
           if (file && paramValue) {
-            // This is a placeholder for actual backend implementation
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('PDF Unlock functionality is a placeholder. Backend integration needed.');
+            result = await pdfService.decryptPdf(file, paramValue);
           }
           break;
 
         case ToolID.PDF_WATERMARK:
           if (file && paramValue) {
-            // This is a placeholder for actual backend implementation
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('PDF Watermark functionality is a placeholder. Backend integration needed.');
-          }
-          break;
-
-        case ToolID.PDF_ROTATE:
-          if (file) {
-            // This is a placeholder for actual backend implementation
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('PDF Rotate functionality is a placeholder. Backend integration needed.');
+            result = await pdfService.watermarkPdf(file, paramValue);
           }
           break;
 
         case ToolID.PDF_PAGE_NUMBERS:
           if (file) {
-            // This is a placeholder for actual backend implementation
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('PDF Page Numbers functionality is a placeholder. Backend integration needed.');
+            result = await pdfService.addPageNumbers(file, paramValue || 'Bottom Center');
           }
           break;
+
+        case ToolID.PDF_ROTATE:
+          if (file) {
+            const rotation = paramValue === 'Left' ? -90 : 90;
+            result = await pdfService.rotatePdf(file, rotation);
+          }
+          break;
+
         case ToolID.PDF_SPLIT:
           if (file && paramValue) {
             const splitPoints = paramValue.split(',').map(Number);
@@ -169,9 +161,13 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
 
         case ToolID.JPG_TO_PDF:
           if (file) {
-            // This is a placeholder for actual backend implementation
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('JPG to PDF functionality is a placeholder. Backend integration needed.');
+            result = await pdfService.imageToPdf(file);
+          }
+          break;
+
+        case ToolID.PDF_REPAIR:
+          if (file) {
+            result = await pdfService.repairPdf(file);
           }
           break;
 
@@ -379,12 +375,18 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       case ToolID.PDF_ROTATE:
         return (
           <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200 flex justify-center space-x-6">
-            <button className="flex flex-col items-center p-4 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-              <RotateCcw className="mb-2 text-doc-slate" size={24} />
+            <button
+              onClick={() => setParamValue('Left')}
+              className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Left' ? 'bg-doc-slate text-white border-doc-slate' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
+            >
+              <RotateCcw className={`mb-2 ${paramValue === 'Left' ? 'text-white' : 'text-doc-slate'}`} size={24} />
               <span className="text-sm font-medium">Left 90°</span>
             </button>
-            <button className="flex flex-col items-center p-4 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-              <RotateCw className="mb-2 text-doc-slate" size={24} />
+            <button
+              onClick={() => setParamValue('Right')}
+              className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Right' ? 'bg-doc-slate text-white border-doc-slate' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
+            >
+              <RotateCw className={`mb-2 ${paramValue === 'Right' ? 'text-white' : 'text-doc-slate'}`} size={24} />
               <span className="text-sm font-medium">Right 90°</span>
             </button>
           </div>
@@ -589,10 +591,10 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       case ToolID.JPG_TO_PDF:
       case ToolID.PDF_TO_JPG:
       case ToolID.PDF_TO_PNG:
-      case ToolId === ToolID.WORD_TO_JPG:
+      case ToolID.WORD_TO_JPG:
       case ToolID.PPT_TO_JPG:
-      case ToolId === ToolID.EXCEL_TO_JPG:
-      case ToolId === ToolID.PDF_SCAN:
+      case ToolID.EXCEL_TO_JPG:
+      case ToolID.PDF_SCAN:
         return <ImageIcon size={18} />;
       default:
         return <FileOutput size={18} />;

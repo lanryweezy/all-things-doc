@@ -1,5 +1,5 @@
-import React from 'react';
-import { Layers } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Layers, Download } from 'lucide-react';
 import { ToolID } from '../types';
 import { TOOLS } from '../constants';
 
@@ -9,6 +9,24 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ goHome, activeTool }) => {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+    }
+  };
+
   return (
     <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 transition-colors duration-300">
       <div className="container mx-auto px-2 sm:px-6 lg:px-8 h-16 flex items-center justify-between max-w-7xl">
@@ -21,7 +39,16 @@ export const Header: React.FC<HeaderProps> = ({ goHome, activeTool }) => {
           </span>
         </div>
 
-        <nav>
+        <nav className="flex items-center space-x-4">
+          {deferredPrompt && (
+            <button
+              onClick={handleInstallClick}
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-doc-red text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors"
+            >
+              <Download size={14} />
+              <span className="hidden xs:inline">Install App</span>
+            </button>
+          )}
           {activeTool ? (
             <div className="flex items-center space-x-2 text-sm">
               <button
