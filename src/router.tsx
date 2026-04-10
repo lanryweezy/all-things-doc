@@ -21,6 +21,10 @@ const Base64Tool = lazy(() => import('./components/tools/Base64Tool').then(modul
 const HashGenerator = lazy(() => import('./components/tools/HashGenerator').then(module => ({ default: module.HashGenerator })));
 const UnitConverter = lazy(() => import('./components/tools/UnitConverter').then(module => ({ default: module.UnitConverter })));
 const TextCaseConverter = lazy(() => import('./components/tools/TextCaseConverter').then(module => ({ default: module.TextCaseConverter })));
+const QrGenerator = lazy(() => import('./components/tools/QrGenerator').then(module => ({ default: module.QrGenerator })));
+const PasswordGenerator = lazy(() => import('./components/tools/PasswordGenerator').then(module => ({ default: module.PasswordGenerator })));
+const LoremIpsumGenerator = lazy(() => import('./components/tools/LoremIpsumGenerator').then(module => ({ default: module.LoremIpsumGenerator })));
+const ImageResizer = lazy(() => import('./components/tools/ImageResizer').then(module => ({ default: module.ImageResizer })));
 
 // Lazy load legal pages
 const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
@@ -94,6 +98,22 @@ const TextCaseConverterWrapper = () => {
   return <TextCaseConverter onBack={() => window.history.back()} />;
 };
 
+const QrGeneratorWrapper = () => {
+  return <QrGenerator onBack={() => window.history.back()} />;
+};
+
+const PasswordGeneratorWrapper = () => {
+  return <PasswordGenerator onBack={() => window.history.back()} />;
+};
+
+const LoremIpsumGeneratorWrapper = () => {
+  return <LoremIpsumGenerator onBack={() => window.history.back()} />;
+};
+
+const ImageResizerWrapper = () => {
+  return <ImageResizer onBack={() => window.history.back()} />;
+};
+
 // Helper function to map tool IDs to paths
 function getToolPath(toolId: ToolID): string | null {
   // Intelligent Document
@@ -132,6 +152,18 @@ function getToolPath(toolId: ToolID): string | null {
   }
   if (toolId === ToolID.TEXT_CASE_CONVERTER) {
     return '/tools/text-case-converter';
+  }
+  if (toolId === ToolID.QR_GENERATOR) {
+    return '/tools/qr-generator';
+  }
+  if (toolId === ToolID.PASSWORD_GENERATOR) {
+    return '/tools/password-generator';
+  }
+  if (toolId === ToolID.LOREM_IPSUM_GENERATOR) {
+    return '/tools/lorem-ipsum-generator';
+  }
+  if (toolId === ToolID.IMAGE_RESIZER) {
+    return '/tools/image-resizer';
   }
 
   // Client/Image Tools
@@ -320,6 +352,38 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <TextCaseConverterWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/qr-generator',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <QrGeneratorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/password-generator',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PasswordGeneratorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/lorem-ipsum-generator',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LoremIpsumGeneratorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/image-resizer',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ImageResizerWrapper />
           </Suspense>
         ),
       },

@@ -48,6 +48,9 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
     ToolID.UNIT_CONVERTER,
     ToolID.TEXT_CASE_CONVERTER,
     ToolID.HASH_GENERATOR,
+    ToolID.QR_GENERATOR,
+    ToolID.PASSWORD_GENERATOR,
+    ToolID.LOREM_IPSUM_GENERATOR,
   ];
 
   const [activeCategory, setActiveCategory] = useState<ToolCategory | 'featured'>('featured');
@@ -62,8 +65,8 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
       ToolID.PDF_OCR,
       ToolID.UNIT_CONVERTER,
       ToolID.TEXT_CASE_CONVERTER,
-      ToolID.JWT_SECRET_GENERATOR,
-      ToolID.UUID_GENERATOR,
+      ToolID.QR_GENERATOR,
+      ToolID.PASSWORD_GENERATOR,
     ].includes(tool.id)
   );
 
