@@ -330,4 +330,54 @@ export const TOOL_SEO_ENHANCEMENTS = {
     h1: 'QR Code Generator - Create Custom QR Codes',
     h2: 'Free Online QR Code Creation Tool',
   },
+
+  [ToolID.UNIT_CONVERTER]: {
+    seoTitle: 'Unit Converter - Convert Length, Weight, Temperature | All Things Doc',
+    seoDescription:
+      'Fast and accurate unit converter for length, weight, temperature, and digital storage. Free online conversion tool with instant results.',
+    longDescription:
+      'Convert between various units of measurement quickly and accurately. Our tool supports Length (meters, kilometers, miles, feet, etc.), Weight (kilograms, grams, pounds, etc.), Temperature (Celsius, Fahrenheit, Kelvin), and Digital Storage (Bytes, KB, MB, GB, TB). Perfect for students, engineers, and everyday use.',
+    h1: 'Unit Converter - Length, Weight & More',
+    h2: 'Free Online Measurement Conversion Tool',
+  },
+
+  [ToolID.TEXT_CASE_CONVERTER]: {
+    seoTitle: 'Text Case Converter - UPPERCASE to lowercase | All Things Doc',
+    seoDescription:
+      'Transform your text between UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case, and more instantly.',
+    longDescription:
+      'Change the capitalization of your text with ease. Our Text Case Converter supports multiple formats including UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, and kebab-case. Simply paste your text and copy the result in the desired format.',
+    h1: 'Text Case Converter - Transform Capitalization',
+    h2: 'Free Online Text Formatting and Case Tool',
+  },
+
+  [ToolID.PASSWORD_GENERATOR]: {
+    seoTitle: 'Secure Password Generator - Create Strong Passwords | All Things Doc',
+    seoDescription:
+      'Generate secure, random passwords with customizable length and character sets. Improve your online security with our private password tool.',
+    longDescription:
+      'Create strong, unguessable passwords to protect your online accounts. Customize the length and include uppercase letters, lowercase letters, numbers, and symbols. Our generator works entirely in your browser, ensuring your passwords are never sent to any server.',
+    h1: 'Secure Password Generator - Strong & Random',
+    h2: 'Free Online Tool for Creating Secure Passwords',
+  },
+
+  [ToolID.LOREM_IPSUM_GENERATOR]: {
+    seoTitle: 'Lorem Ipsum Generator - Placeholder Text for Designers | All Things Doc',
+    seoDescription:
+      'Generate Lorem Ipsum placeholder text for your designs, mockups, and layouts. Choose number of paragraphs, sentences, or words.',
+    longDescription:
+      'Quickly generate professional placeholder text (dummy text) for your design projects. Our Lorem Ipsum generator allows you to specify the exact amount of text you need in paragraphs, sentences, or words. Perfect for web designers, graphic artists, and developers.',
+    h1: 'Lorem Ipsum Generator - Dummy Text',
+    h2: 'Free Online Placeholder Text Creation Tool',
+  },
+
+  [ToolID.IMAGE_RESIZER]: {
+    seoTitle: 'Image Resizer - Change Image Dimensions Online Free | All Things Doc',
+    seoDescription:
+      'Resize your images to specific pixel dimensions while maintaining aspect ratio. Fast, client-side image resizing with high quality.',
+    longDescription:
+      'Change the width and height of your images easily. Our tool allows you to specify new dimensions and optionally maintain the original aspect ratio to prevent stretching. Processing happens entirely in your browser for maximum speed and privacy.',
+    h1: 'Image Resizer - Change Dimensions Fast',
+    h2: 'Free Online Tool to Resize JPG, PNG, and WebP',
+  },
 };

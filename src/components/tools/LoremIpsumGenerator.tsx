@@ -24,47 +24,33 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
   const generateText = () => {
     let result = '';
 
+    const getRandomWord = () => LOREM_TEXT[Math.floor(Math.random() * LOREM_TEXT.length)];
+
     if (type === 'words') {
-      const words = [];
-      if (startWithLorem) words.push('Lorem', 'ipsum');
-      while (words.length < count) {
-        words.push(LOREM_TEXT[Math.floor(Math.random() * LOREM_TEXT.length)]);
-      }
+      const words = startWithLorem ? ['Lorem', 'ipsum'] : [];
+      while (words.length < count) words.push(getRandomWord());
       result = words.slice(0, count).join(' ') + '.';
     } else if (type === 'sentences') {
-      const sentences = [];
-      for (let i = 0; i < count; i++) {
-        let sentence = [];
+      const sentences = Array.from({ length: count }, (_, i) => {
         const wordCount = Math.floor(Math.random() * 10) + 8;
-        if (i === 0 && startWithLorem) {
-          sentence.push('Lorem', 'ipsum', 'dolor', 'sit', 'amet');
-        }
-        while (sentence.length < wordCount) {
-          sentence.push(LOREM_TEXT[Math.floor(Math.random() * LOREM_TEXT.length)]);
-        }
-        let s = sentence.join(' ');
-        sentences.push(s.charAt(0).toUpperCase() + s.slice(1) + '.');
-      }
+        const sentence = (i === 0 && startWithLorem) ? ['lorem', 'ipsum', 'dolor', 'sit', 'amet'] : [];
+        while (sentence.length < wordCount) sentence.push(getRandomWord());
+        const s = sentence.join(' ');
+        return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+      });
       result = sentences.join(' ');
     } else {
-      const paragraphs = [];
-      for (let p = 0; p < count; p++) {
-        const sentences = [];
+      const paragraphs = Array.from({ length: count }, (_, p) => {
         const sentenceCount = Math.floor(Math.random() * 4) + 4;
-        for (let i = 0; i < sentenceCount; i++) {
-          let sentence = [];
+        const sentences = Array.from({ length: sentenceCount }, (_, i) => {
           const wordCount = Math.floor(Math.random() * 10) + 10;
-          if (p === 0 && i === 0 && startWithLorem) {
-            sentence.push('Lorem', 'ipsum', 'dolor', 'sit', 'amet');
-          }
-          while (sentence.length < wordCount) {
-            sentence.push(LOREM_TEXT[Math.floor(Math.random() * LOREM_TEXT.length)]);
-          }
-          let s = sentence.join(' ');
-          sentences.push(s.charAt(0).toUpperCase() + s.slice(1) + '.');
-        }
-        paragraphs.push(sentences.join(' '));
-      }
+          const sentence = (p === 0 && i === 0 && startWithLorem) ? ['lorem', 'ipsum', 'dolor', 'sit', 'amet'] : [];
+          while (sentence.length < wordCount) sentence.push(getRandomWord());
+          const s = sentence.join(' ');
+          return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+        });
+        return sentences.join(' ');
+      });
       result = paragraphs.join('\n\n');
     }
 
@@ -124,15 +110,13 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
             </select>
           </div>
           <div className="flex flex-col justify-end">
-            <label className="flex items-center space-x-3 cursor-pointer group mb-1">
-              <div
-                onClick={() => setStartWithLorem(!startWithLorem)}
-                className={`w-6 h-6 rounded flex items-center justify-center border-2 transition-all ${
-                  startWithLorem ? 'bg-doc-red border-doc-red' : 'bg-white border-slate-200 group-hover:border-doc-red/30'
-                }`}
-              >
-                {startWithLorem && <Check size={14} className="text-white" />}
-              </div>
+            <label className="flex items-center space-x-3 cursor-pointer group mb-1 select-none">
+              <input
+                type="checkbox"
+                checked={startWithLorem}
+                onChange={() => setStartWithLorem(!startWithLorem)}
+                className="w-5 h-5 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+              />
               <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Start with "Lorem ipsum"</span>
             </label>
           </div>

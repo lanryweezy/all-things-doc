@@ -71,6 +71,12 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
             placeholder="Enter text or base64 here..."
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                handleEncode();
+              }
+            }}
           />
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>

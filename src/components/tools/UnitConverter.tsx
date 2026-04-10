@@ -70,12 +70,22 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
       if (toUnit === 'fahrenheit') finalVal = (celsius * 9/5) + 32;
       if (toUnit === 'kelvin') finalVal = celsius + 273.15;
 
-      setResult(finalVal.toFixed(4).replace(/\.?0+$/, ''));
+      const resultValue = finalVal;
+      if (Math.abs(resultValue) < 0.0001 && resultValue !== 0) {
+        setResult(resultValue.toExponential(4));
+      } else {
+        setResult(resultValue.toFixed(4).replace(/\.?0+$/, ''));
+      }
     } else {
       const units = UNIT_TYPES[type] as Record<string, number>;
       const baseValue = val / units[fromUnit];
       const finalValue = baseValue * units[toUnit];
-      setResult(finalValue.toFixed(6).replace(/\.?0+$/, ''));
+
+      if (Math.abs(finalValue) < 0.000001 && finalValue !== 0) {
+        setResult(finalValue.toExponential(6));
+      } else {
+        setResult(finalValue.toFixed(6).replace(/\.?0+$/, ''));
+      }
     }
   };
 

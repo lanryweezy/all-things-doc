@@ -22,8 +22,9 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
     if (!input.trim()) return;
 
     try {
-      const parsed = JSON.parse(input);
-      setOutput(JSON.stringify(parsed, null, indent));
+      // Use a faster way to check if input is already an object or needs parsing
+      const parsed = typeof input === 'string' ? JSON.parse(input) : input;
+      setOutput(JSON.stringify(parsed, null, indent === 0 ? '\t' : indent));
     } catch (err) {
       setError(`Invalid JSON: ${(err as Error).message}`);
     }
@@ -34,7 +35,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
     if (!input.trim()) return;
 
     try {
-      const parsed = JSON.parse(input);
+      const parsed = typeof input === 'string' ? JSON.parse(input) : input;
       setOutput(JSON.stringify(parsed));
     } catch (err) {
       setError(`Invalid JSON: ${(err as Error).message}`);
@@ -74,6 +75,12 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
             placeholder='{"key": "value"}'
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                handleFormat();
+              }
+            }}
           />
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>

@@ -87,8 +87,9 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Size: {size}px</label>
+              <label htmlFor="qr-size" className="block text-sm font-medium text-slate-700 mb-1">Size: {size}px</label>
               <input
+                id="qr-size"
                 type="range"
                 min="128"
                 max="512"
@@ -99,8 +100,9 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Margin: {margin}</label>
+              <label htmlFor="qr-margin" className="block text-sm font-medium text-slate-700 mb-1">Margin: {margin}</label>
               <input
+                id="qr-margin"
                 type="range"
                 min="0"
                 max="10"

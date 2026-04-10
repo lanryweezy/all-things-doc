@@ -61,6 +61,12 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
             placeholder="Enter text to hash..."
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                handleGenerate();
+              }
+            }}
           />
         </div>
 

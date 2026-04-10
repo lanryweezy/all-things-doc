@@ -29,7 +29,7 @@ export const summarizeText = async (text: string): Promise<string> => {
   }
 
   if (!ai) {
-    return 'Demo mode: AI summarization requires API key or backend service. Please add your Gemini API key or configure backend service to use this feature.';
+    return 'Error: Gemini API Key is missing. Please set VITE_GEMINI_API_KEY in your environment variables to enable AI features.';
   }
 
   const response = await ai.models.generateContent({
@@ -53,7 +53,7 @@ export const translateText = async (text: string, targetLanguage: string): Promi
   }
 
   if (!ai) {
-    return `Demo mode: AI translation requires API key or backend service. In real mode, this would translate to: ${targetLanguage}`;
+    return `Error: Gemini API Key is missing. Cannot translate to ${targetLanguage}. Please add your API key.`;
   }
 
   const response = await ai.models.generateContent({
@@ -85,7 +85,7 @@ export const performOCR = async (imageBase64: string, mimeType: string): Promise
   }
 
   if (!ai) {
-    return 'Demo mode: AI OCR requires API key or backend service. Please add your Gemini API key or configure backend service to use this feature.';
+    return 'Error: Gemini API Key is missing. OCR requires an active AI connection. Please add your API key.';
   }
 
   const response = await ai.models.generateContent({

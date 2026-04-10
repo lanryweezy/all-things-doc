@@ -23,12 +23,30 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
   const cases = [
     { name: 'UPPERCASE', fn: (s: string) => s.toUpperCase() },
     { name: 'lowercase', fn: (s: string) => s.toLowerCase() },
-    { name: 'Title Case', fn: (s: string) => s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') },
-    { name: 'Sentence case', fn: (s: string) => s.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()) },
-    { name: 'camelCase', fn: (s: string) => s.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()) },
-    { name: 'PascalCase', fn: (s: string) => s.toLowerCase().replace(/(?:^|[^a-zA-Z0-9]+)(.)/g, (m, chr) => chr.toUpperCase()) },
-    { name: 'snake_case', fn: (s: string) => s.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '') },
-    { name: 'kebab-case', fn: (s: string) => s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') },
+    {
+      name: 'Title Case',
+      fn: (s: string) => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())
+    },
+    {
+      name: 'Sentence case',
+      fn: (s: string) => s.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase())
+    },
+    {
+      name: 'camelCase',
+      fn: (s: string) => s.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
+    },
+    {
+      name: 'PascalCase',
+      fn: (s: string) => s.toLowerCase().replace(/(?:^|[^a-zA-Z0-9]+)(.)/g, (m, chr) => chr.toUpperCase())
+    },
+    {
+      name: 'snake_case',
+      fn: (s: string) => s.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')
+    },
+    {
+      name: 'kebab-case',
+      fn: (s: string) => s.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    },
   ];
 
   return (

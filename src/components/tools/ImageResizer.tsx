@@ -150,15 +150,13 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                     </div>
                   </div>
 
-                  <label className="flex items-center space-x-3 cursor-pointer group">
-                    <div
-                      onClick={() => setMaintainAspectRatio(!maintainAspectRatio)}
-                      className={`w-6 h-6 rounded flex items-center justify-center border-2 transition-all ${
-                        maintainAspectRatio ? 'bg-doc-red border-doc-red' : 'bg-white border-slate-200 group-hover:border-doc-red/30'
-                      }`}
-                    >
-                      {maintainAspectRatio && <Check size={14} className="text-white" />}
-                    </div>
+                  <label className="flex items-center space-x-3 cursor-pointer group select-none">
+                    <input
+                      type="checkbox"
+                      checked={maintainAspectRatio}
+                      onChange={() => setMaintainAspectRatio(!maintainAspectRatio)}
+                      className="w-5 h-5 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                    />
                     <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Maintain Aspect Ratio</span>
                   </label>
 
