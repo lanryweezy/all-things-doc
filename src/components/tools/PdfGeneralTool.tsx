@@ -108,6 +108,12 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           }
           break;
 
+        case ToolID.PDF_UNLOCK:
+          if (file && paramValue) {
+            result = await pdfService.decryptPdf(file, paramValue);
+          }
+          break;
+
         case ToolID.PDF_WATERMARK:
           if (file && paramValue) {
             result = await pdfService.watermarkPdf(file, paramValue);

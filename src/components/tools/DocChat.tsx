@@ -3,7 +3,8 @@ import { ArrowLeft, Send } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { fileToBase64 } from '../../services/imageService';
-import { processPdf, createChatSession } from '../../services/geminiService';
+import { createChatSession } from '../../services/geminiService';
+import { extractTextFromPdf } from '../../services/pdfService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { Chat, GenerateContentResponse } from '@google/genai';
@@ -40,8 +41,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
     try {
       let docText = '';
       if (uploadedFile.type === 'application/pdf') {
-        const base64 = await fileToBase64(uploadedFile);
-        docText = await processPdf(base64, 'WORD', 'text');
+        docText = await extractTextFromPdf(uploadedFile);
       } else {
         docText = await uploadedFile.text();
       }

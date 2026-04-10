@@ -127,6 +127,14 @@ export const protectPdf = async (file: File, password: string): Promise<Uint8Arr
   });
 };
 
+export const decryptPdf = async (file: File, password: string): Promise<Uint8Array> => {
+  const { PDFDocument } = await import('pdf-lib');
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer, { password });
+
+  return await pdfDoc.save();
+};
+
 export const addPageNumbers = async (file: File, position: string): Promise<Uint8Array> => {
   const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
   const arrayBuffer = await file.arrayBuffer();
@@ -203,9 +211,25 @@ export const extractTextFromPdf = async (file: File): Promise<string> => {
       return await backendExtractTextFromPdf(file);
     } catch (error) {
       console.warn('Backend PDF text extraction failed, falling back to client-side processing:', error);
-      throw error;
     }
   }
 
-  throw new Error('Backend service not available and client-side processing not implemented');
+  const pdfjs = await import('pdfjs-dist');
+  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+
+  const arrayBuffer = await file.arrayBuffer();
+  const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+  const pdf = await loadingTask.promise;
+  let fullText = '';
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items
+      .map((item: any) => item.str)
+      .join(' ');
+    fullText += pageText + '\n\n';
+  }
+
+  return fullText;
 };

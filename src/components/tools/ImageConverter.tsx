@@ -15,6 +15,7 @@ interface ImageConverterProps {
 export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
   const [file, setFile] = useState<File | null>(null);
   const [targetFormat, setTargetFormat] = useState<'jpeg' | 'png' | 'webp' | 'pdf'>('png');
+  const [quality, setQuality] = useState(0.9);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [resultData, setResultData] = useState<Uint8Array | null>(null);
@@ -50,7 +51,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
       } else {
         // Convert image to another image format
         const mimeType = `image/${targetFormat}` as 'image/jpeg' | 'image/png' | 'image/webp';
-        const url = await convertImage(file, mimeType);
+        const url = await convertImage(file, mimeType, quality);
         setResultUrl(url);
         setResultData(null); // We'll use resultUrl for image download
       }
@@ -122,11 +123,11 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
             />
 
             {file && (
-              <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 animate-fade-in">
+              <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 animate-fade-in space-y-6">
                 <div className="flex flex-col md:flex-row md:items-end gap-6">
                   <div className="flex-grow">
                     <label className="block text-sm font-medium text-doc-slate mb-2">
-                      Convert to
+                      Target Format
                     </label>
                     <div className="grid grid-cols-4 gap-3">
                       {['jpeg', 'png', 'webp', 'pdf'].map(fmt => (
@@ -137,7 +138,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                             py-3 px-4 rounded-lg text-sm font-semibold uppercase transition-all
                             ${
                               targetFormat === fmt
-                                ? 'bg-doc-slate text-white shadow-md transform scale-105'
+                                ? 'bg-doc-slate text-white shadow-md'
                                 : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                             }
                           `}
@@ -156,6 +157,31 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                     Convert
                   </Button>
                 </div>
+
+                {(targetFormat === 'jpeg' || targetFormat === 'webp') && (
+                  <div className="border-t border-slate-200 pt-6">
+                    <div className="flex justify-between items-center mb-3">
+                      <label htmlFor="quality-slider" className="text-sm font-medium text-slate-700">
+                        Image Quality / Compression
+                      </label>
+                      <span className="text-sm font-bold text-doc-red">{Math.round(quality * 100)}%</span>
+                    </div>
+                    <input
+                      id="quality-slider"
+                      type="range"
+                      min="0.1"
+                      max="1.0"
+                      step="0.05"
+                      value={quality}
+                      onChange={(e) => setQuality(parseFloat(e.target.value))}
+                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                    />
+                    <div className="flex justify-between text-xs text-slate-400 mt-2 italic">
+                      <span>Smaller size, lower quality</span>
+                      <span>Best quality, larger size</span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
