@@ -29,7 +29,7 @@ export const summarizeText = async (text: string): Promise<string> => {
   }
 
   if (!ai) {
-    return 'Demo mode: AI summarization requires API key or backend service. Please add your Gemini API key or configure backend service to use this feature.';
+    return 'Error: Gemini API Key is missing. Please set VITE_GEMINI_API_KEY in your environment variables to enable AI features.';
   }
 
   const response = await ai.models.generateContent({
@@ -53,7 +53,7 @@ export const translateText = async (text: string, targetLanguage: string): Promi
   }
 
   if (!ai) {
-    return `Demo mode: AI translation requires API key or backend service. In real mode, this would translate to: ${targetLanguage}`;
+    return `Error: Gemini API Key is missing. Cannot translate to ${targetLanguage}. Please add your API key.`;
   }
 
   const response = await ai.models.generateContent({
@@ -85,7 +85,7 @@ export const performOCR = async (imageBase64: string, mimeType: string): Promise
   }
 
   if (!ai) {
-    return 'Demo mode: AI OCR requires API key or backend service. Please add your Gemini API key or configure backend service to use this feature.';
+    return 'Error: Gemini API Key is missing. OCR requires an active AI connection. Please add your API key.';
   }
 
   const response = await ai.models.generateContent({
@@ -135,8 +135,38 @@ export const convertCode = async (code: string, targetLang: string): Promise<str
 export const processPdf = async (
   pdfBase64: string,
   mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' | 'BANK_STATEMENT',
-  outputFormat: 'markdown' | 'text' = 'markdown'
+  outputFormat: 'markdown' | 'text' = 'markdown',
+  advanced: boolean = false
 ): Promise<string> => {
+  if (advanced && BACKEND_AVAILABLE) {
+    try {
+      const byteCharacters = atob(pdfBase64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const file = new File([blob], 'document.pdf', { type: 'application/pdf' });
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('advanced', 'true');
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/pdf/extract-text`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.markdown || data.text || '';
+      }
+    } catch (error) {
+      console.warn('Advanced PDF extraction failed, falling back to Gemini:', error);
+    }
+  }
+
   if (mode === 'OCR' && BACKEND_AVAILABLE) {
     try {
       // Convert base64 to blob for backend processing

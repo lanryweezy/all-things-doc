@@ -1,10 +1,11 @@
-const CACHE_NAME = 'all-things-doc-v1';
+const CACHE_NAME = 'all-things-doc-v1.1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/src/index.css',
-  '/App.tsx',
-  '/index.tsx'
+  '/manifest.json',
+  '/icon-192.svg',
+  '/icon-512.svg',
+  '/pdf.worker.mjs'
 ];
 
 // Install event - cache resources
@@ -16,36 +17,33 @@ self.addEventListener('install', (event) => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - cache-first for assets, network-first for others
 self.addEventListener('fetch', (event) => {
+  // Skip cross-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) return;
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Cache hit - return response
         if (response) {
           return response;
         }
 
-        // Clone the request
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then((response) => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
+        return fetch(event.request).then((networkResponse) => {
+          // Don't cache non-successful responses or non-basic requests
+          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
           }
 
-          // Clone the response
-          const responseToCache = response.clone();
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
 
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
+          return networkResponse;
         });
       })
   );
@@ -65,4 +63,5 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim();
 });

@@ -5,7 +5,7 @@ import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
 interface DataConverterProps {
-  toolId: ToolID.JSON_TO_CSV | ToolID.CSV_TO_JSON | ToolID.XML_TO_JSON | ToolID.JSON_TO_XML;
+  toolId: ToolID.JSON_TO_CSV | ToolID.CSV_TO_JSON | ToolID.XML_TO_JSON | ToolID.JSON_TO_XML | ToolID.YAML_TO_JSON | ToolID.JSON_TO_YAML;
   onBack: () => void;
 }
 
@@ -41,6 +41,10 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         return 'XML';
       case ToolID.JSON_TO_XML:
         return 'JSON';
+      case ToolID.YAML_TO_JSON:
+        return 'YAML';
+      case ToolID.JSON_TO_YAML:
+        return 'JSON';
       default:
         return '';
     }
@@ -56,6 +60,10 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         return 'JSON';
       case ToolID.JSON_TO_XML:
         return 'XML';
+      case ToolID.YAML_TO_JSON:
+        return 'JSON';
+      case ToolID.JSON_TO_YAML:
+        return 'YAML';
       default:
         return '';
     }
@@ -76,7 +84,7 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
     }
   };
 
-  const handleConvert = () => {
+  const handleConvert = async () => {
     setError(null);
     if (!input.trim()) return;
 
@@ -86,29 +94,88 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         const arrayData = Array.isArray(jsonData) ? jsonData : [jsonData];
         if (arrayData.length === 0) throw new Error('Empty JSON array');
 
-        const headers = Object.keys(arrayData[0]);
+        const flattenObject = (obj: any, prefix = ''): Record<string, string> => {
+          if (typeof obj !== 'object' || obj === null) {
+            return { [prefix]: obj };
+          }
+          return Object.keys(obj).reduce((acc: any, k: string) => {
+            const pre = prefix.length ? prefix + '.' : '';
+            const value = obj[k];
+            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+              Object.assign(acc, flattenObject(value, pre + k));
+            } else if (Array.isArray(value)) {
+              if (value.length > 0 && typeof value[0] === 'object') {
+                acc[pre + k] = JSON.stringify(value);
+              } else {
+                acc[pre + k] = value.join('; ');
+              }
+            } else {
+              acc[pre + k] = value;
+            }
+            return acc;
+          }, {});
+        };
+
+        const flattenedData = arrayData.map(row => flattenObject(row));
+        const allKeys = Array.from(new Set(flattenedData.flatMap(row => Object.keys(row))));
+
         const csvRows = [
-          headers.join(','),
-          ...arrayData.map(row =>
-            headers
-              .map(fieldName => {
-                const val = (row as JsonObject)[fieldName];
-                return JSON.stringify(val ?? ''); // Simple CSV escaping
+          allKeys.join(','),
+          ...flattenedData.map(row =>
+            allKeys
+              .map(k => {
+                const val = row[k] ?? '';
+                const strVal = String(val).replace(/"/g, '""');
+                return `"${strVal}"`;
               })
               .join(',')
           ),
         ];
         setOutput(csvRows.join('\n'));
       } else if (toolId === ToolID.CSV_TO_JSON) {
-        const rows = input.trim().split('\n');
-        if (rows.length < 2) throw new Error('Invalid CSV: Needs header and at least one row');
+        const parseCsv = (text: string) => {
+          const result = [];
+          let row: string[] = [];
+          let cur = '';
+          let inQuotes = false;
 
-        const headers = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-        const jsonResult = rows.slice(1).map(row => {
-          const values = row.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+          for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            const nextChar = text[i + 1];
+
+            if (char === '"' && inQuotes && nextChar === '"') {
+              cur += '"';
+              i++;
+            } else if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              row.push(cur.trim());
+              cur = '';
+            } else if ((char === '\r' || char === '\n') && !inQuotes) {
+              row.push(cur.trim());
+              if (row.length > 1 || row[0] !== '') result.push(row);
+              row = [];
+              cur = '';
+              if (char === '\r' && nextChar === '\n') i++;
+            } else {
+              cur += char;
+            }
+          }
+          if (cur || row.length > 0) {
+            row.push(cur.trim());
+            result.push(row);
+          }
+          return result;
+        };
+
+        const allRows = parseCsv(input.trim());
+        if (allRows.length < 2) throw new Error('Invalid CSV: Needs header and at least one row');
+
+        const headers = allRows[0];
+        const jsonResult = allRows.slice(1).map(rowData => {
           const obj: CsvRow = {};
           headers.forEach((h, i) => {
-            obj[h] = values[i];
+            obj[h] = rowData[i] || '';
           });
           return obj;
         });
@@ -187,6 +254,14 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         } else {
           setOutput(`<root>${jsonToXml(jsonData)}</root>`);
         }
+      } else if (toolId === ToolID.YAML_TO_JSON) {
+        const yaml = await import('js-yaml');
+        const data = yaml.load(input);
+        setOutput(JSON.stringify(data, null, 2));
+      } else if (toolId === ToolID.JSON_TO_YAML) {
+        const yaml = await import('js-yaml');
+        const data = JSON.parse(input);
+        setOutput(yaml.dump(data));
       }
     } catch (err) {
       setError(`Conversion Failed: ${(err as Error).message}`);
@@ -226,6 +301,12 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
             placeholder={getInputPlaceholder()}
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                handleConvert();
+              }
+            }}
           />
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>

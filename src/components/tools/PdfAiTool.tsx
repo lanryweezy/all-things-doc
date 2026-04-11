@@ -35,6 +35,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<'markdown' | 'text'>('markdown');
+  const [advanced, setAdvanced] = useState(false);
   const [progress, setProgress] = useState<number | undefined>(undefined);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
@@ -98,7 +99,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       if (toolId === ToolID.PDF_OCR) mode = 'OCR';
       if (toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) mode = 'BANK_STATEMENT';
 
-      const output = await processPdf(base64, mode, outputFormat);
+      const output = await processPdf(base64, mode, outputFormat, advanced);
 
       clearInterval(progressInterval);
       setProgress(100);
@@ -281,7 +282,23 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
         {file && !result && !isProcessing && (
           <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="flex-grow">
+            <div className="flex-grow space-y-4">
+              {toolId === ToolID.PDF_TO_WORD && (
+                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <label htmlFor="advanced-mode" className="text-sm font-bold text-indigo-900">Advanced AI Extraction</label>
+                    <p className="text-xs text-indigo-600 font-medium">Use OpenDataLoader for perfect structure and tables.</p>
+                  </div>
+                  <input
+                    id="advanced-mode"
+                    type="checkbox"
+                    checked={advanced}
+                    onChange={(e) => setAdvanced(e.target.checked)}
+                    className="w-5 h-5 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                  />
+                </div>
+              )}
+
               {(toolId === ToolID.PDF_TO_WORD || toolId === ToolID.PDF_OCR) && (
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                   <label className="block text-sm font-semibold text-doc-slate mb-3">

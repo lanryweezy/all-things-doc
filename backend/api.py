@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException, Response
+from fastapi import APIRouter, File, UploadFile, HTTPException, Response, Form
 from fastapi.responses import StreamingResponse
 from typing import Optional, List
 import io
@@ -6,7 +6,7 @@ import io
 # Import our processing modules
 from pdf_processing.pdf_utils import (
     merge_pdfs, split_pdf, compress_pdf, 
-    extract_text_from_pdf
+    extract_text_from_pdf, extract_advanced_pdf_data
 )
 from ai_processing.ai_utils import TextProcessor, ocr_image, ocr_pdf
 
@@ -84,10 +84,12 @@ async def compress_pdf_endpoint(file: UploadFile = File(...)):
 
 
 @router.post("/pdf/extract-text")
-async def extract_text_pdf_endpoint(file: UploadFile = File(...)):
-    """Extract text from a PDF file"""
+async def extract_text_pdf_endpoint(file: UploadFile = File(...), advanced: bool = Form(False)):
+    """Extract text from a PDF file with optional advanced structured data"""
     try:
         content = await file.read()
+        if advanced:
+            return extract_advanced_pdf_data(content)
         text = extract_text_from_pdf(content)
         return {"text": text}
     except Exception as e:
@@ -96,7 +98,7 @@ async def extract_text_pdf_endpoint(file: UploadFile = File(...)):
 
 # AI Processing Endpoints
 @router.post("/ai/summarize")
-async def summarize_text_endpoint(text: str):
+async def summarize_text_endpoint(text: str = Form(...)):
     """Summarize text using open-source model"""
     try:
         summary = text_processor.summarize_text(text)
@@ -106,7 +108,7 @@ async def summarize_text_endpoint(text: str):
 
 
 @router.post("/ai/translate")
-async def translate_text_endpoint(text: str, target_language: str = "es"):
+async def translate_text_endpoint(text: str = Form(...), target_language: str = Form("es")):
     """Translate text using open-source model"""
     try:
         translation = text_processor.translate_text(text, target_language)
@@ -137,7 +139,7 @@ async def ocr_pdf_endpoint(file: UploadFile = File(...), language: str = "eng"):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/ai/classify")
-async def classify_text_endpoint(text: str, candidate_labels: List[str]):
+async def classify_text_endpoint(text: str = Form(...), candidate_labels: List[str] = Form(...)):
     """Classify text using the Gemini model with a zero-shot approach"""
     try:
         classification = text_processor.classify_text(text, candidate_labels)

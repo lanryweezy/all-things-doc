@@ -3,7 +3,8 @@ import { ArrowLeft, Send } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { fileToBase64 } from '../../services/imageService';
-import { processPdf, createChatSession } from '../../services/geminiService';
+import { createChatSession } from '../../services/geminiService';
+import { extractTextFromPdf } from '../../services/pdfService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { Chat, GenerateContentResponse } from '@google/genai';
@@ -18,7 +19,7 @@ interface Message {
 }
 
 export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [chatSession, setChatSession] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -35,30 +36,48 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
   useEffect(scrollToBottom, [messages]);
 
   const handleFileUpload = async (uploadedFile: File) => {
-    setFile(uploadedFile);
+    const newFiles = [...files, uploadedFile];
+    setFiles(newFiles);
     setIsUploading(true);
     try {
-      let docText = '';
-      if (uploadedFile.type === 'application/pdf') {
-        const base64 = await fileToBase64(uploadedFile);
-        docText = await processPdf(base64, 'WORD', 'text');
-      } else {
-        docText = await uploadedFile.text();
+      let combinedText = '';
+      for (const f of newFiles) {
+        let docText = '';
+        const ext = f.name.split('.').pop()?.toLowerCase();
+        if (f.type === 'application/pdf' || ext === 'pdf') {
+          docText = await extractTextFromPdf(f);
+        } else if (ext === 'docx' || ext === 'doc') {
+          const { wordToText } = await import('../../services/pdfService');
+          docText = await wordToText(f);
+        } else if (ext === 'xlsx' || ext === 'xls') {
+          const { excelToCsv } = await import('../../services/pdfService');
+          docText = await excelToCsv(f);
+        } else {
+          docText = await f.text();
+        }
+        combinedText += `\n--- Document: ${f.name} ---\n${docText}\n`;
       }
 
-      const systemInstruction = `You are a helpful assistant. The user has uploaded a document with the following content:\n\n${docText}\n\nAnswer questions based on this document. Keep answers concise and relevant to the document content.`;
+      const systemInstruction = `You are a helpful assistant. The user has uploaded ${newFiles.length} document(s) with the following content:\n\n${combinedText}\n\nAnswer questions based on these documents. Keep answers concise and relevant.`;
       const chat = createChatSession(systemInstruction);
       setChatSession(chat);
-      setMessages([
-        {
+
+      if (messages.length === 0) {
+        setMessages([
+          {
+            role: 'model',
+            text: `I've analyzed ${newFiles.length} document(s). What would you like to know about them?`,
+          },
+        ]);
+      } else {
+        setMessages(prev => [...prev, {
           role: 'model',
-          text: `I've analyzed ${uploadedFile.name}. What would you like to know about it?`,
-        },
-      ]);
+          text: `Added ${uploadedFile.name} to the conversation context.`,
+        }]);
+      }
     } catch (error) {
       console.error(error);
       alert('Failed to analyze document.');
-      setFile(null);
     } finally {
       setIsUploading(false);
     }
@@ -102,11 +121,10 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 flex-grow flex flex-col overflow-hidden">
-        {!chatSession ? (
+        {files.length === 0 ? (
           <div className="p-8 flex flex-col justify-center h-full">
             <FileUpload
-              accept=".pdf,.txt,.md,.json,.js,.ts,.py"
-              selectedFile={file}
+              accept=".pdf,.txt,.md,.json,.js,.ts,.py,.docx,.xlsx"
               onFileSelect={handleFileUpload}
               label="Upload PDF or Text Document to Chat"
               processingProgress={isUploading ? 50 : undefined}
@@ -157,6 +175,26 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
               <div ref={messagesEndRef} />
             </div>
 
+            <div className="px-6 py-3 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
+               <div className="flex -space-x-2 overflow-hidden">
+                 {files.map((f, i) => (
+                   <div key={i} title={f.name} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-doc-red flex items-center justify-center text-[10px] text-white font-bold">
+                     DOC
+                   </div>
+                 ))}
+               </div>
+               <button
+                onClick={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.onchange = (e: any) => handleFileUpload(e.target.files[0]);
+                  input.click();
+                }}
+                className="text-xs font-bold text-doc-red hover:underline"
+               >
+                 + Add another
+               </button>
+            </div>
             <div className="p-4 bg-white border-t border-slate-200">
               <div className="flex items-center space-x-2">
                 <input

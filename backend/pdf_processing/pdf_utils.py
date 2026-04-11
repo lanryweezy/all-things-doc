@@ -2,8 +2,10 @@
 PDF processing module using PyMuPDF (fitz) for efficient document operations.
 """
 import fitz  # PyMuPDF
-from typing import List, IO
+from typing import List, IO, Dict, Any
 import io
+import os
+import tempfile
 
 def merge_pdfs(pdf_files: List[bytes]) -> bytes:
     """
@@ -71,3 +73,47 @@ def extract_text_from_pdf(pdf_bytes: bytes) -> str:
         
     pdf.close()
     return text
+
+def extract_advanced_pdf_data(pdf_bytes: bytes) -> Dict[str, Any]:
+    """
+    Extract advanced structured data (Markdown, JSON with boxes) using OpenDataLoader.
+    """
+    try:
+        import opendataloader_pdf
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            input_file = os.path.join(tmp_dir, "input.pdf")
+            output_dir = os.path.join(tmp_dir, "output")
+            os.makedirs(output_dir)
+
+            with open(input_file, "wb") as f:
+                f.write(pdf_bytes)
+
+            opendataloader_pdf.convert(
+                input_path=[input_file],
+                output_dir=output_dir,
+                format="markdown,json",
+                hybrid="docling-fast"
+            )
+
+            md_path = os.path.join(output_dir, "input.md")
+            json_path = os.path.join(output_dir, "input.json")
+
+            markdown_content = ""
+            if os.path.exists(md_path):
+                with open(md_path, "r") as f:
+                    markdown_content = f.read()
+
+            json_content = {}
+            if os.path.exists(json_path):
+                import json
+                with open(json_path, "r") as f:
+                    json_content = json.load(f)
+
+            return {
+                "markdown": markdown_content,
+                "structured": json_content
+            }
+    except Exception as e:
+        print(f"Error in advanced extraction: {str(e)}")
+        return {"error": str(e), "markdown": extract_text_from_pdf(pdf_bytes)}
