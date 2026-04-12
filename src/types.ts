@@ -111,6 +111,9 @@ export enum ToolID {
   COLOR_PALETTE = 'color-palette',
   IMAGE_CROPPER = 'image-cropper',
   SPEECH_TO_TEXT = 'speech-to-text',
+  WORD_COUNTER = 'word-counter',
+  TEXT_CLEANER = 'text-cleaner',
+  IMAGE_TO_BASE64 = 'image-to-base64',
 }
 
 export enum ToolCategory {

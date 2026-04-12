@@ -283,7 +283,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
         {file && !result && !isProcessing && (
           <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="flex-grow space-y-4">
-              {toolId === ToolID.PDF_TO_WORD && (
+              {[ToolID.PDF_TO_WORD, ToolID.PDF_TO_EXCEL, ToolID.PDF_BANK_STATEMENT_CONVERTER, ToolID.PDF_OCR].includes(toolId) && (
                 <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
                   <div className="space-y-0.5">
                     <label htmlFor="advanced-mode" className="text-sm font-bold text-indigo-900">Advanced AI Extraction</label>

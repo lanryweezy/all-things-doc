@@ -16,6 +16,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [aspect, setAspect] = useState<number | undefined>(4 / 3);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
@@ -101,15 +102,39 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
                 image={imageSrc}
                 crop={crop}
                 zoom={zoom}
-                aspect={4 / 3}
+                aspect={aspect}
+                cropShape={aspect === 1 ? 'round' : 'rect'}
+                showGrid={true}
                 onCropChange={setCrop}
                 onCropComplete={onCropComplete}
                 onZoomChange={setZoom}
               />
             </div>
 
-            <div className="flex flex-col md:flex-row gap-6 items-center">
-              <div className="flex-grow w-full">
+            <div className="flex flex-col md:flex-row gap-6 items-start">
+              <div className="flex-grow w-full space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: 'Free', val: undefined },
+                    { label: '1:1', val: 1 },
+                    { label: '4:3', val: 4 / 3 },
+                    { label: '16:9', val: 16 / 9 },
+                    { label: 'Circle', val: 1 },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      onClick={() => setAspect(preset.val)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                        aspect === preset.val && preset.label !== 'Circle'
+                          ? 'bg-doc-red text-white border-doc-red'
+                          : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+
                 <label className="block text-sm font-bold text-slate-500 mb-2 uppercase">Zoom</label>
                 <input
                   type="range"

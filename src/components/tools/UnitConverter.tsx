@@ -38,6 +38,38 @@ const UNIT_TYPES = {
     megabytes: 1 / (1024 * 1024),
     gigabytes: 1 / (1024 * 1024 * 1024),
     terabytes: 1 / (1024 * 1024 * 1024 * 1024),
+  },
+  Area: {
+    square_meters: 1,
+    square_kilometers: 0.000001,
+    square_miles: 0.0000003861,
+    acres: 0.000247105,
+    hectares: 0.0001,
+    square_feet: 10.7639,
+  },
+  Speed: {
+    meters_per_second: 1,
+    kilometers_per_hour: 3.6,
+    miles_per_hour: 2.23694,
+    knots: 1.94384,
+    mach: 0.00293867,
+  },
+  Volume: {
+    liters: 1,
+    milliliters: 1000,
+    cubic_meters: 0.001,
+    gallons: 0.264172,
+    quarts: 1.05669,
+    pints: 2.11338,
+    cups: 4.22675,
+    fluid_ounces: 33.814,
+  },
+  Pressure: {
+    pascals: 1,
+    kilopascals: 0.001,
+    bar: 0.00001,
+    psi: 0.000145038,
+    atm: 0.0000098692,
   }
 };
 
@@ -115,8 +147,8 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
-        <div className="flex justify-center border-b border-slate-100 pb-6">
-          <div className="inline-flex p-1 bg-slate-100 rounded-xl">
+        <div className="flex justify-center border-b border-slate-100 pb-6 overflow-x-auto custom-scrollbar">
+          <div className="inline-flex p-1 bg-slate-100 rounded-xl whitespace-nowrap min-w-max">
             {Object.keys(UNIT_TYPES).map((t) => (
               <button
                 key={t}

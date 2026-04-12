@@ -14,19 +14,23 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [indent, setIndent] = useState(2);
+  const [isValid, setIsValid] = useState<boolean | null>(null);
 
   const toolInfo = TOOLS[ToolID.JSON_FORMATTER];
 
   const handleFormat = () => {
     setError(null);
+    setIsValid(null);
     if (!input.trim()) return;
 
     try {
-      // Use a faster way to check if input is already an object or needs parsing
-      const parsed = typeof input === 'string' ? JSON.parse(input) : input;
+      const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed, null, indent === 0 ? '\t' : indent));
+      setIsValid(true);
     } catch (err) {
-      setError(`Invalid JSON: ${(err as Error).message}`);
+      const msg = (err as Error).message;
+      setError(`Invalid JSON: ${msg}`);
+      setIsValid(false);
     }
   };
 
@@ -67,11 +71,16 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
-            Input JSON
+          <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
+            <span>Input JSON</span>
+            {isValid !== null && (
+              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                {isValid ? 'Valid JSON' : 'Invalid JSON'}
+              </span>
+            )}
           </label>
           <textarea
-            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-300 focus:ring-doc-red'}`}
+            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : isValid ? 'border-green-300 focus:ring-green-200' : 'border-slate-300 focus:ring-doc-red'}`}
             placeholder='{"key": "value"}'
             value={input}
             onChange={e => setInput(e.target.value)}

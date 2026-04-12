@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TOOLS } from '../constants';
 import { ToolID, ToolCategory } from '../types';
-import { ChevronRight, Search } from 'lucide-react';
+import { ChevronRight, Search, Star } from 'lucide-react';
 
 interface ToolTipProps {
   text: string;
@@ -62,10 +62,27 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
     ToolID.HTML_TO_MARKDOWN,
     ToolID.IMAGE_CROPPER,
     ToolID.SPEECH_TO_TEXT,
+    ToolID.TEXT_CLEANER,
+    ToolID.IMAGE_TO_BASE64,
   ];
 
   const [activeCategory, setActiveCategory] = useState<ToolCategory | 'featured'>('featured');
   const [searchQuery, setSearchQuery] = useState('');
+  const [favorites, setFavorites] = useState<ToolID[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('atd-favorites');
+    if (saved) setFavorites(JSON.parse(saved));
+  }, []);
+
+  const toggleFavorite = (e: React.MouseEvent, id: ToolID) => {
+    e.stopPropagation();
+    const newFavs = favorites.includes(id)
+      ? favorites.filter(f => f !== id)
+      : [...favorites, id];
+    setFavorites(newFavs);
+    localStorage.setItem('atd-favorites', JSON.stringify(newFavs));
+  };
 
   const allTools = Object.values(TOOLS);
   
@@ -93,6 +110,8 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
     : activeCategory === 'featured'
       ? featuredTools
       : allTools.filter(tool => tool.category === activeCategory);
+
+  const favoriteTools = allTools.filter(tool => favorites.includes(tool.id));
 
   // Tool tips for complex tools that need additional explanation
   const toolTips: Record<string, string> = {
@@ -150,6 +169,21 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
       {!searchQuery && (
       <div className="sticky top-16 z-40 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm py-4 border-b border-slate-200 dark:border-slate-700 mb-8 transition-colors">
         <div className="flex flex-wrap justify-center gap-2 px-2" role="tablist" aria-label="Tool Categories">
+          {favorites.length > 0 && (
+            <button
+              onClick={() => setActiveCategory('favorites' as any)}
+              className={`
+                whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center
+                ${
+                  activeCategory === ('favorites' as any)
+                    ? 'bg-yellow-400 text-slate-900 shadow-md transform scale-105'
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                }
+              `}
+            >
+              <Star size={16} className={`mr-1 ${activeCategory === ('favorites' as any) ? 'fill-current' : 'text-yellow-400'}`} /> Pins
+            </button>
+          )}
           <button
             onClick={() => setActiveCategory('featured')}
             role="tab"
@@ -203,7 +237,9 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
               ? `Search Results for "${searchQuery}"` 
               : activeCategory === 'featured' 
                 ? 'Popular & Featured Tools' 
-                : activeCategory}
+                : activeCategory === ('favorites' as any)
+                  ? 'Your Pinned Tools'
+                  : activeCategory}
           </h2>
           <div className="h-px bg-slate-200 flex-grow"></div>
           <span className="text-sm text-slate-400 dark:text-slate-500 font-medium transition-colors">
@@ -242,8 +278,18 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                 aria-label={`Open ${tool.title}: ${tool.description}`}
                 className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-doc-red focus:ring-offset-2 dark:focus:ring-offset-slate-900 relative overflow-hidden"
               >
-                {isNew && (
-                  <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm animate-pulse">
+                <button
+                  onClick={(e) => toggleFavorite(e, tool.id)}
+                  className={`absolute top-3 right-3 p-2 rounded-full transition-all z-10 ${
+                    favorites.includes(tool.id)
+                      ? 'bg-yellow-400 text-white shadow-sm'
+                      : 'bg-slate-50 text-slate-300 hover:text-yellow-400 opacity-0 group-hover:opacity-100'
+                  }`}
+                >
+                  <Star size={14} className={favorites.includes(tool.id) ? 'fill-current' : ''} />
+                </button>
+                {isNew && !favorites.includes(tool.id) && (
+                  <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
                     NEW
                   </div>
                 )}

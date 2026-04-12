@@ -32,6 +32,9 @@ const JsonToTypeScript = lazy(() => import('./components/tools/JsonToTypeScript'
 const SqlFormatter = lazy(() => import('./components/tools/SqlFormatter').then(module => ({ default: module.SqlFormatter })));
 const HtmlToMarkdown = lazy(() => import('./components/tools/HtmlToMarkdown').then(module => ({ default: module.HtmlToMarkdown })));
 const PdfOrganize = lazy(() => import('./components/tools/PdfOrganize').then(module => ({ default: module.PdfOrganize })));
+const TextCleaner = lazy(() => import('./components/tools/TextCleaner').then(module => ({ default: module.TextCleaner })));
+const ImageToBase64 = lazy(() => import('./components/tools/ImageToBase64').then(module => ({ default: module.ImageToBase64 })));
+const WordCounter = lazy(() => import('./components/tools/WordCounter').then(module => ({ default: module.WordCounter })));
 const SvgConverter = lazy(() => import('./components/tools/SvgConverter').then(module => ({ default: module.SvgConverter })));
 const ColorPalette = lazy(() => import('./components/tools/ColorPalette').then(module => ({ default: module.ColorPalette })));
 const RegexTester = lazy(() => import('./components/tools/RegexTester').then(module => ({ default: module.RegexTester })));
@@ -179,6 +182,18 @@ const ImageCompressorWrapper = () => {
   return <ImageCompressor onBack={() => window.history.back()} />;
 };
 
+const WordCounterWrapper = () => {
+  return <WordCounter onBack={() => window.history.back()} />;
+};
+
+const TextCleanerWrapper = () => {
+  return <TextCleaner onBack={() => window.history.back()} />;
+};
+
+const ImageToBase64Wrapper = () => {
+  return <ImageToBase64 onBack={() => window.history.back()} />;
+};
+
 // Helper function to map tool IDs to paths
 function getToolPath(toolId: ToolID): string | null {
   // Intelligent Document
@@ -244,6 +259,15 @@ function getToolPath(toolId: ToolID): string | null {
   }
   if (toolId === ToolID.SQL_FORMATTER) {
     return '/tools/sql-formatter';
+  }
+  if (toolId === ToolID.TEXT_CLEANER) {
+    return '/tools/text-cleaner';
+  }
+  if (toolId === ToolID.IMAGE_TO_BASE64) {
+    return '/tools/image-to-base64';
+  }
+  if (toolId === ToolID.WORD_COUNTER) {
+    return '/tools/word-counter';
   }
   if (toolId === ToolID.HTML_TO_MARKDOWN) {
     return '/tools/html-to-markdown';
@@ -592,6 +616,30 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <ImageCompressorWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/word-counter',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <WordCounterWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/text-cleaner',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <TextCleanerWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/image-to-base64',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ImageToBase64Wrapper />
           </Suspense>
         ),
       },
