@@ -3,22 +3,29 @@ import { Upload, File, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
-  acceptedTypes?: string[];
+  accept?: string | string[];
   maxSizeInMB?: number;
   className?: string;
   label?: string;
+  selectedFile?: File | null;
+  onClear?: () => void;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
   onFileSelect,
-  acceptedTypes = [],
+  accept = [],
   maxSizeInMB = 50,
   className = '',
   label = 'Choose file or drag and drop',
+  selectedFile: controlledFile,
+  onClear: controlledClear,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string>('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [internalFile, setInternalFile] = useState<File | null>(null);
+
+  const isControlled = controlledFile !== undefined;
+  const selectedFile = isControlled ? controlledFile : internalFile;
 
   const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
@@ -30,7 +37,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       }
 
       // Check file type if specified
-      if (acceptedTypes.length > 0) {
+      const acceptedTypes = Array.isArray(accept) ? accept : accept.split(',').map(t => t.trim());
+
+      if (acceptedTypes.length > 0 && acceptedTypes[0] !== '' && acceptedTypes[0] !== '*/*') {
         const fileExtension = file.name.split('.').pop()?.toLowerCase();
         const mimeType = file.type;
 
@@ -50,7 +59,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       return null;
     },
-    [maxSizeInBytes, maxSizeInMB, acceptedTypes]
+    [maxSizeInBytes, maxSizeInMB, accept]
   );
 
   const handleFile = useCallback(
@@ -59,15 +68,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       if (validationError) {
         setError(validationError);
-        setSelectedFile(null);
+        if (!isControlled) setInternalFile(null);
         return;
       }
 
       setError('');
-      setSelectedFile(file);
+      if (!isControlled) setInternalFile(file);
       onFileSelect(file);
     },
-    [onFileSelect, validateFile]
+    [onFileSelect, validateFile, isControlled]
   );
 
   const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
@@ -144,8 +153,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               <div>
                 <p className="font-medium text-slate-700">{label}</p>
                 <p className="text-sm text-slate-500">
-                  {acceptedTypes.length > 0
-                    ? `Accepted: ${acceptedTypes.join(', ')}`
+                  {Array.isArray(accept) && accept.length > 0 && accept[0] !== ''
+                    ? `Accepted: ${accept.join(', ')}`
+                    : typeof accept === 'string' && accept !== '' && accept !== '*/*'
+                    ? `Accepted: ${accept}`
                     : 'All file types accepted'}
                   {maxSizeInMB && ` • Max ${maxSizeInMB}MB`}
                 </p>
@@ -163,7 +174,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                 type="file"
                 className="hidden"
                 onChange={handleFileInput}
-                accept={acceptedTypes.join(',')}
+                accept={Array.isArray(accept) ? accept.join(',') : accept}
               />
             </label>
           )}
@@ -180,7 +191,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       {selectedFile && (
         <button
           onClick={() => {
-            setSelectedFile(null);
+            if (isControlled && controlledClear) {
+              controlledClear();
+            } else {
+              setInternalFile(null);
+            }
             setError('');
           }}
           className="mt-2 text-sm text-doc-red hover:text-red-700"

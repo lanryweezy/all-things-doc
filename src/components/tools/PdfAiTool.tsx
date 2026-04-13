@@ -283,19 +283,33 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
         {file && !result && !isProcessing && (
           <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="flex-grow space-y-4">
-              {[ToolID.PDF_TO_WORD, ToolID.PDF_TO_EXCEL, ToolID.PDF_BANK_STATEMENT_CONVERTER, ToolID.PDF_OCR].includes(toolId) && (
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
+              {[
+                ToolID.PDF_TO_WORD,
+                ToolID.PDF_TO_EXCEL,
+                ToolID.PDF_BANK_STATEMENT_CONVERTER,
+                ToolID.PDF_OCR,
+              ].includes(toolId) && (
+                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between group cursor-pointer hover:bg-indigo-100/50 transition-colors" onClick={() => setAdvanced(!advanced)}>
                   <div className="space-y-0.5">
-                    <label htmlFor="advanced-mode" className="text-sm font-bold text-indigo-900">Advanced AI Extraction</label>
-                    <p className="text-xs text-indigo-600 font-medium">Use OpenDataLoader for perfect structure and tables.</p>
+                    <label
+                      htmlFor="advanced-mode"
+                      className="text-sm font-bold text-indigo-900 cursor-pointer"
+                    >
+                      Advanced AI Extraction
+                    </label>
+                    <p className="text-xs text-indigo-600 font-medium">
+                      Use OpenDataLoader for perfect structure and tables.
+                    </p>
                   </div>
-                  <input
-                    id="advanced-mode"
-                    type="checkbox"
-                    checked={advanced}
-                    onChange={(e) => setAdvanced(e.target.checked)}
-                    className="w-5 h-5 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                  />
+                  <div className={`
+                    w-12 h-6 rounded-full p-1 transition-colors duration-200 ease-in-out
+                    ${advanced ? 'bg-indigo-600' : 'bg-indigo-200'}
+                  `}>
+                    <div className={`
+                      w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out
+                      ${advanced ? 'translate-x-6' : 'translate-x-0'}
+                    `} />
+                  </div>
                 </div>
               )}
 

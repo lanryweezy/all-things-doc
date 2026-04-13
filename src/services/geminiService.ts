@@ -138,34 +138,6 @@ export const processPdf = async (
   outputFormat: 'markdown' | 'text' = 'markdown',
   advanced: boolean = false
 ): Promise<string> => {
-  if (advanced && BACKEND_AVAILABLE) {
-    try {
-      const byteCharacters = atob(pdfBase64);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf' });
-      const file = new File([blob], 'document.pdf', { type: 'application/pdf' });
-
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('advanced', 'true');
-
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/pdf/extract-text`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data.markdown || data.text || '';
-      }
-    } catch (error) {
-      console.warn('Advanced PDF extraction failed, falling back to Gemini:', error);
-    }
-  }
 
   if (mode === 'OCR' && BACKEND_AVAILABLE) {
     try {
@@ -218,6 +190,11 @@ export const processPdf = async (
       prompt =
         'Extract all transaction data from this bank statement PDF. Convert it to CSV format with columns for: Date, Description, Debit, Credit, Balance. Ensure proper formatting and handle different transaction types. Return ONLY the CSV data with headers, no other text or markdown code blocks.';
       break;
+  }
+
+  // Enhance prompt if advanced mode is on
+  if (advanced) {
+    prompt = `[ADVANCED MODE: DEEP EXTRACTION]\n${prompt}\nPerform an exhaustive analysis of the document. Ensure no small details, footer text, or complex table data is missed. Focus on structural integrity and perfect formatting.`;
   }
 
   const response = await ai.models.generateContent({

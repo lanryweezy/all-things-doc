@@ -66,8 +66,11 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
     } else if (toolId === ToolID.PDF_COMPARE) {
       if (!file || secondaryFiles.length === 0) return;
     } else if (toolId === ToolID.PDF_MERGE || toolId === ToolID.MERGE_WORD) {
-      if (!file && secondaryFiles.length === 0) return;
-      if (file && secondaryFiles.length === 0) return; // Need at least two
+      const totalFiles = (file ? 1 : 0) + secondaryFiles.length;
+      if (totalFiles < 2) {
+        alert('Please upload at least two files to merge.');
+        return;
+      }
     } else if (toolId === ToolID.PDF_SPLIT) {
       if (!file || !paramValue) return; // Ensure file and split points are provided
     }
@@ -83,8 +86,8 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       // Process based on tool type
       switch (toolId) {
         case ToolID.PDF_MERGE:
-          if (file) {
-            const filesToMerge = [file, ...secondaryFiles];
+          const filesToMerge = file ? [file, ...secondaryFiles] : secondaryFiles;
+          if (filesToMerge.length >= 2) {
             const blobResult = await pdfService.mergePdfs(filesToMerge);
             const arrayBuffer = await blobResult.arrayBuffer();
             result = new Uint8Array(arrayBuffer);
@@ -270,7 +273,15 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   }, [resultData, toolId]); // Added toolId to dependency array for correct mimeType determination
 
   const handleSecondaryUpload = (newFile: File) => {
-    setSecondaryFiles(prev => [...prev, newFile]);
+    if (!file) {
+      setFile(newFile);
+    } else {
+      setSecondaryFiles(prev => [...prev, newFile]);
+    }
+  };
+
+  const removeSecondaryFile = (index: number) => {
+    setSecondaryFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const getAcceptType = () => {
@@ -496,33 +507,67 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           <div className="mb-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-doc-slate">Files to Merge</h3>
-              <span className="text-sm text-slate-500">
-                {secondaryFiles.length + (file ? 1 : 0)} files
+              <span className="text-sm text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded-full">
+                {(file ? 1 : 0) + secondaryFiles.length} files
               </span>
             </div>
-            <div className="space-y-2">
+
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
               {file && (
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <span className="text-sm truncate max-w-[200px]">{file.name}</span>
-                  <span className="text-xs text-slate-400 bg-slate-200 px-2 py-1 rounded">1</span>
+                <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm animate-fade-in">
+                  <div className="flex items-center space-x-3 min-w-0">
+                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-doc-slate text-white text-xs font-bold rounded-full">1</span>
+                    <span className="text-sm font-medium text-slate-700 truncate">{file.name}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (secondaryFiles.length > 0) {
+                        setFile(secondaryFiles[0]);
+                        setSecondaryFiles(prev => prev.slice(1));
+                      } else {
+                        setFile(null);
+                      }
+                    }}
+                    className="p-1 text-slate-400 hover:text-doc-red hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               )}
+
               {secondaryFiles.map((f, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm animate-fade-in"
                 >
-                  <span className="text-sm truncate max-w-[200px]">{f.name}</span>
-                  <span className="text-xs text-slate-400 bg-slate-200 px-2 py-1 rounded">
-                    {i + 2}
-                  </span>
+                  <div className="flex items-center space-x-3 min-w-0">
+                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-slate-400 text-white text-xs font-bold rounded-full">{i + 2}</span>
+                    <span className="text-sm font-medium text-slate-700 truncate">{f.name}</span>
+                  </div>
+                  <button
+                    onClick={() => removeSecondaryFile(i)}
+                    className="p-1 text-slate-400 hover:text-doc-red hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               ))}
+
+              {!file && secondaryFiles.length === 0 && (
+                <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-lg text-slate-400">
+                  <Layers size={32} className="mx-auto mb-2 opacity-20" />
+                  <p className="text-sm">No files added yet</p>
+                </div>
+              )}
             </div>
+
             <FileUpload
               accept={getAcceptType()}
               onFileSelect={handleSecondaryUpload}
-              label={`Add another ${toolId === ToolID.MERGE_WORD ? 'Word Doc' : 'PDF'}`}
+              selectedFile={null}
+              onClear={() => {}}
+              label={file ? `Add another ${toolId === ToolID.MERGE_WORD ? 'Word Doc' : 'PDF'}` : getUploadLabel()}
+              className="mt-4"
             />
           </div>
         );
@@ -717,7 +762,21 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
               </Button>
             </div>
           </div>
-        ) : !file && toolId !== ToolID.PDF_MERGE && toolId !== ToolID.MERGE_WORD ? (
+        ) : toolId === ToolID.PDF_MERGE || toolId === ToolID.MERGE_WORD ? (
+          <div>
+            {renderConfiguration()}
+            <div className="flex justify-end mt-6">
+              <Button
+                onClick={handleProcess}
+                isLoading={isProcessing}
+                className={`${toolInfo.color.replace('text-', 'bg-').replace('600', '600')} hover:opacity-90 text-white`}
+                icon={getActionButtonIcon()}
+              >
+                {getActionLabel()}
+              </Button>
+            </div>
+          </div>
+        ) : !file ? (
           <FileUpload
             accept={getAcceptType()}
             selectedFile={file}
@@ -728,14 +787,12 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           />
         ) : (
           <div>
-            {toolId !== ToolID.PDF_MERGE && toolId !== ToolID.MERGE_WORD && (
-              <FileUpload
-                accept={getAcceptType()}
-                selectedFile={file}
-                onFileSelect={setFile}
-                onClear={() => setFile(null)}
-              />
-            )}
+            <FileUpload
+              accept={getAcceptType()}
+              selectedFile={file}
+              onFileSelect={setFile}
+              onClear={() => setFile(null)}
+            />
 
             <div className="mt-8">
               {renderConfiguration()}
