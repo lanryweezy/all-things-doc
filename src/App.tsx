@@ -4,12 +4,15 @@ import { Header } from './components/Header';
 import { DarkModeToggle } from './components/DarkModeToggle';
 import { SeoHelmet } from './components/SeoHelmet';
 import { analytics } from './services/analytics';
+import { checkBackendHealth } from './services/apiCheck';
 
 const App: React.FC = () => {
   const location = useLocation();
 
-  // Track page views
+  // Initialize backend health check and track page views
   React.useEffect(() => {
+    checkBackendHealth();
+
     const path = location.pathname;
     if (path === '/') {
       analytics.trackPageView('home');

@@ -5,21 +5,19 @@ import {
   performOcrImage as backendOcrImage,
   performOcrPdf as backendOcrPdf,
 } from './backendService';
-
-// Check if we have a backend available
-const BACKEND_AVAILABLE = !!import.meta.env.VITE_BACKEND_URL;
+import { isBackendAvailable } from './apiCheck';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
 const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 const MODEL_NAME = 'gemini-2.5-flash';
 
-export const isApiAvailable = () => !!ai || BACKEND_AVAILABLE;
+export const isApiAvailable = () => !!ai || isBackendAvailable();
 
 // Use backend for summarization if available, otherwise Gemini
 export const summarizeText = async (text: string): Promise<string> => {
   if (!text) return '';
 
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendSummarize(text);
     } catch (error) {
@@ -43,7 +41,7 @@ export const summarizeText = async (text: string): Promise<string> => {
 export const translateText = async (text: string, targetLanguage: string): Promise<string> => {
   if (!text) return '';
 
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendTranslate(text, targetLanguage);
     } catch (error) {
@@ -65,7 +63,7 @@ export const translateText = async (text: string, targetLanguage: string): Promi
 
 // Use backend for OCR if available, otherwise Gemini
 export const performOCR = async (imageBase64: string, mimeType: string): Promise<string> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       // Convert base64 to blob for backend processing
       const byteCharacters = atob(imageBase64);

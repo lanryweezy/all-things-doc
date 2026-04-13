@@ -4,13 +4,11 @@ import {
   compressPdf as backendCompressPdf,
   extractTextFromPdf as backendExtractTextFromPdf
 } from './backendService';
-
-// Check if we have a backend available
-const BACKEND_AVAILABLE = !!import.meta.env.VITE_BACKEND_URL;
+import { isBackendAvailable } from './apiCheck';
 
 // Use backend for PDF operations if available, otherwise client-side
 export const mergePdfs = async (files: File[]): Promise<Blob> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendMergePdfs(files);
     } catch (error) {
@@ -33,7 +31,7 @@ export const mergePdfs = async (files: File[]): Promise<Blob> => {
 };
 
 export const splitPdf = async (file: File, splitPoints: number[]): Promise<Blob> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendSplitPdf(file, splitPoints);
     } catch (error) {
@@ -213,20 +211,26 @@ export const watermarkPdf = async (file: File, text: string): Promise<Uint8Array
 };
 
 export const compressPdf = async (file: File): Promise<Blob> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendCompressPdf(file);
     } catch (error) {
       console.warn('Backend PDF compression failed, falling back to client-side processing:', error);
-      throw error;
     }
   }
 
-  throw new Error('Backend service not available and client-side processing not implemented');
+  // Basic Client-side "Compression" by re-saving with optimization
+  const { PDFDocument } = await import('pdf-lib');
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+  // pdf-lib's save() performs basic optimization by default
+  const pdfBytes = await pdfDoc.save();
+  return new Blob([pdfBytes], { type: 'application/pdf' });
 };
 
 export const extractTextFromPdf = async (file: File): Promise<string> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendExtractTextFromPdf(file);
     } catch (error) {
