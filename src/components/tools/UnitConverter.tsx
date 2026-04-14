@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, Copy, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -70,6 +71,35 @@ const UNIT_TYPES = {
     bar: 0.00001,
     psi: 0.000145038,
     atm: 0.0000098692,
+  },
+  Time: {
+    seconds: 1,
+    minutes: 1 / 60,
+    hours: 1 / 3600,
+    days: 1 / 86400,
+    weeks: 1 / 604800,
+    months: 1 / 2629800,
+    years: 1 / 31557600,
+  },
+  Energy: {
+    joules: 1,
+    kilojoules: 0.001,
+    calories: 0.239006,
+    kilocalories: 0.000239006,
+    watt_hours: 0.000277778,
+    kilowatt_hours: 0.000000277778,
+  },
+  Power: {
+    watts: 1,
+    kilowatts: 0.001,
+    horsepower: 0.00134102,
+    btu_per_minute: 0.056869,
+  },
+  Fuel: {
+    mpg_us: 1,
+    mpg_uk: 1.20095,
+    km_per_liter: 0.425144,
+    liters_per_100km: 'special_l100km',
   }
 };
 
@@ -80,6 +110,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
   const [inputValue, setInputValue] = useState('1');
   const [result, setResult] = useState<string>('');
   const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.UNIT_CONVERTER];
 
@@ -109,9 +140,26 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
         setResult(resultValue.toFixed(4).replace(/\.?0+$/, ''));
       }
     } else {
-      const units = UNIT_TYPES[type] as Record<string, number>;
-      const baseValue = val / units[fromUnit];
-      const finalValue = baseValue * units[toUnit];
+      const units = UNIT_TYPES[type] as Record<string, any>;
+
+      let finalValue: number;
+
+      // Special handling for Fuel (L/100km is inverse)
+      if (type === 'Fuel') {
+        let kmpl: number;
+        if (fromUnit === 'mpg_us') kmpl = val * 0.425144;
+        else if (fromUnit === 'mpg_uk') kmpl = val * 0.354006;
+        else if (fromUnit === 'km_per_liter') kmpl = val;
+        else kmpl = 100 / val; // liters_per_100km
+
+        if (toUnit === 'mpg_us') finalValue = kmpl / 0.425144;
+        else if (toUnit === 'mpg_uk') finalValue = kmpl / 0.354006;
+        else if (toUnit === 'km_per_liter') finalValue = kmpl;
+        else finalValue = 100 / kmpl;
+      } else {
+        const baseValue = val / units[fromUnit];
+        finalValue = baseValue * units[toUnit];
+      }
 
       if (Math.abs(finalValue) < 0.000001 && finalValue !== 0) {
         setResult(finalValue.toExponential(6));
@@ -126,6 +174,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(result);
     setCopied(true);
+    showToast('Result copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
   };
 

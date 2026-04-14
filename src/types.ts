@@ -114,6 +114,8 @@ export enum ToolID {
   WORD_COUNTER = 'word-counter',
   TEXT_CLEANER = 'text-cleaner',
   IMAGE_TO_BASE64 = 'image-to-base64',
+  LINE_UTILS = 'line-utils',
+  URL_ENCODER = 'url-encoder',
 }
 
 export enum ToolCategory {

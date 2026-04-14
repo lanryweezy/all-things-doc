@@ -33,6 +33,8 @@ const SqlFormatter = lazy(() => import('./components/tools/SqlFormatter').then(m
 const HtmlToMarkdown = lazy(() => import('./components/tools/HtmlToMarkdown').then(module => ({ default: module.HtmlToMarkdown })));
 const PdfOrganize = lazy(() => import('./components/tools/PdfOrganize').then(module => ({ default: module.PdfOrganize })));
 const TextCleaner = lazy(() => import('./components/tools/TextCleaner').then(module => ({ default: module.TextCleaner })));
+const LineUtils = lazy(() => import('./components/tools/LineUtils').then(module => ({ default: module.LineUtils })));
+const UrlEncoder = lazy(() => import('./components/tools/UrlEncoder').then(module => ({ default: module.UrlEncoder })));
 const ImageToBase64 = lazy(() => import('./components/tools/ImageToBase64').then(module => ({ default: module.ImageToBase64 })));
 const WordCounter = lazy(() => import('./components/tools/WordCounter').then(module => ({ default: module.WordCounter })));
 const SvgConverter = lazy(() => import('./components/tools/SvgConverter').then(module => ({ default: module.SvgConverter })));
@@ -190,6 +192,14 @@ const TextCleanerWrapper = () => {
   return <TextCleaner onBack={() => window.history.back()} />;
 };
 
+const LineUtilsWrapper = () => {
+  return <LineUtils onBack={() => window.history.back()} />;
+};
+
+const UrlEncoderWrapper = () => {
+  return <UrlEncoder onBack={() => window.history.back()} />;
+};
+
 const ImageToBase64Wrapper = () => {
   return <ImageToBase64 onBack={() => window.history.back()} />;
 };
@@ -262,6 +272,12 @@ function getToolPath(toolId: ToolID): string | null {
   }
   if (toolId === ToolID.TEXT_CLEANER) {
     return '/tools/text-cleaner';
+  }
+  if (toolId === ToolID.LINE_UTILS) {
+    return '/tools/line-utils';
+  }
+  if (toolId === ToolID.URL_ENCODER) {
+    return '/tools/url-encoder';
   }
   if (toolId === ToolID.IMAGE_TO_BASE64) {
     return '/tools/image-to-base64';
@@ -344,6 +360,22 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <PrivacyPolicy />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/line-utils',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LineUtilsWrapper />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'tools/url-encoder',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <UrlEncoderWrapper />
           </Suspense>
         ),
       },

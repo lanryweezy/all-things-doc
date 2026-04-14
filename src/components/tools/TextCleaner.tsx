@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Eraser, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Eraser, Copy, Check, Search } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -11,12 +12,15 @@ interface TextCleanerProps {
 export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
   const [input, setInput] = useState('');
   const [copied, setCopied] = useState(false);
+  const [findText, setFindText] = useState('');
+  const [replaceText, setReplaceText] = useState('');
   const [options, setOptions] = useState({
     extraSpaces: true,
     emptyLines: true,
     smartQuotes: true,
     trim: true,
   });
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.TEXT_CLEANER];
 
@@ -44,7 +48,15 @@ export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(input);
     setCopied(true);
+    showToast('Result copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleReplace = () => {
+    if (!findText) return;
+    const result = input.split(findText).join(replaceText);
+    setInput(result);
+    showToast('Text replaced');
   };
 
   return (
@@ -60,23 +72,56 @@ export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-          {[
-            { id: 'extraSpaces', label: 'Extra Spaces' },
-            { id: 'emptyLines', label: 'Empty Lines' },
-            { id: 'smartQuotes', label: 'Smart Quotes' },
-            { id: 'trim', label: 'Trim Lines' },
-          ].map((opt) => (
-            <label key={opt.id} className="flex items-center space-x-2 cursor-pointer group select-none">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+          <div className="space-y-4">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Cleaning Options</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { id: 'extraSpaces', label: 'Extra Spaces' },
+                { id: 'emptyLines', label: 'Empty Lines' },
+                { id: 'smartQuotes', label: 'Smart Quotes' },
+                { id: 'trim', label: 'Trim Lines' },
+              ].map((opt) => (
+                <label key={opt.id} className="flex items-center space-x-2 cursor-pointer group select-none">
+                  <input
+                    type="checkbox"
+                    checked={(options as any)[opt.id]}
+                    onChange={() => setOptions({ ...options, [opt.id]: !(options as any)[opt.id] })}
+                    className="w-4 h-4 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                  />
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">{opt.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Find & Replace</h3>
+            <div className="flex space-x-2">
               <input
-                type="checkbox"
-                checked={(options as any)[opt.id]}
-                onChange={() => setOptions({ ...options, [opt.id]: !(options as any)[opt.id] })}
-                className="w-4 h-4 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                type="text"
+                placeholder="Find..."
+                value={findText}
+                onChange={(e) => setFindText(e.target.value)}
+                className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-doc-red"
               />
-              <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">{opt.label}</span>
-            </label>
-          ))}
+              <input
+                type="text"
+                placeholder="Replace..."
+                value={replaceText}
+                onChange={(e) => setReplaceText(e.target.value)}
+                className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-doc-red"
+              />
+              <button
+                onClick={handleReplace}
+                disabled={!findText}
+                className="p-2 bg-doc-red text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                title="Replace All"
+              >
+                <Search size={18} />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="relative">
