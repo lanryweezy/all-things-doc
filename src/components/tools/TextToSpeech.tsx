@@ -56,6 +56,39 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
     setIsSpeaking(false);
   };
 
+  // Helper to create a WAV header for raw PCM data
+  const getWavHeader = (dataLength: number, sampleRate: number, numChannels: number) => {
+    const buffer = new ArrayBuffer(44);
+    const view = new DataView(buffer);
+
+    const writeString = (v: DataView, offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        v.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+
+    // RIFF chunk descriptor
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + dataLength, true);
+    writeString(view, 8, 'WAVE');
+
+    // fmt sub-chunk
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true); // PCM format
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * numChannels * 2, true); // byte rate
+    view.setUint16(32, numChannels * 2, true); // block align
+    view.setUint16(34, 16, true); // bits per sample
+
+    // data sub-chunk
+    writeString(view, 36, 'data');
+    view.setUint32(40, dataLength, true);
+
+    return buffer;
+  };
+
   const handleGenerate = async () => {
     if (!text.trim()) return;
 
@@ -95,39 +128,6 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       alert('Failed to generate speech.');
     } finally {
       setIsProcessing(false);
-    }
-  };
-
-  // Helper to create a WAV header for raw PCM data
-  const getWavHeader = (dataLength: number, sampleRate: number, numChannels: number) => {
-    const buffer = new ArrayBuffer(44);
-    const view = new DataView(buffer);
-
-    // RIFF chunk descriptor
-    writeString(view, 0, 'RIFF');
-    view.setUint32(4, 36 + dataLength, true);
-    writeString(view, 8, 'WAVE');
-
-    // fmt sub-chunk
-    writeString(view, 12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true); // PCM format
-    view.setUint16(22, numChannels, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * numChannels * 2, true); // byte rate
-    view.setUint16(32, numChannels * 2, true); // block align
-    view.setUint16(34, 16, true); // bits per sample
-
-    // data sub-chunk
-    writeString(view, 36, 'data');
-    view.setUint32(40, dataLength, true);
-
-    return buffer;
-  };
-
-  const writeString = (view: DataView, offset: number, string: string) => {
-    for (let i = 0; i < string.length; i++) {
-      view.setUint8(offset + i, string.charCodeAt(i));
     }
   };
 

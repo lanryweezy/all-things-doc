@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Hash, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Hash, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -13,6 +14,7 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
   const [output, setOutput] = useState('');
   const [copied, setCopied] = useState(false);
   const [algo, setAlgo] = useState('SHA-256');
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.HASH_GENERATOR];
 
@@ -31,6 +33,7 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
     setCopied(true);
+    showToast('Hash copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -95,7 +98,8 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
         </div>
 
         {output && (
-          <div className="mt-8 p-6 bg-slate-50 rounded-xl border border-slate-200 relative group">
+          <div className="space-y-4">
+          <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 relative group">
             <div className="flex justify-between items-center mb-2">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{algo} Hash</span>
               <button
@@ -109,6 +113,25 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
             <div className="font-mono text-sm break-all text-slate-700">
               {output}
             </div>
+          </div>
+
+          <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Hash className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-indigo-900 uppercase tracking-wider">Related Tool</p>
+                <p className="text-sm text-indigo-700 font-medium">Need to hash a file instead of text?</p>
+              </div>
+            </div>
+            <button
+              onClick={() => window.location.href = '/tools/file-hasher'}
+              className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
+            >
+              <LinkIcon size={14} className="mr-1.5" /> Try File Checksum
+            </button>
+          </div>
           </div>
         )}
       </div>

@@ -19,6 +19,7 @@ import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { jsPDF } from 'jspdf';
 import { downloadText, downloadBinary } from '../../utils/downloadUtils';
+import { useToast } from '../ui/Toast';
 
 interface PdfAiToolProps {
   toolId:
@@ -38,6 +39,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
   const [advanced, setAdvanced] = useState(false);
   const [progress, setProgress] = useState<number | undefined>(undefined);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[toolId];
 
@@ -141,7 +143,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       downloadText(result, filename);
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 
@@ -190,7 +192,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       downloadBinary(uint8Array, 'searchable_document.pdf', 'application/pdf');
     } catch (error) {
       console.error('PDF generation failed:', error);
-      alert('Failed to generate PDF. Please try again or check your browser settings.');
+      showToast('Failed to generate PDF. Please try again.', 'error');
     }
   };
 
@@ -298,7 +300,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                       Advanced AI Extraction
                     </label>
                     <p className="text-xs text-indigo-600 font-medium">
-                      Use OpenDataLoader for perfect structure and tables.
+                      Use Deep Context analysis for complex layouts and tables.
                     </p>
                   </div>
                   <div className={`
@@ -482,7 +484,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                         setTimeout(() => URL.revokeObjectURL(url), 100);
                       } catch (error) {
                         console.error('Alternative download failed:', error);
-                        alert('Alternative download failed. Please try the main download button.');
+                        showToast('Alternative download failed.', 'error');
                       }
                     }}
                     className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"

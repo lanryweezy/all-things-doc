@@ -214,7 +214,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
-            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">From</label>
+            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">From Value</label>
             <div className="space-y-3">
               <input
                 id="unit-input"
@@ -223,7 +223,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
                 onChange={(e) => setInputValue(e.target.value)}
                 className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-doc-slate focus:ring-2 focus:ring-doc-red outline-none"
               />
-              <label htmlFor="from-unit-select" className="sr-only">From Unit</label>
+              <label htmlFor="from-unit-select" className="block text-sm font-medium text-slate-500">From Unit</label>
               <select
                 id="from-unit-select"
                 value={fromUnit}
@@ -238,7 +238,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           </div>
 
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-500">To</label>
+            <label className="block text-sm font-medium text-slate-500">To Value</label>
             <div className="space-y-3">
               <div className="w-full p-4 bg-doc-red/5 border border-doc-red/10 rounded-xl text-2xl font-bold text-doc-red min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
                 <span>{result || '0'}</span>
@@ -248,7 +248,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
                   </button>
                 )}
               </div>
-              <label htmlFor="to-unit-select" className="sr-only">To Unit</label>
+              <label htmlFor="to-unit-select" className="block text-sm font-medium text-slate-500">To Unit</label>
               <select
                 id="to-unit-select"
                 value={toUnit}

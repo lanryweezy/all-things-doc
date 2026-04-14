@@ -9,7 +9,7 @@ import { isBackendAvailable } from './apiCheck';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
 const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
-const MODEL_NAME = 'gemini-2.5-flash';
+const MODEL_NAME = 'gemini-1.5-flash';
 
 export const isApiAvailable = () => !!ai || isBackendAvailable();
 
@@ -225,8 +225,9 @@ export const generateSpeech = async (text: string) => {
   if (!ai) {
     return null; // Return null for demo mode - text-to-speech requires API key
   }
+  // Note: Multimodal output (AUDIO) is currently supported in Gemini 2.0 Flash
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-preview-tts',
+    model: 'gemini-2.0-flash-exp',
     contents: [{ parts: [{ text }] }],
     config: {
       responseModalities: [Modality.AUDIO],

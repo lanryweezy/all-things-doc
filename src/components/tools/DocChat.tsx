@@ -8,6 +8,7 @@ import { extractTextFromPdf } from '../../services/pdfService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { Chat, GenerateContentResponse } from '@google/genai';
+import { useToast } from '../ui/Toast';
 
 interface DocChatProps {
   onBack: () => void;
@@ -25,6 +26,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const { showToast } = useToast();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const toolInfo = TOOLS[ToolID.CHAT_WITH_DOC];
@@ -77,7 +79,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to analyze document.');
+      showToast('Failed to analyze document.', 'error');
     } finally {
       setIsUploading(false);
     }
