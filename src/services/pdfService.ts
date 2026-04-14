@@ -273,3 +273,38 @@ export const excelToCsv = async (file: File): Promise<string> => {
   const worksheet = workbook.Sheets[firstSheetName];
   return XLSX.utils.sheet_to_csv(worksheet);
 };
+
+export const pdfToImages = async (file: File, format: 'jpeg' | 'png' = 'jpeg'): Promise<Blob[]> => {
+  const pdfjs = await import('pdfjs-dist');
+  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+
+  const arrayBuffer = await file.arrayBuffer();
+  const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+  const pdf = await loadingTask.promise;
+  const images: Blob[] = [];
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const viewport = page.getViewport({ scale: 2.0 });
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) continue;
+
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    await page.render({
+      canvasContext: context,
+      viewport: viewport
+    }).promise;
+
+    const blob = await new Promise<Blob | null>(resolve =>
+      canvas.toBlob(resolve, `image/${format}`, 0.95)
+    );
+
+    if (blob) images.push(blob);
+  }
+
+  return images;
+};

@@ -137,7 +137,7 @@ export const processPdf = async (
   advanced: boolean = false
 ): Promise<string> => {
 
-  if (mode === 'OCR' && BACKEND_AVAILABLE) {
+  if (mode === 'OCR' && isBackendAvailable()) {
     try {
       // Convert base64 to blob for backend processing
       const byteCharacters = atob(pdfBase64);

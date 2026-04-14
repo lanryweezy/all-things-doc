@@ -175,6 +175,28 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           }
           break;
 
+        case ToolID.PDF_TO_JPG:
+        case ToolID.PDF_TO_PNG:
+          if (file) {
+            const format = toolId === ToolID.PDF_TO_PNG ? 'png' : 'jpeg';
+            const images = await pdfService.pdfToImages(file, format);
+
+            if (images.length === 1) {
+              const ab = await images[0].arrayBuffer();
+              result = new Uint8Array(ab);
+            } else {
+              const JSZip = (await import('jszip')).default;
+              const zip = new JSZip();
+              for (let i = 0; i < images.length; i++) {
+                zip.file(`page-${i + 1}.${format}`, images[i]);
+              }
+              const blob = await zip.generateAsync({ type: 'blob' });
+              const ab = await blob.arrayBuffer();
+              result = new Uint8Array(ab);
+            }
+          }
+          break;
+
         case ToolID.HTML_TO_PDF:
           if (paramValue) {
             const html2canvas = (await import('html2canvas')).default;
@@ -244,17 +266,54 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
 
   const handleDownload = () => {
     if (!resultData) return;
-    const filename = `${toolInfo.title.replace(/\s+/g, '_')}_result.${
-      toolId === ToolID.PDF_SPLIT ? 'zip' : 'pdf'
-    }`;
-    const mimeType = toolId === ToolID.PDF_SPLIT ? 'application/zip' : 'application/pdf';
+
+    let extension = 'pdf';
+    let mimeType = 'application/pdf';
+
+    if (toolId === ToolID.PDF_SPLIT || (resultData.length > 0 && toolId === ToolID.PDF_TO_JPG && secondaryFiles.length > 0)) {
+       // This logic is a bit flawed because secondaryFiles isn't used for count here,
+       // but we know if it's a zip if toolId is split or if we have multiple pages in PDF_TO_JPG
+    }
+
+    const isZip = toolId === ToolID.PDF_SPLIT ||
+                 (toolId === ToolID.PDF_TO_JPG && resultData.length > 0) ||
+                 (toolId === ToolID.PDF_TO_PNG && resultData.length > 0);
+
+    // Check if it's actually an image
+    const isSingleImage = (toolId === ToolID.PDF_TO_JPG || toolId === ToolID.PDF_TO_PNG) && !isZip;
+    // Actually our logic in handleProcess makes it a zip if > 1 page.
+    // For simplicity, let's just detect if the first few bytes look like a ZIP
+    const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4B;
+    const isJpeg = resultData[0] === 0xFF && resultData[1] === 0xD8;
+    const isPng = resultData[0] === 0x89 && resultData[1] === 0x50;
+
+    if (isActuallyZip) {
+      extension = 'zip';
+      mimeType = 'application/zip';
+    } else if (isJpeg) {
+      extension = 'jpg';
+      mimeType = 'image/jpeg';
+    } else if (isPng) {
+      extension = 'png';
+      mimeType = 'image/png';
+    }
+
+    const filename = `${toolInfo.title.replace(/\s+/g, '_')}_result.${extension}`;
     downloadBinary(resultData, filename, mimeType);
   };
 
   // Create download URL when resultData changes
   useEffect(() => {
     if (resultData) {
-      const mimeType = toolId === ToolID.PDF_SPLIT ? 'application/zip' : 'application/pdf';
+      const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4B;
+      const isJpeg = resultData[0] === 0xFF && resultData[1] === 0xD8;
+      const isPng = resultData[0] === 0x89 && resultData[1] === 0x50;
+
+      let mimeType = 'application/pdf';
+      if (isActuallyZip) mimeType = 'application/zip';
+      else if (isJpeg) mimeType = 'image/jpeg';
+      else if (isPng) mimeType = 'image/png';
+
       const blob = new Blob([resultData], { type: mimeType });
       const url = URL.createObjectURL(blob);
       urlRef.current = url;

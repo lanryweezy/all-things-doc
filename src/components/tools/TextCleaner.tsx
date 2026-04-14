@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Eraser, Copy, Check, Sparkles } from 'lucide-react';
+import { ArrowLeft, Eraser, Copy, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
