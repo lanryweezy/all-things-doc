@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, AlignLeft, Copy, Check } from 'lucide-react';
+import { ArrowLeft, AlignLeft, Copy, Check, Beaker, Code, Database, FileCode } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -50,6 +50,27 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
     navigator.clipboard.writeText(output);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleLoadSample = () => {
+    const sample = {
+      user: {
+        id: 1,
+        name: "John Doe",
+        email: "john@example.com",
+        roles: ["admin", "editor"],
+        settings: {
+          theme: "dark",
+          notifications: true
+        }
+      },
+      status: "active",
+      timestamp: new Date().toISOString()
+    };
+    setInput(JSON.stringify(sample));
+    setOutput('');
+    setIsValid(null);
+    setError(null);
   };
 
   return (
@@ -147,7 +168,55 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
         >
           Minify
         </Button>
+        <Button
+          onClick={handleLoadSample}
+          variant="outline"
+          className="min-w-[150px] border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+          icon={<Beaker size={18} />}
+        >
+          Load Sample
+        </Button>
       </div>
+
+      {isValid && (
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-100 pt-8">
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/json-to-typescript'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Code className="w-4 h-4 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Generate TS Interface</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/json-to-csv'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Database className="w-4 h-4 text-cyan-700" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Convert to CSV</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/json-to-yaml'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <FileCode className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Convert to YAML</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

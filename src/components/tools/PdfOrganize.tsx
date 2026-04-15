@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Trash2, Download, RefreshCw, LayoutGrid, GripVertical, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import * as pdfService from '../../services/pdfService';
@@ -19,6 +20,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
   const [isComplete, setIsComplete] = useState(false);
   const [resultData, setResultData] = useState<Uint8Array | null>(null);
   const [pageCount, setPageCount] = useState(0);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.PDF_ORGANIZE];
 
@@ -60,7 +62,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
       setResultData(data);
       setIsComplete(true);
     } catch (err) {
-      alert('Error organizing PDF');
+      showToast('Error organizing PDF', 'error');
     } finally {
       setIsProcessing(false);
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Download, RefreshCcw, Image as ImageIcon, Link } from 'lucide-react';
+import { ArrowLeft, Download, RefreshCcw, Image as ImageIcon, Link, Maximize, Minimize2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { convertImage } from '../../services/imageService';
@@ -7,6 +7,7 @@ import * as pdfService from '../../services/pdfService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { downloadBinary, downloadBlob } from '../../utils/downloadUtils';
+import { useToast } from '../ui/Toast';
 
 interface ImageConverterProps {
   onBack: () => void;
@@ -20,6 +21,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [resultData, setResultData] = useState<Uint8Array | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (resultData) {
@@ -57,7 +59,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to convert image');
+      showToast('Failed to convert image', 'error');
     } finally {
       setIsProcessing(false);
     }
@@ -83,12 +85,12 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
           .then(blob => downloadBlob(blob, filename))
           .catch(error => {
             console.error('Download failed:', error);
-            alert('Download failed. Please try again or check your browser settings.');
+            showToast('Download failed. Please try again.', 'error');
           });
       }
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 
@@ -195,7 +197,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
               Your {targetFormat === 'pdf' ? 'PDF' : 'image'} is ready to download.
             </p>
 
-            <div className="flex justify-center space-x-4">
+            <div className="flex justify-center space-x-4 mb-8">
               <Button onClick={handleReset} variant="outline">
                 Convert Another
               </Button>
@@ -217,6 +219,32 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                   Alternative Download
                 </a>
               )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/image-resizer'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <Maximize className="w-4 h-4 text-teal-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Resize this Image</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/image-compressor'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <Minimize2 className="w-4 h-4 text-teal-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Compress Image</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

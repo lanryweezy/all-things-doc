@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRightLeft, Copy, Check, Type } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, Copy, Check, Type, Beaker } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -11,13 +12,19 @@ interface TextCaseConverterProps {
 export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) => {
   const [input, setInput] = useState('');
   const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.TEXT_CASE_CONVERTER];
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
+    showToast('Copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const loadSample = () => {
+    setInput('THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG');
   };
 
   const cases = [
@@ -67,8 +74,16 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
       </div>
 
       <div className="space-y-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-          <label className="block text-sm font-medium text-slate-500 mb-2">Input Text</label>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 relative">
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-sm font-medium text-slate-500">Input Text</label>
+            <button
+              onClick={loadSample}
+              className="text-xs font-bold text-doc-red hover:underline flex items-center"
+            >
+              <Beaker size={14} className="mr-1" /> Load Sample
+            </button>
+          </div>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}

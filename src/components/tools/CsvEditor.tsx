@@ -139,9 +139,27 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
           </div>
           <h2 className="text-2xl font-bold text-doc-slate mb-2">No CSV data loaded</h2>
           <p className="text-slate-500 mb-8">Click here to upload a CSV file or start with a blank table</p>
-          <Button onClick={(e) => { e.stopPropagation(); setHeaders(['Column 1', 'Column 2']); setData([['', '']]); }} className="bg-doc-slate">
-            Create Blank Table
-          </Button>
+          <div className="flex justify-center space-x-4">
+            <Button onClick={(e) => { e.stopPropagation(); setHeaders(['Column 1', 'Column 2']); setData([['', '']]); }} variant="outline">
+              Create Blank Table
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                setHeaders(['Date', 'Description', 'Category', 'Amount']);
+                setData([
+                  ['2023-10-01', 'Online Store', 'Shopping', '$-120.00'],
+                  ['2023-10-02', 'Employer Corp', 'Salary', '$5,000.00'],
+                  ['2023-10-05', 'Gas Station', 'Transport', '$-65.20'],
+                  ['2023-10-10', 'Monthly Rent', 'Housing', '$-1,800.00'],
+                  ['2023-10-15', 'Coffee Shop', 'Food', '$-5.50']
+                ]);
+              }}
+              className="bg-emerald-600"
+            >
+              Load Sample Data
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">

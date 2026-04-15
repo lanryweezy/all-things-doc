@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Play, Download, Link, Cpu, Zap, Pause } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { generateSpeech } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -21,6 +22,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string>('');
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.TEXT_TO_SPEECH];
 
@@ -125,7 +127,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to generate speech.');
+      showToast('Failed to generate speech.', 'error');
     } finally {
       setIsProcessing(false);
     }
@@ -138,7 +140,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       downloadBinary(audioData, filename, 'audio/wav');
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 

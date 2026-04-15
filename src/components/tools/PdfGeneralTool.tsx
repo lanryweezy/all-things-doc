@@ -26,6 +26,7 @@ import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import * as pdfService from '../../services/pdfService';
 import { downloadBinary } from '../../utils/downloadUtils';
+import { useToast } from '../ui/Toast';
 
 interface PdfGeneralToolProps {
   toolId: ToolID;
@@ -41,6 +42,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   const [resultData, setResultData] = useState<Uint8Array | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const urlRef = useRef<string | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[toolId];
 
@@ -68,7 +70,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
     } else if (toolId === ToolID.PDF_MERGE || toolId === ToolID.MERGE_WORD) {
       const totalFiles = (file ? 1 : 0) + secondaryFiles.length;
       if (totalFiles < 2) {
-        alert('Please upload at least two files to merge.');
+        showToast('Please upload at least two files to merge.', 'error');
         return;
       }
     } else if (toolId === ToolID.PDF_SPLIT) {
@@ -157,14 +159,14 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
           if (file) {
             // For demo purposes, we'll redact a fixed area
             result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            alert('PDF Redact functionality is a placeholder. Backend integration needed.');
+            showToast('PDF Redact functionality is a placeholder.', 'info');
           }
           break;
 
         case ToolID.PDF_COMPARE:
           if (file && secondaryFiles.length > 0) {
             // For demo purposes, we'll just show a comparison message
-            alert('In a production app, this would compare the two PDFs and show differences.');
+            showToast('In a production app, this would compare PDFs.', 'info');
             result = new Uint8Array(); // Placeholder
           }
           break;
@@ -236,9 +238,15 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       if (result) {
         setResultData(result);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error processing PDF:', error);
-      alert('Error processing file. Please try again.');
+      let errorMsg = 'Error processing file.';
+      if (error?.message?.includes('encrypted') || error?.message?.includes('password')) {
+        errorMsg = 'This PDF is password protected. Please unlock it first.';
+      } else if (error?.message?.includes('corrupt') || error?.message?.includes('invalid')) {
+        errorMsg = 'The PDF file appears to be invalid or corrupt.';
+      }
+      showToast(errorMsg, 'error');
     }
 
     setIsProcessing(false);
@@ -771,7 +779,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
             onClick={handleDownload}
             disabled={!resultData}
           >
-            Download File
+            Download Result
           </Button>
           {downloadUrl && (
             <a
@@ -784,6 +792,32 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
               Alternative Download
             </a>
           )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8 mt-8">
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf-organize'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Layers className="w-4 h-4 text-fuchsia-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Organize PDF Pages</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-compress'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Minimize2 className="w-4 h-4 text-green-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Compress PDF</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

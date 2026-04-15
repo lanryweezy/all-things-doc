@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Code, Copy, Check, ArrowRightLeft } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -12,6 +13,7 @@ export const HtmlToMarkdown: React.FC<HtmlToMarkdownProps> = ({ onBack }) => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.HTML_TO_MARKDOWN];
 
@@ -25,7 +27,7 @@ export const HtmlToMarkdown: React.FC<HtmlToMarkdownProps> = ({ onBack }) => {
       const markdown = turndownService.turndown(input);
       setOutput(markdown);
     } catch (err) {
-      alert('Error converting HTML to Markdown');
+      showToast('Error converting HTML to Markdown', 'error');
     }
   };
 

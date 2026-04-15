@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Copy, Check, RefreshCw, Key as KeyIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -16,6 +17,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeUppercase, setIncludeUppercase] = useState(true);
   const [includeLowercase, setIncludeLowercase] = useState(true);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.JWT_SECRET_GENERATOR];
 
@@ -32,7 +34,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
     if (includeSymbols) charset += symbols;
 
     if (charset === '') {
-      alert('Please select at least one character type');
+      showToast('Please select at least one character type', 'error');
       return;
     }
 

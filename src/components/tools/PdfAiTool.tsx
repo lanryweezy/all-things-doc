@@ -20,6 +20,7 @@ import { ToolID } from '../../types';
 import { jsPDF } from 'jspdf';
 import { downloadText, downloadBinary } from '../../utils/downloadUtils';
 import { useToast } from '../ui/Toast';
+import { FileEdit, Minimize2, Beaker } from 'lucide-react';
 
 interface PdfAiToolProps {
   toolId:
@@ -42,6 +43,36 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
   const { showToast } = useToast();
 
   const toolInfo = TOOLS[toolId];
+
+  const handleLoadSample = async () => {
+    try {
+      setIsProcessing(true);
+      setProgress(0);
+
+      // Artificial delay to simulate file analysis
+      for (let i = 0; i <= 100; i += 20) {
+        setProgress(i);
+        await new Promise(r => setTimeout(r, 200));
+      }
+
+      let sampleResult = '';
+      if (toolId === ToolID.PDF_TO_EXCEL || toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) {
+        sampleResult = "Date,Description,Amount\n2023-10-01,Sample Transaction,$-100.00\n2023-10-05,Monthly Subscription,$-15.00";
+      } else if (toolId === ToolID.PDF_TO_POWERPOINT) {
+        sampleResult = "# Slide 1: Introduction\n* Key Concept 1\n* Key Concept 2\n\n# Slide 2: Analysis\n* Data Point A\n* Data Point B";
+      } else {
+        sampleResult = "This is a sample document extraction result. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+      }
+
+      setResult(sampleResult);
+      showToast('Loaded sample extraction data', 'info');
+    } catch (err) {
+      showToast('Failed to load sample', 'error');
+    } finally {
+      setIsProcessing(false);
+      setProgress(undefined);
+    }
+  };
 
   // Manage download URLs for different content types
   useEffect(() => {
@@ -154,7 +185,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       downloadText(result, filename);
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 
@@ -269,6 +300,17 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
           label="Upload a PDF Document"
         />
 
+        {!file && !result && !isProcessing && (
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={handleLoadSample}
+              className="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors flex items-center"
+            >
+              <Beaker size={14} className="mr-1.5" /> Don't have a PDF? Use Sample Data
+            </button>
+          </div>
+        )}
+
         {isProcessing && (
           <div className="mt-6">
             <ProcessingProgress
@@ -377,7 +419,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
         )}
 
         {result && (
-          <>
+          <div className="space-y-8">
             <ResultDisplay
               title={
                 toolId === ToolID.PDF_TO_EXCEL
@@ -496,7 +538,33 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                 )}
               </div>
             )}
-          </>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf-organize'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <FileEdit className="w-4 h-4 text-fuchsia-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Organize PDF Pages</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-compress'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <Minimize2 className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Compress PDF</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Database, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Database, Copy, Check, Beaker } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { format } from 'sql-formatter';
@@ -14,6 +15,7 @@ export const SqlFormatter: React.FC<SqlFormatterProps> = ({ onBack }) => {
   const [output, setOutput] = useState('');
   const [dialect, setDialect] = useState('sql');
   const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.SQL_FORMATTER];
 
@@ -25,7 +27,7 @@ export const SqlFormatter: React.FC<SqlFormatterProps> = ({ onBack }) => {
       });
       setOutput(formatted);
     } catch (err) {
-      alert('Error formatting SQL. Please check your syntax.');
+      showToast('Error formatting SQL. Please check your syntax.', 'error');
     }
   };
 
@@ -33,6 +35,23 @@ export const SqlFormatter: React.FC<SqlFormatterProps> = ({ onBack }) => {
     navigator.clipboard.writeText(output);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleLoadSample = () => {
+    const sample = `SELECT
+  u.id,
+  u.username,
+  u.email,
+  o.order_date,
+  o.total_amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+  AND o.total_amount > 100
+ORDER BY o.order_date DESC
+LIMIT 10;`;
+    setInput(sample);
+    setOutput('');
   };
 
   return (
@@ -92,6 +111,14 @@ export const SqlFormatter: React.FC<SqlFormatterProps> = ({ onBack }) => {
         </select>
         <Button onClick={handleFormat} disabled={!input.trim()} className="bg-doc-slate min-w-[150px]" icon={<Database size={18} />}>
           Format SQL
+        </Button>
+        <Button
+          onClick={handleLoadSample}
+          variant="outline"
+          className="min-w-[150px] border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+          icon={<Beaker size={18} />}
+        >
+          Load Sample
         </Button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ArrowRightLeft, Copy, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, Copy, Check, Beaker } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -274,6 +274,32 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleLoadSample = () => {
+    let sample = '';
+    switch (toolId) {
+      case ToolID.JSON_TO_CSV:
+      case ToolID.JSON_TO_XML:
+      case ToolID.JSON_TO_YAML:
+        sample = JSON.stringify([
+          { id: 1, name: "John Doe", role: "Admin", email: "john@example.com" },
+          { id: 2, name: "Jane Smith", role: "User", email: "jane@example.com" }
+        ], null, 2);
+        break;
+      case ToolID.CSV_TO_JSON:
+        sample = 'id,name,role,email\n1,John Doe,Admin,john@example.com\n2,Jane Smith,User,jane@example.com';
+        break;
+      case ToolID.XML_TO_JSON:
+        sample = '<users>\n  <user>\n    <id>1</id>\n    <name>John Doe</name>\n  </user>\n</users>';
+        break;
+      case ToolID.YAML_TO_JSON:
+        sample = 'users:\n  - id: 1\n    name: John Doe\n  - id: 2\n    name: Jane Smith';
+        break;
+    }
+    setInput(sample);
+    setOutput('');
+    setError(null);
+  };
+
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-140px)] flex flex-col">
       <div className="mb-6 flex-shrink-0">
@@ -337,13 +363,21 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center flex-shrink-0">
+      <div className="mt-6 flex justify-center gap-4 flex-shrink-0">
         <Button
           onClick={handleConvert}
           className="bg-cyan-700 hover:bg-cyan-800 min-w-[200px]"
           icon={<ArrowRightLeft size={18} />}
         >
           Convert
+        </Button>
+        <Button
+          onClick={handleLoadSample}
+          variant="outline"
+          className="min-w-[150px] border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+          icon={<Beaker size={18} />}
+        >
+          Load Sample
         </Button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Key, Copy, AlertCircle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Key, Copy, AlertCircle, RefreshCw, Beaker } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -76,6 +76,11 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
     setError(null);
   };
 
+  const loadSample = () => {
+    const sample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoyNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+    decodeJWT(sample);
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8 flex items-center space-x-3">
@@ -98,14 +103,24 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
                placeholder="Paste your JWT here..."
                className="w-full h-full p-6 bg-white border border-slate-200 rounded-3xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono text-sm resize-none"
              />
-             {token && (
-               <button
-                 onClick={reset}
-                 className="absolute right-4 top-4 p-2 bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500 rounded-xl transition-colors"
-               >
-                 <RefreshCw size={16} />
-               </button>
-             )}
+             <div className="absolute right-4 top-4 flex space-x-2">
+               {!token && (
+                  <button
+                    onClick={loadSample}
+                    className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors flex items-center text-xs font-bold"
+                  >
+                    <Beaker size={16} className="mr-1" /> Load Sample
+                  </button>
+               )}
+               {token && (
+                 <button
+                   onClick={reset}
+                   className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500 rounded-xl transition-colors"
+                 >
+                   <RefreshCw size={16} />
+                 </button>
+               )}
+             </div>
           </div>
         </div>
 

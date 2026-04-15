@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, ShieldCheck, Download, Trash2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import piexif from 'piexifjs';
@@ -15,6 +16,7 @@ export const ExifRemover: React.FC<ExifRemoverProps> = ({ onBack }) => {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.EXIF_REMOVER];
 
@@ -44,7 +46,7 @@ export const ExifRemover: React.FC<ExifRemoverProps> = ({ onBack }) => {
           setIsProcessing(false);
         } catch (err) {
           console.error(err);
-          alert('Error removing metadata. Ensure it is a valid JPEG image.');
+          showToast('Error removing metadata. Ensure it is a valid JPEG image.', 'error');
           setIsProcessing(false);
         }
       };

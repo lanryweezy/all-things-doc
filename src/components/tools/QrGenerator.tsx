@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, QrCode, Download, RefreshCw, Copy, Check, Scan } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import QRCode from 'qrcode';
@@ -18,6 +19,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
   const [mode, setMode] = useState<'generate' | 'scan'>('generate');
   const [scanResult, setScanResult] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.QR_GENERATOR];
 
@@ -74,7 +76,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
         if (code) {
           setScanResult(code.data);
         } else {
-          alert('No QR code found in image');
+          showToast('No QR code found in image', 'error');
         }
       }
     };

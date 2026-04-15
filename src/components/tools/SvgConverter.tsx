@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Image as ImageIcon, Download, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { downloadBlob } from '../../utils/downloadUtils';
@@ -16,6 +17,7 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.SVG_CONVERTER];
 
@@ -54,7 +56,7 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
       };
       img.src = url;
     } catch (err) {
-      alert('Error converting SVG');
+      showToast('Error converting SVG', 'error');
       setIsProcessing(false);
     }
   };

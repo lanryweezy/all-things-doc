@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ArrowLeft, PenTool, Download, Trash2, Eraser, Check } from 'lucide-react';
+import { ArrowLeft, PenTool, Download, Trash2, Eraser, Check, FileSignature } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
@@ -126,6 +126,20 @@ export const SignatureGenerator: React.FC<SignatureGeneratorProps> = ({ onBack }
            <Button onClick={download} disabled={isEmpty} className="bg-indigo-600 px-12 py-4" icon={<Download size={18} />}>
              Download PNG
            </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full border-t border-slate-100 pt-8 mt-4">
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-sign'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <FileSignature className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Sign a PDF Document</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 text-xs text-blue-800 leading-relaxed font-medium max-w-lg text-center">

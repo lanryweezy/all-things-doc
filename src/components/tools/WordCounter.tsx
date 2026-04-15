@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ArrowLeft, Type, Hash, AlignLeft, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Type, Hash, AlignLeft, BarChart3, Beaker } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -12,6 +12,10 @@ export const WordCounter: React.FC<WordCounterProps> = ({ onBack }) => {
   const [input, setInput] = useState('');
 
   const toolInfo = TOOLS[ToolID.WORD_COUNTER];
+
+  const loadSample = () => {
+    setInput('The quick brown fox jumps over the lazy dog. This is a sample sentence to demonstrate the word counter tool. It counts words, characters, sentences, and paragraphs in real-time as you type.');
+  };
 
   const stats = useMemo(() => {
     const trimmed = input.trim();
@@ -61,7 +65,16 @@ export const WordCounter: React.FC<WordCounterProps> = ({ onBack }) => {
           ))}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 relative">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs font-bold text-slate-400">Content</span>
+            <button
+              onClick={loadSample}
+              className="text-xs font-bold text-doc-red hover:underline flex items-center"
+            >
+              <Beaker size={14} className="mr-1" /> Load Sample
+            </button>
+          </div>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
