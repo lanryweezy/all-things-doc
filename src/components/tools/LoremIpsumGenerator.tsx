@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, FileText, Copy, Check, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -69,6 +71,7 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -95,7 +98,7 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
               max="100"
               value={count}
               onChange={(e) => setCount(parseInt(e.target.value) || 1)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-bold"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none font-bold"
             />
           </div>
           <div>
@@ -104,7 +107,7 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
               id="lorem-type"
               value={type}
               onChange={(e) => setType(e.target.value as any)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-bold"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none font-bold"
             >
               <option value="paragraphs">Paragraphs</option>
               <option value="sentences">Sentences</option>
@@ -118,7 +121,7 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
                 type="checkbox"
                 checked={startWithLorem}
                 onChange={() => setStartWithLorem(!startWithLorem)}
-                className="w-5 h-5 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                className="w-5 h-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-600 cursor-pointer"
               />
               <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Start with "Lorem ipsum"</span>
             </label>
@@ -136,14 +139,14 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
           <div className="absolute right-4 top-4 flex space-x-2">
             <button
               onClick={generateText}
-              className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-doc-red shadow-sm transition-colors"
+              className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-cyan-600 shadow-sm transition-colors"
               title="Regenerate"
             >
               <RefreshCw size={20} />
             </button>
             <button
               onClick={handleCopy}
-              className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-doc-red shadow-sm transition-colors"
+              className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-cyan-600 shadow-sm transition-colors"
               title="Copy"
             >
               {copied ? <Check size={20} className="text-green-600" /> : <Copy size={20} />}

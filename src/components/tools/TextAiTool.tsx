@@ -4,6 +4,8 @@ import { Button } from '../ui/Button';
 import { ResultDisplay } from '../ui/ResultDisplay';
 import { TOOLS, LANGUAGES, CODING_LANGUAGES } from '../../constants';
 import { ToolID } from '../../types';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import * as GeminiService from '../../services/geminiService';
 
 interface TextAiToolProps {
@@ -66,7 +68,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
           <select
             value={configValue}
             onChange={e => setConfigValue(e.target.value)}
-            className="w-full md:w-64 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-doc-red outline-none"
+            className="w-full md:w-64 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-600 outline-none"
           >
             {LANGUAGES.map(lang => (
               <option key={lang} value={lang}>
@@ -102,6 +104,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -129,7 +132,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
                   ? 'focus:ring-amber-500'
                   : toolId === ToolID.UNIVERSAL_TRANSLATOR
                     ? 'focus:ring-purple-500'
-                    : 'focus:ring-doc-red'
+                    : 'focus:ring-cyan-600'
               }`}
               placeholder={
                 toolId === ToolID.CODE_MORPH
@@ -171,6 +174,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
           <ResultDisplay title="Result" content={result} isCode={toolId === ToolID.CODE_MORPH} />
         )}
       </div>
+      <AboutTool toolId={toolId} />
     </div>
   );
 };

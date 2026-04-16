@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Code, Copy, Check, Image as ImageIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -50,7 +52,7 @@ export const ImageToBase64: React.FC<ImageToBase64Props> = ({ onBack }) => {
           <div className="flex-grow flex flex-col min-h-0 space-y-4 animate-fade-in">
             <div className="flex items-center justify-between">
                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Base64 Data URI</span>
-               <button onClick={handleCopy} className="text-doc-red hover:text-red-700 text-xs font-bold flex items-center">
+               <button onClick={handleCopy} className="text-red-600 hover:text-cyan-700 text-xs font-bold flex items-center">
                   {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
                   {copied ? 'COPIED!' : 'COPY CODE'}
                </button>

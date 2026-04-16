@@ -31,6 +31,35 @@ export const SeoHelmet: React.FC<SeoHelmetProps> = ({ tool }) => {
     // Update Document Title
     document.title = title;
 
+    // Inject JSON-LD structured data
+    let scriptTag = document.querySelector('script[type="application/ld+json"]');
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.setAttribute('type', 'application/ld+json');
+      document.head.appendChild(scriptTag);
+    }
+
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": tool ? tool.title : "All Things Doc",
+      "operatingSystem": "Any",
+      "applicationCategory": tool ? "MultimediaApplication" : "UtilitiesApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "url": window.location.href,
+      "softwareVersion": "1.0",
+      "publisher": {
+        "@type": "Organization",
+        "name": "All Things Doc"
+      }
+    };
+    scriptTag.textContent = JSON.stringify(schemaData);
+
     // Update Meta Description
     let metaDescription = document.querySelector("meta[name='description']");
     if (!metaDescription) {

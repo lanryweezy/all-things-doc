@@ -189,7 +189,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
           </div>
           <input
             type="text"
-            className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-800 placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-doc-red focus:border-doc-red sm:text-sm transition-colors shadow-sm"
+            className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 bg-white dark:bg-slate-800 placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-cyan-600 focus:border-cyan-600 sm:text-sm transition-colors shadow-sm"
             placeholder="Search for tools (e.g., PDF to Word, OCR, JSON...)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -225,8 +225,8 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
               whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center
               ${
                 activeCategory === 'featured'
-                  ? 'bg-doc-red text-white shadow-md transform scale-105'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-doc-red dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors'
+                  ? 'bg-cyan-600 text-white shadow-md transform scale-105'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-600 dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors'
               }
             `}
           >
@@ -244,7 +244,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                 whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
                 ${
                   activeCategory === category
-                    ? 'bg-doc-red text-white shadow-md transform scale-105'
+                    ? 'bg-cyan-600 text-white shadow-md transform scale-105'
                     : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-doc-slate dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors'
                 }
               `}
@@ -289,7 +289,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
             </p>
             <button 
               onClick={() => setSearchQuery('')}
-              className="inline-flex items-center px-6 py-3 bg-doc-red text-white rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
+              className="inline-flex items-center px-6 py-3 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
             >
               Clear search & view all tools
             </button>
@@ -307,7 +307,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                 role="button"
                 tabIndex={0}
                 aria-label={`Open ${tool.title}: ${tool.description}`}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-doc-red focus:ring-offset-2 dark:focus:ring-offset-slate-900 relative overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 dark:focus:ring-offset-slate-900 relative overflow-hidden"
               >
                 <button
                   onClick={(e) => toggleFavorite(e, tool.id)}
@@ -329,13 +329,13 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                 >
                   <tool.icon className={`w-7 h-7 ${tool.color}`} aria-hidden="true" />
                 </div>
-                <h3 className="text-xl font-bold text-doc-slate dark:text-white mb-2 group-hover:text-doc-red transition-colors">
+                <h3 className="text-xl font-bold text-doc-slate dark:text-white mb-2 group-hover:text-cyan-600 transition-colors">
                   {tool.title}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4 flex-grow transition-colors">
                   {tool.description}
                 </p>
-                <div className="flex items-center text-sm font-bold text-doc-red opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                <div className="flex items-center text-sm font-bold text-cyan-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                   Open Tool <ChevronRight size={16} className="ml-1" aria-hidden="true" />
                 </div>
               </div>

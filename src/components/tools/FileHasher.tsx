@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ArrowLeft, Hash, File, Copy, RefreshCw, Link as LinkIcon } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 import { FileUpload } from '../ui/FileUpload';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -16,7 +18,7 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
   const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.FILE_HASHER] || {
-    title: 'File Checksum',
+    title: 'File Checksum (Hash)',
     icon: Hash,
     color: 'text-rose-600',
     bgColor: 'bg-rose-100',
@@ -58,6 +60,7 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -138,6 +141,7 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
           </div>
         )}
       </div>
+      <AboutTool toolId={ToolID.FILE_HASHER} />
     </div>
   );
 };

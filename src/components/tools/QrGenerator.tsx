@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, QrCode, Download, RefreshCw, Copy, Check, Scan } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -84,6 +86,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -103,13 +106,13 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
         <div className="inline-flex p-1 bg-slate-100 rounded-xl">
           <button
             onClick={() => setMode('generate')}
-            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${mode === 'generate' ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500'}`}
+            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${mode === 'generate' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500'}`}
           >
             Generate
           </button>
           <button
             onClick={() => setMode('scan')}
-            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${mode === 'scan' ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500'}`}
+            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${mode === 'scan' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500'}`}
           >
             Scan / Read
           </button>
@@ -124,7 +127,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none text-sm"
+                className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none text-sm"
                 placeholder="Enter link or text for the QR code..."
               />
             </div>
@@ -140,7 +143,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
                   step="32"
                   value={size}
                   onChange={(e) => setSize(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
               </div>
               <div>
@@ -152,7 +155,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
                   max="10"
                   value={margin}
                   onChange={(e) => setMargin(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
               </div>
             </div>

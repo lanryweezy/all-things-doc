@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Trash2, Download, RefreshCw, LayoutGrid, GripVertical, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -88,6 +90,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-6xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
@@ -111,7 +114,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
               <h3 className="font-bold text-slate-700">Drag to reorder, click X to delete</h3>
               <div className="flex items-center space-x-4">
                 <span className="text-sm font-medium text-slate-500">{pages.length} Pages remaining</span>
-                <Button onClick={handleProcess} isLoading={isProcessing} className="bg-doc-red" icon={<RefreshCw size={18} />}>
+                <Button onClick={handleProcess} isLoading={isProcessing} className="bg-cyan-600" icon={<RefreshCw size={18} />}>
                   Save Changes
                 </Button>
               </div>

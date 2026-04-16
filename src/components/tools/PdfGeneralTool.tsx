@@ -1,917 +1,108 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  ArrowLeft,
+  FileText,
   Download,
-  RefreshCcw,
-  Lock,
-  Stamp,
-  Layers,
-  FileOutput,
-  PenTool,
-  CheckCircle,
-  RotateCw,
-  RotateCcw,
-  Unlock,
-  Link,
-  Image as ImageIcon,
+  RefreshCw,
+  Trash2,
   Scissors,
-  GitCompare,
+  Merge,
+  FileLock,
   EyeOff,
-  FilePlus,
-  Minimize2,
+  Layers,
+  Minimize2
 } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { FileUpload } from '../FileUpload';
-import { TOOLS } from '../../constants';
+import { FileUpload } from '../ui/FileUpload';
+import { useToast } from '../ui/Toast';
+import { ToolLayout } from '../ui/ToolLayout';
 import { ToolID } from '../../types';
 import * as pdfService from '../../services/pdfService';
 import { downloadBinary } from '../../utils/downloadUtils';
-import { useToast } from '../ui/Toast';
 
 interface PdfGeneralToolProps {
-  toolId: ToolID;
+  toolId: ToolID.PDF_MERGE | ToolID.PDF_SPLIT | ToolID.PDF_PROTECT | ToolID.PDF_UNLOCK | ToolID.PDF_COMPRESS;
   onBack: () => void;
 }
 
 export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }) => {
   const [file, setFile] = useState<File | null>(null);
-  const [secondaryFiles, setSecondaryFiles] = useState<File[]>([]);
-  const [paramValue, setParamValue] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  const [resultData, setResultData] = useState<Uint8Array | null>(null);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const urlRef = useRef<string | null>(null);
+  const [password, setPassword] = useState('');
   const { showToast } = useToast();
 
-  const toolInfo = TOOLS[toolId];
-
-  // Initialize defaults based on tool type - only run once on mount
-  useEffect(() => {
-    if (
-      toolId === ToolID.PDF_COMPRESS ||
-      toolId === ToolID.COMPRESS_WORD ||
-      toolId === ToolID.COMPRESS_EXCEL ||
-      toolId === ToolID.COMPRESS_PPT
-    ) {
-      setParamValue('Recommended');
-    } else {
-      setParamValue('');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only run once on mount
-  }, []);
-
   const handleProcess = async () => {
-    // Validation
-    if (toolId === ToolID.HTML_TO_PDF) {
-      if (!paramValue) return;
-    } else if (toolId === ToolID.PDF_COMPARE) {
-      if (!file || secondaryFiles.length === 0) return;
-    } else if (toolId === ToolID.PDF_MERGE || toolId === ToolID.MERGE_WORD) {
-      const totalFiles = (file ? 1 : 0) + secondaryFiles.length;
-      if (totalFiles < 2) {
-        showToast('Please upload at least two files to merge.', 'error');
-        return;
-      }
-    } else if (toolId === ToolID.PDF_SPLIT) {
-      if (!file || !paramValue) return; // Ensure file and split points are provided
-    }
-    else {
-      if (!file) return;
-    }
-
+    if (!file) return;
     setIsProcessing(true);
-
     try {
-      let result: Uint8Array | undefined;
-
-      // Process based on tool type
+      let result: Uint8Array;
       switch (toolId) {
-        case ToolID.PDF_MERGE:
-          const filesToMerge = file ? [file, ...secondaryFiles] : secondaryFiles;
-          if (filesToMerge.length >= 2) {
-            const blobResult = await pdfService.mergePdfs(filesToMerge);
-            const arrayBuffer = await blobResult.arrayBuffer();
-            result = new Uint8Array(arrayBuffer);
-          }
-          break;
-
-        case ToolID.PDF_COMPRESS:
-          if (file) {
-            const blobResult = await pdfService.compressPdf(
-              file,
-              paramValue as 'Extreme' | 'Recommended' | 'Less'
-            );
-            const arrayBuffer = await blobResult.arrayBuffer();
-            result = new Uint8Array(arrayBuffer);
-          }
-          break;
-
         case ToolID.PDF_PROTECT:
-          if (file && paramValue) {
-            result = await pdfService.protectPdf(file, paramValue);
-          }
+          result = await pdfService.protectPdf(file, password);
+          downloadBinary(result, 'protected.pdf', 'application/pdf');
           break;
-
         case ToolID.PDF_UNLOCK:
-          if (file && paramValue) {
-            result = await pdfService.decryptPdf(file, paramValue);
-          }
+          result = await pdfService.unlockPdf(file, password);
+          downloadBinary(result, 'unlocked.pdf', 'application/pdf');
           break;
-
-        case ToolID.PDF_WATERMARK:
-          if (file && paramValue) {
-            result = await pdfService.watermarkPdf(file, paramValue);
-          }
+        case ToolID.PDF_COMPRESS:
+          result = await pdfService.compressPdf(file);
+          downloadBinary(result, 'compressed.pdf', 'application/pdf');
           break;
-
-        case ToolID.PDF_PAGE_NUMBERS:
-          if (file) {
-            result = await pdfService.addPageNumbers(file, paramValue || 'Bottom Center');
-          }
-          break;
-
-        case ToolID.PDF_ROTATE:
-          if (file) {
-            const rotation = paramValue === 'Left' ? -90 : 90;
-            result = await pdfService.rotatePdf(file, rotation);
-          }
-          break;
-
-        case ToolID.PDF_ORGANIZE:
-          if (file && paramValue) {
-            const indices = paramValue.split(',').map(Number);
-            result = await pdfService.reorderPdfPages(file, indices);
-          }
-          break;
-
-        case ToolID.PDF_SPLIT:
-          if (file && paramValue) {
-            const splitPoints = paramValue.split(',').map(Number);
-            const blobResult = await pdfService.splitPdf(file, splitPoints);
-            // Convert Blob to Uint8Array for consistency with other results
-            const arrayBuffer = await blobResult.arrayBuffer();
-            result = new Uint8Array(arrayBuffer);
-          }
-          break;
-
-        case ToolID.PDF_REDACT:
-          if (file) {
-            // For demo purposes, we'll redact a fixed area
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
-            showToast('PDF Redact functionality is a placeholder.', 'info');
-          }
-          break;
-
-        case ToolID.PDF_COMPARE:
-          if (file && secondaryFiles.length > 0) {
-            // For demo purposes, we'll just show a comparison message
-            showToast('In a production app, this would compare PDFs.', 'info');
-            result = new Uint8Array(); // Placeholder
-          }
-          break;
-
-        case ToolID.JPG_TO_PDF:
-          if (file) {
-            result = await pdfService.imageToPdf(file);
-          }
-          break;
-
-        case ToolID.PDF_TO_JPG:
-        case ToolID.PDF_TO_PNG:
-          if (file) {
-            const format = toolId === ToolID.PDF_TO_PNG ? 'png' : 'jpeg';
-            const images = await pdfService.pdfToImages(file, format);
-
-            if (images.length === 1) {
-              const ab = await images[0].arrayBuffer();
-              result = new Uint8Array(ab);
-            } else {
-              const JSZip = (await import('jszip')).default;
-              const zip = new JSZip();
-              for (let i = 0; i < images.length; i++) {
-                zip.file(`page-${i + 1}.${format}`, images[i]);
-              }
-              const blob = await zip.generateAsync({ type: 'blob' });
-              const ab = await blob.arrayBuffer();
-              result = new Uint8Array(ab);
-            }
-          }
-          break;
-
-        case ToolID.HTML_TO_PDF:
-          if (paramValue) {
-            const html2canvas = (await import('html2canvas')).default;
-            const { jsPDF } = await import('jspdf');
-            const div = document.createElement('div');
-            div.style.position = 'absolute';
-            div.style.left = '-9999px';
-            div.style.width = '800px';
-            div.innerHTML = paramValue;
-            document.body.appendChild(div);
-
-            const canvas = await html2canvas(div);
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const imgProps = pdf.getImageProperties(imgData);
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            const ab = pdf.output('arraybuffer');
-            result = new Uint8Array(ab);
-            document.body.removeChild(div);
-          }
-          break;
-
-        case ToolID.PDF_REPAIR:
-          if (file) {
-            result = await pdfService.repairPdf(file);
-          }
-          break;
-
         default:
-          // Simulating backend processing for binary operations
-          await new Promise(r => setTimeout(r, 2000));
-          break;
+          throw new Error('Action not supported in this view');
       }
-
-      if (result) {
-        setResultData(result);
-      }
-    } catch (error: any) {
-      console.error('Error processing PDF:', error);
-      let errorMsg = 'Error processing file.';
-      if (error?.message?.includes('encrypted') || error?.message?.includes('password')) {
-        errorMsg = 'This PDF is password protected. Please unlock it first.';
-      } else if (error?.message?.includes('corrupt') || error?.message?.includes('invalid')) {
-        errorMsg = 'The PDF file appears to be invalid or corrupt.';
-      }
-      showToast(errorMsg, 'error');
-    }
-
-    setIsProcessing(false);
-    setIsComplete(true);
-  };
-
-  const handleReset = () => {
-    setFile(null);
-    setSecondaryFiles([]);
-    setResultData(null);
-    // Re-initialize default if needed, or clear. useEffect will handle switching tools,
-    // but for reset we might want to keep the default.
-    if (
-      toolId === ToolID.PDF_COMPRESS ||
-      toolId === ToolID.COMPRESS_WORD ||
-      toolId === ToolID.COMPRESS_EXCEL ||
-      toolId === ToolID.COMPRESS_PPT
-    ) {
-      setParamValue('Recommended');
-    } else {
-      setParamValue('');
-    }
-    setIsComplete(false);
-  };
-
-  const handleDownload = () => {
-    if (!resultData) return;
-
-    let extension = 'pdf';
-    let mimeType = 'application/pdf';
-
-    if (toolId === ToolID.PDF_SPLIT || (resultData.length > 0 && toolId === ToolID.PDF_TO_JPG && secondaryFiles.length > 0)) {
-       // This logic is a bit flawed because secondaryFiles isn't used for count here,
-       // but we know if it's a zip if toolId is split or if we have multiple pages in PDF_TO_JPG
-    }
-
-    const isZip = toolId === ToolID.PDF_SPLIT ||
-                 (toolId === ToolID.PDF_TO_JPG && resultData.length > 0) ||
-                 (toolId === ToolID.PDF_TO_PNG && resultData.length > 0);
-
-    // Check if it's actually an image
-    const isSingleImage = (toolId === ToolID.PDF_TO_JPG || toolId === ToolID.PDF_TO_PNG) && !isZip;
-    // Actually our logic in handleProcess makes it a zip if > 1 page.
-    // For simplicity, let's just detect if the first few bytes look like a ZIP
-    const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4B;
-    const isJpeg = resultData[0] === 0xFF && resultData[1] === 0xD8;
-    const isPng = resultData[0] === 0x89 && resultData[1] === 0x50;
-
-    if (isActuallyZip) {
-      extension = 'zip';
-      mimeType = 'application/zip';
-    } else if (isJpeg) {
-      extension = 'jpg';
-      mimeType = 'image/jpeg';
-    } else if (isPng) {
-      extension = 'png';
-      mimeType = 'image/png';
-    }
-
-    const filename = `${toolInfo.title.replace(/\s+/g, '_')}_result.${extension}`;
-    downloadBinary(resultData, filename, mimeType);
-  };
-
-  // Create download URL when resultData changes
-  useEffect(() => {
-    if (resultData) {
-      const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4B;
-      const isJpeg = resultData[0] === 0xFF && resultData[1] === 0xD8;
-      const isPng = resultData[0] === 0x89 && resultData[1] === 0x50;
-
-      let mimeType = 'application/pdf';
-      if (isActuallyZip) mimeType = 'application/zip';
-      else if (isJpeg) mimeType = 'image/jpeg';
-      else if (isPng) mimeType = 'image/png';
-
-      const blob = new Blob([resultData], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      urlRef.current = url;
-      Promise.resolve().then(() => setDownloadUrl(url));
-    } else {
-      Promise.resolve().then(() => setDownloadUrl(null));
-    }
-
-    // Cleanup URL when component unmounts or resultData changes
-    return () => {
-      if (urlRef.current) {
-        URL.revokeObjectURL(urlRef.current);
-        urlRef.current = null;
-      }
-    };
-  }, [resultData, toolId]); // Added toolId to dependency array for correct mimeType determination
-
-  const handleSecondaryUpload = (newFile: File) => {
-    if (!file) {
-      setFile(newFile);
-    } else {
-      setSecondaryFiles(prev => [...prev, newFile]);
+      showToast('Action Completed Successfully');
+    } catch (err: any) {
+      showToast(err.message || 'Processing Failed', 'error');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  const removeSecondaryFile = (index: number) => {
-    setSecondaryFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const getAcceptType = () => {
-    // Office to PDF / Office Conversions
-    if (
-      toolId === ToolID.WORD_TO_PDF ||
-      toolId === ToolID.WORD_TO_EXCEL ||
-      toolId === ToolID.WORD_TO_PPT ||
-      toolId === ToolID.WORD_TO_TEXT ||
-      toolId === ToolID.WORD_TO_JPG ||
-      toolId === ToolID.COMPRESS_WORD ||
-      toolId === ToolID.MERGE_WORD
-    )
-      return '.doc,.docx';
-    if (
-      toolId === ToolID.EXCEL_TO_PDF ||
-      toolId === ToolID.EXCEL_TO_WORD ||
-      toolId === ToolID.EXCEL_TO_CSV ||
-      toolId === ToolID.EXCEL_TO_JPG ||
-      toolId === ToolID.COMPRESS_EXCEL
-    )
-      return '.xls,.xlsx';
-    if (
-      toolId === ToolID.POWERPOINT_TO_PDF ||
-      toolId === ToolID.PPT_TO_WORD ||
-      toolId === ToolID.PPT_TO_JPG ||
-      toolId === ToolID.COMPRESS_PPT
-    )
-      return '.ppt,.pptx';
-    if (toolId === ToolID.TEXT_TO_WORD) return '.txt';
-    if (toolId === ToolID.CSV_TO_EXCEL) return '.csv';
-
-    // Images
-    if (toolId === ToolID.JPG_TO_PDF || toolId === ToolID.PDF_SCAN) return 'image/*';
-
-    // Generic
-    if (toolId === ToolID.GENERIC_TO_PDF) return '*/*';
-
-    // Default PDF
-    return 'application/pdf';
-  };
-
-  const getUploadLabel = () => {
-    if (
-      toolId === ToolID.WORD_TO_PDF ||
-      toolId === ToolID.WORD_TO_EXCEL ||
-      toolId === ToolID.WORD_TO_PPT ||
-      toolId === ToolID.WORD_TO_TEXT ||
-      toolId === ToolID.WORD_TO_JPG ||
-      toolId === ToolID.COMPRESS_WORD ||
-      toolId === ToolID.MERGE_WORD
-    )
-      return 'Upload Word Document';
-    if (
-      toolId === ToolID.EXCEL_TO_PDF ||
-      toolId === ToolID.EXCEL_TO_WORD ||
-      toolId === ToolID.EXCEL_TO_CSV ||
-      toolId === ToolID.EXCEL_TO_JPG ||
-      toolId === ToolID.COMPRESS_EXCEL
-    )
-      return 'Upload Excel Spreadsheet';
-    if (
-      toolId === ToolID.POWERPOINT_TO_PDF ||
-      toolId === ToolID.PPT_TO_WORD ||
-      toolId === ToolID.PPT_TO_JPG ||
-      toolId === ToolID.COMPRESS_PPT
-    )
-      return 'Upload PowerPoint Presentation';
-    if (toolId === ToolID.TEXT_TO_WORD) return 'Upload Text File';
-    if (toolId === ToolID.CSV_TO_EXCEL) return 'Upload CSV File';
-    if (toolId === ToolID.JPG_TO_PDF) return 'Upload Image';
-    if (toolId === ToolID.PDF_SCAN) return 'Capture or Upload Document';
-    if (toolId === ToolID.PDF_COMPARE) return 'Upload First PDF';
-    if (toolId === ToolID.GENERIC_TO_PDF) return 'Upload Any File';
-    return 'Upload PDF Document';
-  };
-
-  const renderConfiguration = () => {
+  const getIcon = () => {
     switch (toolId) {
-      case ToolID.PDF_COMPRESS:
-      case ToolID.COMPRESS_WORD:
-      case ToolID.COMPRESS_EXCEL:
-      case ToolID.COMPRESS_PPT:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-            <label className="block text-sm font-semibold text-doc-slate mb-3">
-              Compression Level
-            </label>
-            <div className="grid grid-cols-3 gap-3">
-              {['Extreme', 'Recommended', 'Less'].map(level => (
-                <button
-                  key={level}
-                  onClick={() => setParamValue(level)}
-                  className={`
-                    py-3 px-2 rounded-lg text-sm font-medium transition-all
-                    ${
-                      paramValue === level
-                        ? 'bg-doc-slate text-white shadow-md'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-                    }
-                  `}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
-          </div>
-        );
-
-      case ToolID.PDF_PROTECT:
-      case ToolID.PDF_UNLOCK:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-            <label className="block text-sm font-semibold text-doc-slate mb-2">
-              {toolId === ToolID.PDF_PROTECT ? 'Set Password' : 'Enter Password to Unlock'}
-            </label>
-            <div className="relative">
-              <Lock
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                type="password"
-                placeholder={toolId === ToolID.PDF_PROTECT ? 'Enter a secure password' : 'Password'}
-                value={paramValue}
-                onChange={e => setParamValue(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-doc-red outline-none"
-              />
-            </div>
-          </div>
-        );
-
-      case ToolID.PDF_ROTATE:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200 flex justify-center space-x-6">
-            <button
-              onClick={() => setParamValue('Left')}
-              className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Left' ? 'bg-doc-slate text-white border-doc-slate' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
-            >
-              <RotateCcw className={`mb-2 ${paramValue === 'Left' ? 'text-white' : 'text-doc-slate'}`} size={24} />
-              <span className="text-sm font-medium">Left 90°</span>
-            </button>
-            <button
-              onClick={() => setParamValue('Right')}
-              className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Right' ? 'bg-doc-slate text-white border-doc-slate' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
-            >
-              <RotateCw className={`mb-2 ${paramValue === 'Right' ? 'text-white' : 'text-doc-slate'}`} size={24} />
-              <span className="text-sm font-medium">Right 90°</span>
-            </button>
-          </div>
-        );
-
-      case ToolID.PDF_PAGE_NUMBERS:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-            <label className="block text-sm font-semibold text-doc-slate mb-3">Position</label>
-            <div className="grid grid-cols-3 gap-3">
-              {['Bottom Left', 'Bottom Center', 'Bottom Right'].map(pos => (
-                <button
-                  key={pos}
-                  onClick={() => setParamValue(pos)}
-                  className={`
-                    py-3 px-2 rounded-lg text-sm font-medium transition-all
-                    ${
-                      paramValue === pos
-                        ? 'bg-doc-slate text-white shadow-md'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-                    }
-                  `}
-                >
-                  {pos}
-                </button>
-              ))}
-            </div>
-          </div>
-        );
-
-      case ToolID.HTML_TO_PDF:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-            <label className="block text-sm font-semibold text-doc-slate mb-2">Webpage URL</label>
-            <div className="relative">
-              <Link
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                type="url"
-                placeholder="https://example.com"
-                value={paramValue}
-                onChange={e => setParamValue(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-          </div>
-        );
-
-      case ToolID.PDF_WATERMARK:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-            <label className="block text-sm font-semibold text-doc-slate mb-2">
-              Watermark Text
-            </label>
-            <div className="relative">
-              <Stamp
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                type="text"
-                placeholder="e.g. CONFIDENTIAL"
-                value={paramValue}
-                onChange={e => setParamValue(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              />
-            </div>
-          </div>
-        );
-
-      case ToolID.PDF_MERGE:
-      case ToolID.MERGE_WORD:
-        return (
-          <div className="mb-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-doc-slate">Files to Merge</h3>
-              <span className="text-sm text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded-full">
-                {(file ? 1 : 0) + secondaryFiles.length} files
-              </span>
-            </div>
-
-            <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-              {file && (
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm animate-fade-in">
-                  <div className="flex items-center space-x-3 min-w-0">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-doc-slate text-white text-xs font-bold rounded-full">1</span>
-                    <span className="text-sm font-medium text-slate-700 truncate">{file.name}</span>
-                  </div>
-                  <button
-                    onClick={() => {
-                      if (secondaryFiles.length > 0) {
-                        setFile(secondaryFiles[0]);
-                        setSecondaryFiles(prev => prev.slice(1));
-                      } else {
-                        setFile(null);
-                      }
-                    }}
-                    className="p-1 text-slate-400 hover:text-doc-red hover:bg-red-50 rounded-md transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              )}
-
-              {secondaryFiles.map((f, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm animate-fade-in"
-                >
-                  <div className="flex items-center space-x-3 min-w-0">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-slate-400 text-white text-xs font-bold rounded-full">{i + 2}</span>
-                    <span className="text-sm font-medium text-slate-700 truncate">{f.name}</span>
-                  </div>
-                  <button
-                    onClick={() => removeSecondaryFile(i)}
-                    className="p-1 text-slate-400 hover:text-doc-red hover:bg-red-50 rounded-md transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-
-              {!file && secondaryFiles.length === 0 && (
-                <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-lg text-slate-400">
-                  <Layers size={32} className="mx-auto mb-2 opacity-20" />
-                  <p className="text-sm">No files added yet</p>
-                </div>
-              )}
-            </div>
-
-            <FileUpload
-              accept={getAcceptType()}
-              onFileSelect={handleSecondaryUpload}
-              selectedFile={null}
-              onClear={() => {}}
-              label={file ? `Add another ${toolId === ToolID.MERGE_WORD ? 'Word Doc' : 'PDF'}` : getUploadLabel()}
-              className="mt-4"
-            />
-          </div>
-        );
-
-      case ToolID.PDF_COMPARE:
-        return (
-          <div className="mb-6 space-y-4">
-            <h3 className="font-semibold text-doc-slate">Comparison File</h3>
-            {secondaryFiles.length > 0 ? (
-              <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <span className="text-sm truncate max-w-[200px]">{secondaryFiles[0].name}</span>
-                <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded font-medium">
-                  Uploaded
-                </span>
-              </div>
-            ) : (
-              <FileUpload
-                accept="application/pdf"
-                onFileSelect={f => setSecondaryFiles([f])}
-                label="Upload Second PDF"
-              />
-            )}
-          </div>
-        );
-
-      case ToolID.PDF_REDACT:
-        return (
-          <div className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm text-slate-600">
-            <p>
-              Uploaded file will be opened in a secure redact view where you can select areas to
-              black out.
-            </p>
-          </div>
-        );
-      case ToolID.PDF_SPLIT:
-        return (
-          <div className="mb-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-            <label className="block text-sm font-semibold text-doc-slate mb-2">
-              Split Points (comma-separated page numbers)
-            </label>
-            <input
-              type="text"
-              placeholder="e.g., 2,5,8"
-              value={paramValue}
-              onChange={e => setParamValue(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-        );
-
-      default:
-        return null;
+      case ToolID.PDF_MERGE: return <Layers />;
+      case ToolID.PDF_SPLIT: return <Scissors />;
+      case ToolID.PDF_PROTECT: return <FileLock />;
+      case ToolID.PDF_UNLOCK: return <EyeOff />;
+      case ToolID.PDF_COMPRESS: return <Minimize2 />;
+      default: return <FileText />;
     }
   };
-
-  const getActionButtonIcon = () => {
-    switch (toolId) {
-      case ToolID.PDF_MERGE:
-      case ToolID.MERGE_WORD:
-        return <Layers size={18} />;
-      case ToolID.PDF_PROTECT:
-        return <Lock size={18} />;
-      case ToolID.PDF_UNLOCK:
-        return <Unlock size={18} />;
-      case ToolID.PDF_WATERMARK:
-        return <Stamp size={18} />;
-      case ToolID.PDF_EDIT:
-        return <PenTool size={18} />;
-      case ToolID.PDF_ROTATE:
-        return <RotateCw size={18} />;
-      case ToolID.PDF_SPLIT:
-        return <Scissors size={18} />;
-      case ToolID.PDF_COMPARE:
-        return <GitCompare size={18} />;
-      case ToolID.PDF_REDACT:
-        return <EyeOff size={18} />;
-      case ToolID.GENERIC_TO_PDF:
-        return <FilePlus size={18} />;
-      case ToolID.COMPRESS_WORD:
-      case ToolID.COMPRESS_EXCEL:
-      case ToolID.COMPRESS_PPT:
-      case ToolID.PDF_COMPRESS:
-        return <Minimize2 size={18} />;
-      case ToolID.WORD_TO_EXCEL:
-      case ToolID.EXCEL_TO_WORD:
-      case ToolID.PDF_TO_EXCEL:
-      case ToolID.PDF_TO_WORD:
-      case ToolID.WORD_TO_PDF:
-      case ToolID.EXCEL_TO_PDF:
-      case ToolID.PPT_TO_WORD:
-      case ToolID.WORD_TO_PPT:
-      case ToolID.EXCEL_TO_CSV:
-      case ToolID.CSV_TO_EXCEL:
-      case ToolID.TEXT_TO_WORD:
-      case ToolID.WORD_TO_TEXT:
-        return <RefreshCcw size={18} />;
-      case ToolID.JPG_TO_PDF:
-      case ToolID.PDF_TO_JPG:
-      case ToolID.PDF_TO_PNG:
-      case ToolID.WORD_TO_JPG:
-      case ToolID.PPT_TO_JPG:
-      case ToolID.EXCEL_TO_JPG:
-      case ToolID.PDF_SCAN:
-        return <ImageIcon size={18} />;
-      default:
-        return <FileOutput size={18} />;
-    }
-  };
-
-  const getActionLabel = () => {
-    if (toolId === ToolID.PDF_EDIT) return 'Open Editor';
-    if (toolId === ToolID.PDF_SCAN) return 'Save as PDF';
-    if (toolId === ToolID.HTML_TO_PDF) return 'Convert URL';
-    if (toolId === ToolID.GENERIC_TO_PDF) return 'Convert to PDF';
-    return `Process ${toolInfo.title.replace('PDF', '').replace('to', '')}`;
-  };
-
-  if (isComplete) {
-    return (
-      <div className="max-w-4xl mx-auto text-center py-12">
-        <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle size={40} />
-        </div>
-        <h2 className="text-3xl font-bold text-doc-slate mb-3">Task Completed!</h2>
-        <p className="text-slate-600 mb-8 max-w-md mx-auto">
-          Your file has been processed successfully.
-          {toolId === ToolID.PDF_PROTECT && ' It is now encrypted.'}
-          {(toolId === ToolID.PDF_COMPRESS ||
-            toolId === ToolID.COMPRESS_WORD ||
-            toolId === ToolID.COMPRESS_EXCEL ||
-            toolId === ToolID.COMPRESS_PPT) &&
-            ' We reduced the file size by 45%.'}
-        </p>
-
-        <div className="flex justify-center space-x-4">
-          <Button onClick={handleReset} variant="outline">
-            Process Another
-          </Button>
-          <Button
-            className="bg-emerald-600 hover:bg-emerald-700"
-            icon={<Download size={18} />}
-            onClick={handleDownload}
-            disabled={!resultData}
-          >
-            Download Result
-          </Button>
-          {downloadUrl && (
-            <a
-              href={downloadUrl}
-              download={`${toolInfo.title.replace(/\s+/g, '_')}_result.pdf`}
-              className="inline-flex items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
-              title="Right-click and select 'Save link as...' if direct download doesn't work"
-            >
-              <Link size={16} className="mr-2" />
-              Alternative Download
-            </a>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8 mt-8">
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf-organize'}>
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Layers className="w-4 h-4 text-fuchsia-600" />
-              </div>
-              <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
-                <p className="text-sm text-slate-700 font-bold">Organize PDF Pages</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-compress'}>
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Minimize2 className="w-4 h-4 text-green-600" />
-              </div>
-              <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
-                <p className="text-sm text-slate-700 font-bold">Compress PDF</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <button
-          onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
-        >
-          <ArrowLeft size={16} className="mr-1" /> Back to Tools
-        </button>
-        <div className="flex items-center space-x-3">
-          <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
-            <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
-          </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
-        </div>
-      </div>
+    <ToolLayout toolId={toolId} onBack={onBack}>
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 space-y-8 transition-colors">
+        <FileUpload accept="application/pdf" onFileSelect={setFile} label="Upload PDF Document" />
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        {toolId === ToolID.HTML_TO_PDF ? (
-          <div className="mt-4">
-            {renderConfiguration()}
-            <div className="flex justify-end mt-6">
-              <Button
-                onClick={handleProcess}
-                isLoading={isProcessing}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                icon={getActionButtonIcon()}
-              >
-                Convert URL
-              </Button>
-            </div>
-          </div>
-        ) : toolId === ToolID.PDF_MERGE || toolId === ToolID.MERGE_WORD ? (
-          <div>
-            {renderConfiguration()}
-            <div className="flex justify-end mt-6">
-              <Button
-                onClick={handleProcess}
-                isLoading={isProcessing}
-                className={`${toolInfo.color.replace('text-', 'bg-').replace('600', '600')} hover:opacity-90 text-white`}
-                icon={getActionButtonIcon()}
-              >
-                {getActionLabel()}
-              </Button>
-            </div>
-          </div>
-        ) : !file ? (
-          <FileUpload
-            accept={getAcceptType()}
-            selectedFile={file}
-            onFileSelect={setFile}
-            onClear={() => setFile(null)}
-            label={getUploadLabel()}
-            capture={toolId === ToolID.PDF_SCAN ? 'environment' : undefined}
-          />
-        ) : (
-          <div>
-            <FileUpload
-              accept={getAcceptType()}
-              selectedFile={file}
-              onFileSelect={setFile}
-              onClear={() => setFile(null)}
-            />
+        {file && (
+          <div className="space-y-6 animate-in fade-in duration-500">
+             {(toolId === ToolID.PDF_PROTECT || toolId === ToolID.PDF_UNLOCK) && (
+               <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">Password Required</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all text-slate-900 dark:text-white font-bold"
+                    placeholder="Enter password..."
+                  />
+               </div>
+             )}
 
-            <div className="mt-8">
-              {renderConfiguration()}
-
-              <div className="flex justify-end mt-6">
+             <div className="flex justify-center">
                 <Button
                   onClick={handleProcess}
                   isLoading={isProcessing}
-                  className={`${toolInfo.color.replace('text-', 'bg-').replace('600', '600')} hover:opacity-90 text-white`}
-                  icon={getActionButtonIcon()}
+                  className="bg-cyan-700 hover:bg-cyan-800 px-12 transition-colors"
+                  icon={getIcon()}
                 >
-                  {getActionLabel()}
+                  Start Processing
                 </Button>
-              </div>
-
-              {(toolId === ToolID.PDF_EDIT ||
-                toolId === ToolID.PDF_REDACT ||
-                toolId === ToolID.PDF_ORGANIZE) && (
-                <p className="text-xs text-center text-slate-400 mt-4">
-                  * Note: For this demo, we simulate the complex interactive editor load time.
-                </p>
-              )}
-            </div>
+             </div>
           </div>
         )}
       </div>
-    </div>
+    </ToolLayout>
   );
 };

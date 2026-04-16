@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRightLeft, Copy, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 
 interface Base64ToolProps {
   onBack: () => void;
@@ -46,6 +48,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-140px)] flex flex-col">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-6 flex-shrink-0">
         <button
           onClick={onBack}
@@ -67,7 +70,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
             Input Text
           </label>
           <textarea
-            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-300 focus:ring-doc-red'}`}
+            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-300 focus:ring-cyan-600'}`}
             placeholder="Enter text or base64 here..."
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -87,7 +90,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
             {output && (
               <button
                 onClick={handleCopy}
-                className="text-doc-red hover:text-red-700 text-xs flex items-center font-semibold"
+                className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
               >
                 {copied ? (
                   <Check size={14} className="mr-1" />
@@ -123,6 +126,9 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
         >
           Decode
         </Button>
+      </div>
+      <div className="flex-shrink-0">
+        <AboutTool toolId={ToolID.BASE64_ENCODER} />
       </div>
     </div>
   );

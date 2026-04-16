@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Send } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -146,7 +148,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
                   <div
                     className={`max-w-[80%] rounded-2xl px-5 py-3 text-sm leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-doc-red text-white rounded-br-none'
+                        ? 'bg-cyan-600 text-white rounded-br-none'
                         : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none shadow-sm'
                     }`}
                   >
@@ -180,7 +182,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
             <div className="px-6 py-3 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
                <div className="flex -space-x-2 overflow-hidden">
                  {files.map((f, i) => (
-                   <div key={i} title={f.name} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-doc-red flex items-center justify-center text-[10px] text-white font-bold">
+                   <div key={i} title={f.name} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-cyan-600 flex items-center justify-center text-[10px] text-white font-bold">
                      DOC
                    </div>
                  ))}
@@ -192,7 +194,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
                   input.onchange = (e: any) => handleFileUpload(e.target.files[0]);
                   input.click();
                 }}
-                className="text-xs font-bold text-doc-red hover:underline"
+                className="text-xs font-bold text-cyan-600 hover:underline"
                >
                  + Add another
                </button>
@@ -205,7 +207,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSend()}
                   placeholder="Ask a question about the document..."
-                  className="flex-grow p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-doc-red focus:border-transparent outline-none"
+                  className="flex-grow p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-600 focus:border-transparent outline-none"
                   disabled={isSending}
                 />
                 <Button

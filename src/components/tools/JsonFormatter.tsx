@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, AlignLeft, Copy, Check, Beaker, Code, Database, FileCode } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -95,13 +97,13 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
             <span>Input JSON</span>
             {isValid !== null && (
-              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-cyan-700'}`}>
                 {isValid ? 'Valid JSON' : 'Invalid JSON'}
               </span>
             )}
           </label>
           <textarea
-            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : isValid ? 'border-green-300 focus:ring-green-200' : 'border-slate-300 focus:ring-doc-red'}`}
+            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : isValid ? 'border-green-300 focus:ring-green-200' : 'border-slate-300 focus:ring-cyan-600'}`}
             placeholder='{"key": "value"}'
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -121,7 +123,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
             {output && (
               <button
                 onClick={handleCopy}
-                className="text-doc-red hover:text-red-700 text-xs flex items-center font-semibold"
+                className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
               >
                 {copied ? (
                   <Check size={14} className="mr-1" />

@@ -8,6 +8,8 @@ import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { downloadBinary, downloadBlob } from '../../utils/downloadUtils';
 import { useToast } from '../ui/Toast';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 
 interface ImageConverterProps {
   onBack: () => void;
@@ -98,6 +100,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -166,7 +169,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                       <label htmlFor="quality-slider" className="text-sm font-medium text-slate-700">
                         Image Quality / Compression
                       </label>
-                      <span className="text-sm font-bold text-doc-red">{Math.round(quality * 100)}%</span>
+                      <span className="text-sm font-bold text-cyan-600">{Math.round(quality * 100)}%</span>
                     </div>
                     <input
                       id="quality-slider"
@@ -176,7 +179,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                       step="0.05"
                       value={quality}
                       onChange={(e) => setQuality(parseFloat(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                     />
                     <div className="flex justify-between text-xs text-slate-400 mt-2 italic">
                       <span>Smaller size, lower quality</span>
@@ -203,7 +206,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
               </Button>
               <Button
                 onClick={handleDownload}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-doc-red text-white hover:bg-[#c0392b] shadow-sm hover:shadow"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-cyan-600 text-white hover:bg-[#c0392b] shadow-sm hover:shadow"
               >
                 <Download size={18} className="mr-2" /> Download{' '}
                 {targetFormat === 'pdf' ? 'PDF' : 'Image'}
@@ -249,6 +252,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
           </div>
         )}
       </div>
+      <AboutTool toolId={ToolID.IMAGE_CONVERTER} />
     </div>
   );
 };

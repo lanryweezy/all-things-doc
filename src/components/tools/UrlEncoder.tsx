@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Link, Copy, Check, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -42,6 +44,7 @@ export const UrlEncoder: React.FC<UrlEncoderProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -58,13 +61,13 @@ export const UrlEncoder: React.FC<UrlEncoderProps> = ({ onBack }) => {
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full h-40 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm"
+            className="w-full h-40 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
             placeholder="Paste URL or text to encode/decode..."
           />
         </div>
 
         <div className="flex justify-center space-x-4">
-          <Button onClick={handleEncode} className="bg-doc-red px-8" icon={<RefreshCw size={18} />}>
+          <Button onClick={handleEncode} className="bg-cyan-600 px-8" icon={<RefreshCw size={18} />}>
             Encode
           </Button>
           <Button onClick={handleDecode} variant="outline" className="px-8">
@@ -78,7 +81,7 @@ export const UrlEncoder: React.FC<UrlEncoderProps> = ({ onBack }) => {
             {output && (
               <button
                 onClick={handleCopy}
-                className="text-doc-red hover:text-red-700 text-xs flex items-center font-bold"
+                className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-bold"
               >
                 {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
                 {copied ? 'Copied' : 'Copy'}

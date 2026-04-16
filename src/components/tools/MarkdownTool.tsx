@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, FileText, Download, Copy, Check, Eye, Code } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -49,19 +51,19 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
         <div className="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl">
           <button
             onClick={() => setView('edit')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${view === 'edit' ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500'}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${view === 'edit' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500'}`}
           >
             <Code size={16} className="inline mr-1" /> Edit
           </button>
           <button
             onClick={() => setView('split')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all hidden md:block ${view === 'split' ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500'}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all hidden md:block ${view === 'split' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500'}`}
           >
             Split
           </button>
           <button
             onClick={() => setView('preview')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${view === 'preview' ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500'}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${view === 'preview' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500'}`}
           >
             <Eye size={16} className="inline mr-1" /> Preview
           </button>
@@ -74,7 +76,7 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-grow w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-sm resize-none focus:ring-2 focus:ring-doc-red outline-none"
+              className="flex-grow w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-sm resize-none focus:ring-2 focus:ring-cyan-600 outline-none"
               placeholder="Type markdown here..."
             />
           </div>
@@ -82,7 +84,7 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
 
         {(view === 'preview' || view === 'split') && (
           <div className="flex-1 flex flex-col min-w-0">
-            <div className="flex-grow w-full p-8 bg-white border border-slate-200 rounded-2xl overflow-y-auto prose prose-slate max-w-none prose-headings:text-doc-slate prose-a:text-doc-red">
+            <div className="flex-grow w-full p-8 bg-white border border-slate-200 rounded-2xl overflow-y-auto prose prose-slate max-w-none prose-headings:text-doc-slate prose-a:text-cyan-600">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{input}</ReactMarkdown>
             </div>
           </div>

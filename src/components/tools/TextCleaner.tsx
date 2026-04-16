@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Eraser, Copy, Check, Search } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -61,6 +63,7 @@ export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -87,7 +90,7 @@ export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
                     type="checkbox"
                     checked={(options as any)[opt.id]}
                     onChange={() => setOptions({ ...options, [opt.id]: !(options as any)[opt.id] })}
-                    className="w-4 h-4 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                    className="w-4 h-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-600 cursor-pointer"
                   />
                   <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">{opt.label}</span>
                 </label>
@@ -103,19 +106,19 @@ export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
                 placeholder="Find..."
                 value={findText}
                 onChange={(e) => setFindText(e.target.value)}
-                className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-doc-red"
+                className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-cyan-600"
               />
               <input
                 type="text"
                 placeholder="Replace..."
                 value={replaceText}
                 onChange={(e) => setReplaceText(e.target.value)}
-                className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-doc-red"
+                className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-cyan-600"
               />
               <button
                 onClick={handleReplace}
                 disabled={!findText}
-                className="p-2 bg-doc-red text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                className="p-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 disabled:opacity-50 transition-colors"
                 title="Replace All"
               >
                 <Search size={18} />
@@ -128,14 +131,14 @@ export const TextCleaner: React.FC<TextCleanerProps> = ({ onBack }) => {
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full h-80 p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none leading-relaxed font-mono text-sm"
+            className="w-full h-80 p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none leading-relaxed font-mono text-sm"
             placeholder="Paste messy text here to clean it up..."
           />
           <div className="absolute right-4 bottom-4 flex space-x-2">
             <button
               onClick={handleCopy}
               disabled={!input}
-              className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-doc-red shadow-sm transition-colors disabled:opacity-30"
+              className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-cyan-600 shadow-sm transition-colors disabled:opacity-30"
               title="Copy result"
             >
               {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} />}

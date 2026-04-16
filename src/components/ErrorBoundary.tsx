@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full">
             <div className="text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <AlertCircle className="h-6 w-6 text-red-600" />
+                <AlertCircle className="h-6 w-6 text-cyan-600" />
               </div>
 
               <h2 className="text-xl font-semibold text-slate-900 mb-2">Something went wrong</h2>
@@ -76,7 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <div className="flex space-x-3">
                 <button
                   onClick={this.handleReset}
-                  className="flex-1 bg-doc-red text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                  className="flex-1 bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition-colors"
                 >
                   Try Again
                 </button>

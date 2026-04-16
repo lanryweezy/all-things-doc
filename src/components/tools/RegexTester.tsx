@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useMemo } from 'react';
 import { ArrowLeft, Search, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -48,7 +50,7 @@ export const RegexTester: React.FC<RegexTesterProps> = ({ onBack }) => {
                 <input
                   value={regex}
                   onChange={(e) => setRegex(e.target.value)}
-                  className="w-full pl-6 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-mono"
+                  className="w-full pl-6 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none font-mono"
                   placeholder="enter regex..."
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 font-mono">/</div>
@@ -59,7 +61,7 @@ export const RegexTester: React.FC<RegexTesterProps> = ({ onBack }) => {
               <input
                 value={flags}
                 onChange={(e) => setFlags(e.target.value)}
-                className="w-full py-3 text-center bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-mono"
+                className="w-full py-3 text-center bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none font-mono"
                 placeholder="gim"
               />
             </div>
@@ -79,7 +81,7 @@ export const RegexTester: React.FC<RegexTesterProps> = ({ onBack }) => {
             <textarea
               value={testText}
               onChange={(e) => setTestText(e.target.value)}
-              className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm"
+              className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
               placeholder="Enter text to test against..."
             />
           </div>
@@ -90,7 +92,7 @@ export const RegexTester: React.FC<RegexTesterProps> = ({ onBack }) => {
             <div className="flex-grow bg-slate-50 border border-slate-200 rounded-2xl overflow-y-auto p-4 space-y-2">
               {results.matches.map((match, i) => (
                 <div key={i} className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between group">
-                  <code className="text-doc-red font-bold break-all">{match[0]}</code>
+                  <code className="text-cyan-600 font-bold break-all">{match[0]}</code>
                   <span className="text-[10px] font-bold text-slate-300 uppercase">Pos: {match.index}</span>
                 </div>
               ))}

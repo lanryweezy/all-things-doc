@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Play, Download, Link, Cpu, Zap, Pause } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -146,6 +148,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-3xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -226,7 +229,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
               <Button
                 onClick={handleStopLocal}
                 variant="outline"
-                className="border-red-200 text-red-600 hover:bg-red-50"
+                className="border-red-200 text-cyan-600 hover:bg-red-50"
                 icon={<Pause size={18} />}
               >
                 Stop

@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Mic, MicOff, Copy, Check, RefreshCcw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -120,7 +122,7 @@ export const SpeechToText: React.FC<SpeechToTextProps> = ({ onBack }) => {
         <div className="mt-8 flex items-center justify-center space-x-6">
           <button
             onClick={handleReset}
-            className="p-4 text-slate-400 hover:text-doc-red transition-colors"
+            className="p-4 text-slate-400 hover:text-cyan-600 transition-colors"
             title="Clear text"
           >
             <RefreshCcw size={24} />
@@ -138,7 +140,7 @@ export const SpeechToText: React.FC<SpeechToTextProps> = ({ onBack }) => {
           <button
             onClick={handleCopy}
             disabled={!transcript}
-            className="p-4 text-slate-400 hover:text-doc-red transition-colors disabled:opacity-30"
+            className="p-4 text-slate-400 hover:text-cyan-600 transition-colors disabled:opacity-30"
             title="Copy transcript"
           >
             {copied ? <Check size={24} className="text-green-500" /> : <Copy size={24} />}

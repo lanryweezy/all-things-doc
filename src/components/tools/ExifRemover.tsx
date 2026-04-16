@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, ShieldCheck, Download, Trash2 } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -65,6 +67,7 @@ export const ExifRemover: React.FC<ExifRemoverProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -90,7 +93,7 @@ export const ExifRemover: React.FC<ExifRemoverProps> = ({ onBack }) => {
                 <Button
                   onClick={handleProcess}
                   isLoading={isProcessing}
-                  className="bg-red-600 hover:bg-red-700 min-w-[200px]"
+                  className="bg-cyan-600 hover:bg-cyan-700 min-w-[200px]"
                   icon={<Trash2 size={18} />}
                 >
                   Remove Metadata

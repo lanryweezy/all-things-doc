@@ -4,6 +4,8 @@ import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { useToast } from '../ui/Toast';
 import { ResultDisplay } from '../ui/ResultDisplay';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import { fileToBase64 } from '../../services/imageService';
 import { performOCR } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
@@ -71,6 +73,7 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -213,7 +216,7 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/text-ai/magic-summarizer'}>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-white rounded-lg shadow-sm">
-                    <FileText className="w-4 h-4 text-doc-red" />
+                    <FileText className="w-4 h-4 text-cyan-600" />
                   </div>
                   <div className="text-left">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
@@ -225,6 +228,7 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
           </div>
         )}
       </div>
+      <AboutTool toolId={ToolID.SMART_OCR} />
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Code, FileCode, Copy, Check, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';

@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Image as ImageIcon, Download, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -69,6 +71,7 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -94,7 +97,7 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
                     max="10"
                     value={scale}
                     onChange={(e) => setScale(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                   />
                 </div>
                 <div className="flex justify-center">

@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Minimize2, Download, RefreshCw, FileImage } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -72,6 +74,7 @@ export const ImageCompressor: React.FC<ImageCompressorProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -92,7 +95,7 @@ export const ImageCompressor: React.FC<ImageCompressorProps> = ({ onBack }) => {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="text-sm font-bold text-slate-700 uppercase">Compression Level</label>
-                    <span className="text-sm font-bold text-doc-red">{Math.round((1 - quality) * 100)}% Reduction Target</span>
+                    <span className="text-sm font-bold text-cyan-600">{Math.round((1 - quality) * 100)}% Reduction Target</span>
                   </div>
                   <input
                     type="range"
@@ -101,7 +104,7 @@ export const ImageCompressor: React.FC<ImageCompressorProps> = ({ onBack }) => {
                     step="0.05"
                     value={quality}
                     onChange={(e) => setQuality(parseFloat(e.target.value))}
-                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                   />
                   <div className="flex justify-between text-xs text-slate-400 mt-2 italic">
                     <span>High Compression (Smaller Size)</span>

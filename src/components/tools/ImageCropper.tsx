@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useCallback } from 'react';
 import { ArrowLeft, Crop as CropIcon, Download, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -82,6 +84,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -126,7 +129,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
                       onClick={() => setAspect(preset.val)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                         aspect === preset.val && preset.label !== 'Circle'
-                          ? 'bg-doc-red text-white border-doc-red'
+                          ? 'bg-cyan-600 text-white border-cyan-600'
                           : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                       }`}
                     >
@@ -143,7 +146,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
                   max={3}
                   step={0.1}
                   onChange={(e) => setZoom(parseFloat(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
               </div>
               <Button onClick={getCroppedImg} isLoading={isProcessing} className="w-full md:w-auto min-w-[150px]" icon={<CropIcon size={18} />}>

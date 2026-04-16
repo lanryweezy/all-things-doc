@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, GitCompare, RotateCcw } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -54,7 +56,7 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
             <textarea
               value={text1}
               onChange={(e) => setText1(e.target.value)}
-              className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm"
+              className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
               placeholder="Paste original version..."
             />
           </div>
@@ -63,7 +65,7 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
             <textarea
               value={text2}
               onChange={(e) => setText2(e.target.value)}
-              className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm"
+              className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
               placeholder="Paste modified version..."
             />
           </div>
@@ -75,7 +77,7 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
               key={index}
               className={`px-2 whitespace-pre-wrap ${
                 part.added ? 'bg-green-50 text-green-700 border-l-4 border-green-500' :
-                part.removed ? 'bg-red-50 text-red-700 border-l-4 border-red-500 line-through' :
+                part.removed ? 'bg-red-50 text-cyan-700 border-l-4 border-red-500 line-through' :
                 'text-slate-600'
               }`}
             >

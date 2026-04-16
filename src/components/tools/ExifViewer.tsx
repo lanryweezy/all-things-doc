@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Info, Image as ImageIcon, Search, Download, Trash2, Tag } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -61,6 +63,7 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-6xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">

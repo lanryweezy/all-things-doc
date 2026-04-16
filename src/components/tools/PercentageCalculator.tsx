@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Hash, Percent, TrendingUp, TrendingDown, Info } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toast';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -58,6 +60,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -81,14 +84,14 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
               type="number"
               value={s1X}
               onChange={(e) => setS1X(e.target.value)}
-              className="w-24 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none text-center"
+              className="w-24 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>% of</span>
             <input
               type="number"
               value={s1Y}
               onChange={(e) => setS1Y(e.target.value)}
-              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none text-center"
+              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>?</span>
           </div>
@@ -98,7 +101,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
           >
             <span className="text-red-400 font-bold uppercase tracking-wider">Result</span>
             <div className="flex items-center space-x-4">
-              <span className="text-4xl font-black text-doc-red">{s1Result}</span>
+              <span className="text-4xl font-black text-cyan-600">{s1Result}</span>
               <div className="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">Click to copy</div>
             </div>
           </div>
@@ -115,14 +118,14 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
               type="number"
               value={s2X}
               onChange={(e) => setS2X(e.target.value)}
-              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none text-center"
+              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>is what % of</span>
             <input
               type="number"
               value={s2Y}
               onChange={(e) => setS2Y(e.target.value)}
-              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none text-center"
+              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>?</span>
           </div>
@@ -132,7 +135,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
           >
             <span className="text-red-400 font-bold uppercase tracking-wider">Result</span>
             <div className="flex items-center space-x-4">
-              <span className="text-4xl font-black text-doc-red">{s2Result}%</span>
+              <span className="text-4xl font-black text-cyan-600">{s2Result}%</span>
               <div className="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">Click to copy</div>
             </div>
           </div>
@@ -150,14 +153,14 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
               type="number"
               value={s3From}
               onChange={(e) => setS3From(e.target.value)}
-              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none text-center"
+              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>to</span>
             <input
               type="number"
               value={s3To}
               onChange={(e) => setS3To(e.target.value)}
-              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none text-center"
+              className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
           </div>
           <div
@@ -176,6 +179,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
           </div>
         </div>
       </div>
+      <AboutTool toolId={ToolID.PERCENTAGE_CALCULATOR} />
     </div>
   );
 };

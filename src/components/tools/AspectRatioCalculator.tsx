@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Maximize, RefreshCw, Hash } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toast';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -60,6 +62,7 @@ export const AspectRatioCalculator: React.FC<AspectRatioCalculatorProps> = ({ on
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -159,6 +162,7 @@ export const AspectRatioCalculator: React.FC<AspectRatioCalculatorProps> = ({ on
            </div>
         </div>
       </div>
+      <AboutTool toolId={ToolID.ASPECT_RATIO_CALCULATOR} />
     </div>
   );
 };

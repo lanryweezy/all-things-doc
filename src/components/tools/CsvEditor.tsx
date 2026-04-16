@@ -1,8 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { ArrowLeft, Table, Download, Plus, Trash2, FileUp, Save, Search } from 'lucide-react';
+import {
+  Table,
+  Download,
+  Plus,
+  Trash2,
+  Search,
+  FileUp,
+  FileJson,
+  ArrowRightLeft
+} from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useToast } from '../ui/Toast';
-import { TOOLS } from '../../constants';
+import { ToolLayout } from '../ui/ToolLayout';
 import { ToolID } from '../../types';
 
 interface CsvEditorProps {
@@ -13,16 +22,8 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
   const [data, setData] = useState<string[][]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isEditing, setIsEditing] = useState<[number, number] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
-
-  const toolInfo = TOOLS[ToolID.CSV_EDITOR] || {
-    title: 'CSV Editor',
-    icon: Table,
-    color: 'text-emerald-600',
-    bgColor: 'bg-emerald-100',
-  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -31,31 +32,12 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
     const reader = new FileReader();
     reader.onload = (event) => {
       const text = event.target?.result as string;
-      parseCsv(text);
+      const rows = text.split('\n').map(row => row.split(','));
+      setHeaders(rows[0]);
+      setData(rows.slice(1).filter(row => row.length > 1 || row[0] !== ''));
+      showToast('CSV Loaded Successfully');
     };
     reader.readAsText(file);
-  };
-
-  const parseCsv = (text: string) => {
-    try {
-      const lines = text.split(/\r?\n/);
-      const rows = lines
-        .filter(line => line.trim() !== '')
-        .map(line => {
-          // Basic CSV parsing (doesn't handle commas in quotes perfectly but good enough for common use)
-          const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-          if (matches) return matches.map(m => m.replace(/^"|"$/g, ''));
-          return line.split(',').map(c => c.trim());
-        });
-
-      if (rows.length > 0) {
-        setHeaders(rows[0]);
-        setData(rows.slice(1));
-        showToast('CSV loaded successfully');
-      }
-    } catch (err) {
-      showToast('Failed to parse CSV', 'error');
-    }
   };
 
   const handleDownload = () => {
@@ -71,27 +53,13 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
     a.download = 'edited_data.csv';
     a.click();
     URL.revokeObjectURL(url);
-    showToast('CSV downloaded');
+    showToast('CSV Downloaded');
   };
 
-  const addRow = () => {
-    setData([...data, new Array(headers.length).fill('')]);
-  };
-
+  const addRow = () => setData([...data, new Array(headers.length).fill('')]);
   const addColumn = () => {
-    const newColName = `Column ${headers.length + 1}`;
-    setHeaders([...headers, newColName]);
+    setHeaders([...headers, `Col ${headers.length + 1}`]);
     setData(data.map(row => [...row, '']));
-  };
-
-  const deleteRow = (index: number) => {
-    setData(data.filter((_, i) => i !== index));
-  };
-
-  const handleCellChange = (rowIndex: number, colIndex: number, value: string) => {
-    const newData = [...data];
-    newData[rowIndex][colIndex] = value;
-    setData(newData);
   };
 
   const filteredData = data.filter(row =>
@@ -99,125 +67,104 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="mb-8 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-            <ArrowLeft size={20} />
-          </button>
-          <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
-            <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
-          </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
-        </div>
-        <div className="flex space-x-2">
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileUpload}
-            className="hidden"
-            ref={fileInputRef}
-          />
-          <Button onClick={() => fileInputRef.current?.click()} variant="outline" icon={<FileUp size={18} />}>
+    <ToolLayout
+      toolId={ToolID.CSV_EDITOR}
+      onBack={onBack}
+      maxWidth="6xl"
+      actions={
+        <div className="flex items-center space-x-2">
+          <input type="file" accept=".csv" onChange={handleFileUpload} className="hidden" ref={fileInputRef} />
+          <Button onClick={() => fileInputRef.current?.click()} variant="outline" size="sm" icon={<FileUp size={16} />}>
             Upload
           </Button>
           {data.length > 0 && (
-            <Button onClick={handleDownload} className="bg-emerald-600" icon={<Download size={18} />}>
-              Download
+            <Button onClick={handleDownload} variant="primary" size="sm" icon={<Download size={16} />}>
+              Save
             </Button>
           )}
         </div>
-      </div>
-
+      }
+    >
       {data.length === 0 ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-slate-200 rounded-3xl p-20 text-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition-all group"
+          className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-12 md:p-24 text-center cursor-pointer hover:border-cyan-400 hover:bg-cyan-50/30 dark:hover:bg-cyan-900/10 transition-all group"
         >
-          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <div className="w-20 h-20 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
             <Table size={40} />
           </div>
-          <h2 className="text-2xl font-bold text-doc-slate mb-2">No CSV data loaded</h2>
-          <p className="text-slate-500 mb-8">Click here to upload a CSV file or start with a blank table</p>
-          <div className="flex justify-center space-x-4">
-            <Button onClick={(e) => { e.stopPropagation(); setHeaders(['Column 1', 'Column 2']); setData([['', '']]); }} variant="outline">
-              Create Blank Table
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2 uppercase tracking-tight transition-colors">No Data Loaded</h2>
+          <p className="text-slate-500 dark:text-slate-400 mb-8 font-medium transition-colors">Upload a CSV or start with a sample.</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Button onClick={(e) => { e.stopPropagation(); setHeaders(['ID', 'Name']); setData([['1', 'Sample']]); }} variant="outline">
+              Blank Table
             </Button>
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                setHeaders(['Date', 'Description', 'Category', 'Amount']);
-                setData([
-                  ['2023-10-01', 'Online Store', 'Shopping', '$-120.00'],
-                  ['2023-10-02', 'Employer Corp', 'Salary', '$5,000.00'],
-                  ['2023-10-05', 'Gas Station', 'Transport', '$-65.20'],
-                  ['2023-10-10', 'Monthly Rent', 'Housing', '$-1,800.00'],
-                  ['2023-10-15', 'Coffee Shop', 'Food', '$-5.50']
-                ]);
+                setHeaders(['Date', 'Event', 'Cost']);
+                setData([['2023-11-01', 'Server Upgrade', ',200'], ['2023-11-05', 'Domain Renewal', '5']]);
               }}
-              className="bg-emerald-600"
+              className="bg-cyan-600"
             >
-              Load Sample Data
+              Load Sample
             </Button>
           </div>
         </div>
       ) : (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="relative w-full md:max-w-md group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-500 transition-colors" size={18} />
               <input
                 type="text"
-                placeholder="Search table..."
+                placeholder="Search rows..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500 outline-none transition-all text-slate-900 dark:text-white font-medium"
               />
             </div>
-            <div className="flex space-x-2">
-              <Button onClick={addRow} variant="outline" size="sm" icon={<Plus size={16} />}>Add Row</Button>
-              <Button onClick={addColumn} variant="outline" size="sm" icon={<Plus size={16} />}>Add Column</Button>
+            <div className="flex items-center space-x-2 w-full md:w-auto">
+              <Button onClick={addRow} variant="outline" size="sm" className="flex-1 md:flex-none" icon={<Plus size={14} />}>Row</Button>
+              <Button onClick={addColumn} variant="outline" size="sm" className="flex-1 md:flex-none" icon={<Plus size={14} />}>Col</Button>
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <div className="overflow-x-auto max-h-[60vh]">
-              <table className="w-full text-left border-collapse">
-                <thead className="sticky top-0 bg-slate-50 border-b border-slate-200 z-10">
-                  <tr>
-                    {headers.map((header, i) => (
-                      <th key={i} className="p-4 text-sm font-bold text-slate-600 whitespace-nowrap">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden transition-colors">
+            <div className="overflow-x-auto custom-scrollbar">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr className="bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 transition-colors">
+                    {headers.map((h, i) => (
+                      <th key={i} className="p-4">
                         <input
-                          value={header}
+                          value={h}
                           onChange={(e) => {
-                            const newHeaders = [...headers];
-                            newHeaders[i] = e.target.value;
-                            setHeaders(newHeaders);
+                            const n = [...headers]; n[i] = e.target.value; setHeaders(n);
                           }}
-                          className="bg-transparent border-none focus:ring-0 w-full font-bold outline-none"
+                          className="bg-transparent border-none focus:ring-0 w-full font-black text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 outline-none"
                         />
                       </th>
                     ))}
-                    <th className="p-4 w-10"></th>
+                    <th className="w-10"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {filteredData.map((row, rowIndex) => (
-                    <tr key={rowIndex} className="hover:bg-slate-50 transition-colors group">
-                      {row.map((cell, colIndex) => (
-                        <td key={colIndex} className="p-2">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 transition-colors">
+                  {filteredData.map((row, ri) => (
+                    <tr key={ri} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                      {row.map((cell, ci) => (
+                        <td key={ci} className="p-2">
                           <input
                             value={cell}
-                            onChange={(e) => handleCellChange(rowIndex, colIndex, e.target.value)}
-                            className="w-full p-2 bg-transparent border-none focus:bg-white focus:ring-2 focus:ring-emerald-500 rounded outline-none transition-all"
+                            onChange={(e) => {
+                              const n = [...data]; n[ri][ci] = e.target.value; setData(n);
+                            }}
+                            className="w-full p-2 bg-transparent border-none focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-cyan-500 rounded-lg outline-none transition-all text-slate-700 dark:text-slate-300 text-sm font-medium"
                           />
                         </td>
                       ))}
                       <td className="p-2 text-right">
-                        <button
-                          onClick={() => deleteRow(rowIndex)}
-                          className="p-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
-                        >
+                        <button onClick={() => setData(data.filter((_, i) => i !== ri))} className="p-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
                           <Trash2 size={16} />
                         </button>
                       </td>
@@ -227,12 +174,39 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
               </table>
             </div>
           </div>
-          <div className="flex justify-between text-xs text-slate-400 px-2 font-medium">
+          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 px-2 transition-colors">
             <span>Rows: {data.length} | Columns: {headers.length}</span>
-            <span>All edits are local to your browser</span>
+            <span>Local Browser Processing Only</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800 pt-8 mt-12 transition-colors">
+            <button onClick={() => window.location.href = '/tools/data-converter/csv-to-json'} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xl transition-all group">
+              <div className="flex items-center space-x-4">
+                 <div className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm text-cyan-600">
+                    <FileJson size={18} />
+                 </div>
+                 <div className="text-left">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 transition-colors">Export Option</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">Convert to JSON</p>
+                 </div>
+              </div>
+              <ChevronRight size={18} className="text-slate-300 group-hover:text-cyan-600 transition-colors" />
+            </button>
+            <button onClick={() => window.location.href = '/tools/data-converter/csv-to-xml'} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xl transition-all group">
+              <div className="flex items-center space-x-4">
+                 <div className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm text-amber-600">
+                    <ArrowRightLeft size={18} />
+                 </div>
+                 <div className="text-left">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 transition-colors">Export Option</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">Convert to XML</p>
+                 </div>
+              </div>
+              <ChevronRight size={18} className="text-slate-300 group-hover:text-amber-600 transition-colors" />
+            </button>
           </div>
         </div>
       )}
-    </div>
+    </ToolLayout>
   );
 };

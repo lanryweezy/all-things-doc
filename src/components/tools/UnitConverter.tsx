@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, Copy, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -180,6 +182,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -203,7 +206,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
                 key={t}
                 onClick={() => setType(t as any)}
                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                  type === t ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500 hover:text-slate-700'
+                  type === t ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {t}
@@ -221,14 +224,14 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-doc-slate focus:ring-2 focus:ring-doc-red outline-none"
+                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-doc-slate focus:ring-2 focus:ring-cyan-600 outline-none"
               />
               <label htmlFor="from-unit-select" className="block text-sm font-medium text-slate-500">From Unit</label>
               <select
                 id="from-unit-select"
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
-                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-doc-red"
+                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-cyan-600"
               >
                 {Object.keys(UNIT_TYPES[type]).map((u) => (
                   <option key={u} value={u}>{u.replace('_', ' ')}</option>
@@ -240,10 +243,10 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-500">To Value</label>
             <div className="space-y-3">
-              <div className="w-full p-4 bg-doc-red/5 border border-doc-red/10 rounded-xl text-2xl font-bold text-doc-red min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
+              <div className="w-full p-4 bg-cyan-600/5 border border-cyan-600/10 rounded-xl text-2xl font-bold text-cyan-600 min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
                 <span>{result || '0'}</span>
                 {result && (
-                  <button onClick={handleCopy} className="text-doc-red/60 hover:text-doc-red" aria-label="Copy result">
+                  <button onClick={handleCopy} className="text-cyan-600/60 hover:text-cyan-600" aria-label="Copy result">
                     {copied ? <Check size={20} /> : <Copy size={20} />}
                   </button>
                 )}
@@ -253,7 +256,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
                 id="to-unit-select"
                 value={toUnit}
                 onChange={(e) => setToUnit(e.target.value)}
-                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-doc-red"
+                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-cyan-600"
               >
                 {Object.keys(UNIT_TYPES[type]).map((u) => (
                   <option key={u} value={u}>{u.replace('_', ' ')}</option>

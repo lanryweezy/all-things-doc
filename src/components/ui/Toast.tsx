@@ -38,23 +38,23 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           <div
             key={toast.id}
             className={`
-              flex items-center space-x-3 px-4 py-3 rounded-xl shadow-lg border animate-slide-up
+              flex items-center space-x-3 px-4 py-3 rounded-xl shadow-lg border animate-in slide-in-from-bottom-2 duration-300 transition-colors
               ${
                 toast.type === 'success'
-                  ? 'bg-emerald-50 border-emerald-100 text-emerald-800'
+                  ? 'bg-emerald-50 dark:bg-emerald-900/90 border-emerald-100 dark:border-emerald-800 text-emerald-800 dark:text-emerald-100'
                   : toast.type === 'error'
-                  ? 'bg-red-50 border-red-100 text-red-800'
-                  : 'bg-blue-50 border-blue-100 text-blue-800'
+                  ? 'bg-red-50 dark:bg-red-900/90 border-red-100 dark:border-red-800 text-red-800 dark:text-red-100'
+                  : 'bg-cyan-50 dark:bg-cyan-900/90 border-cyan-100 dark:border-cyan-800 text-cyan-800 dark:text-cyan-100'
               }
             `}
           >
-            {toast.type === 'success' && <CheckCircle size={18} className="text-emerald-500" />}
-            {toast.type === 'error' && <AlertCircle size={18} className="text-red-500" />}
-            {toast.type === 'info' && <Info size={18} className="text-blue-500" />}
-            <span className="text-sm font-semibold">{toast.message}</span>
+            {toast.type === 'success' && <CheckCircle size={18} className="text-emerald-500 dark:text-emerald-400" />}
+            {toast.type === 'error' && <AlertCircle size={18} className="text-red-500 dark:text-red-400" />}
+            {toast.type === 'info' && <Info size={18} className="text-cyan-500 dark:text-cyan-400" />}
+            <span className="text-sm font-bold uppercase tracking-tight">{toast.message}</span>
             <button
               onClick={() => removeToast(toast.id)}
-              className="p-1 hover:bg-black/5 rounded-full transition-colors"
+              className="p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors"
             >
               <X size={14} />
             </button>

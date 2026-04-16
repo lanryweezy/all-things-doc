@@ -19,7 +19,7 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <button
           onClick={onBack}
-          className="flex items-center text-doc-red hover:text-red-700 mb-8 transition-colors"
+          className="flex items-center text-red-600 hover:text-cyan-700 mb-8 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
           Back to Tools
@@ -33,14 +33,14 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
               <h2 className="text-xl font-semibold text-doc-slate mb-4">Main Pages</h2>
               <ul className="space-y-2">
                 <li>
-                  <a href="/" className="text-doc-red hover:text-red-700 transition-colors">
+                  <a href="/" className="text-red-600 hover:text-cyan-700 transition-colors">
                     Home - All Tools
                   </a>
                 </li>
                 <li>
                   <a
                     href="/privacy-policy"
-                    className="text-doc-red hover:text-red-700 transition-colors"
+                    className="text-red-600 hover:text-cyan-700 transition-colors"
                   >
                     Privacy Policy
                   </a>
@@ -48,16 +48,28 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
                 <li>
                   <a
                     href="/terms-of-use"
-                    className="text-doc-red hover:text-red-700 transition-colors"
+                    className="text-red-600 hover:text-cyan-700 transition-colors"
                   >
                     Terms of Use
                   </a>
                 </li>
                 <li>
-                  <a href="/sitemap" className="text-doc-red hover:text-red-700 transition-colors">
+                  <a href="/sitemap" className="text-red-600 hover:text-cyan-700 transition-colors">
                     Sitemap
                   </a>
                 </li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-doc-slate mb-4">Legal</h2>
+              <ul className="space-y-2">
+                 <li>
+                    <a href="/privacy-policy" className="text-red-600 hover:text-cyan-700 transition-colors">Privacy Policy</a>
+                 </li>
+                 <li>
+                    <a href="/terms-of-use" className="text-red-600 hover:text-cyan-700 transition-colors">Terms of Use</a>
+                 </li>
               </ul>
             </section>
 
@@ -74,12 +86,12 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
                     {tools.map(tool => (
                       <li key={tool.id}>
                         <a
-                          href={`/tool/${tool.id}`}
-                          className="text-doc-red hover:text-red-700 transition-colors"
+                          href={`/tools/${tool.id}`}
+                          className="text-red-600 hover:text-cyan-700 transition-colors font-semibold"
                         >
-                          {tool.name}
+                          {tool.title}
                         </a>
-                        <p className="text-sm text-slate-600 mt-1">{tool.description}</p>
+                        <p className="text-sm text-slate-500 mt-0.5">{tool.description}</p>
                       </li>
                     ))}
                   </ul>

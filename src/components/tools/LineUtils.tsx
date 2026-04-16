@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, AlignLeft, Copy, Check, SortAsc, SortDesc, Trash2, Repeat } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -50,6 +52,7 @@ export const LineUtils: React.FC<LineUtilsProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -83,7 +86,7 @@ export const LineUtils: React.FC<LineUtilsProps> = ({ onBack }) => {
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full h-96 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm leading-relaxed"
+            className="w-full h-96 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm leading-relaxed"
             placeholder="Paste your list or lines of text here..."
           />
           <div className="absolute right-4 bottom-4">

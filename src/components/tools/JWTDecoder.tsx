@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Key, Copy, AlertCircle, RefreshCw, Beaker } from 'lucide-react';
 import { useToast } from '../ui/Toast';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
+import { ShieldCheck, Lock } from 'lucide-react';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -83,6 +86,7 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8 flex items-center space-x-3">
         <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ArrowLeft size={20} />
@@ -178,6 +182,35 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
           )}
         </div>
       </div>
+      {decoded && (
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-100 pt-8">
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/password-strength'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Security Check</p>
+                <p className="text-sm text-slate-700 font-bold">Check Secret Strength</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/jwt-secret-generator'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Lock className="w-4 h-4 text-purple-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Generate New Secret</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <AboutTool toolId={ToolID.JWT_DECODER} />
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Code, Copy, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -79,7 +81,7 @@ export const JsonToTypeScript: React.FC<JsonToTypeScriptProps> = ({ onBack }) =>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm"
+            className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
             placeholder='{"id": 1, "name": "Test"}'
           />
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
@@ -88,7 +90,7 @@ export const JsonToTypeScript: React.FC<JsonToTypeScriptProps> = ({ onBack }) =>
           <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex justify-between items-center">
             <span>TypeScript Interface</span>
             {output && (
-              <button onClick={handleCopy} className="text-doc-red hover:text-red-700 text-xs flex items-center font-semibold">
+              <button onClick={handleCopy} className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold">
                 {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
                 {copied ? 'Copied' : 'Copy'}
               </button>

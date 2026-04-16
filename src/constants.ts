@@ -698,7 +698,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   },
   [ToolID.HASH_GENERATOR]: {
     id: ToolID.HASH_GENERATOR,
-    title: 'Hash Generator',
+    title: 'Text Hash Generator',
     description: 'Generate secure SHA-256 and SHA-512 hashes for any text.',
     icon: Hash,
     color: 'text-red-600',
@@ -1189,7 +1189,7 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   },
   [ToolID.FILE_HASHER]: {
     id: ToolID.FILE_HASHER,
-    title: 'File Checksum',
+    title: 'File Checksum (Hash)',
     description: 'Calculate secure SHA-256 and SHA-512 hashes for any file locally.',
     icon: Hash,
     color: 'text-rose-600',

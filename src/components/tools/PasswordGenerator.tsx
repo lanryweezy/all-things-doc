@@ -3,6 +3,8 @@ import { ArrowLeft, Shield, Copy, Check, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 
 interface PasswordGeneratorProps {
   onBack: () => void;
@@ -62,6 +64,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -85,7 +88,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex space-x-2">
             <button
               onClick={generatePassword}
-              className="p-2 text-slate-400 hover:text-doc-red transition-colors"
+              className="p-2 text-slate-400 hover:text-cyan-600 transition-colors"
               title="Regenerate"
             >
               <RefreshCw size={20} />
@@ -93,7 +96,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
             <button
               onClick={handleCopy}
               disabled={!password}
-              className="p-2 text-slate-400 hover:text-doc-red transition-colors"
+              className="p-2 text-slate-400 hover:text-cyan-600 transition-colors"
               title="Copy"
             >
               {copied ? <Check size={20} className="text-green-600" /> : <Copy size={20} />}
@@ -123,7 +126,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
               max="50"
               value={length}
               onChange={(e) => setLength(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
+              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
             />
             <div className="flex justify-between text-xs text-slate-400 font-medium">
               <span>4</span>
@@ -147,7 +150,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
                     type="checkbox"
                     checked={opt.state}
                     onChange={() => opt.setter(!opt.state)}
-                    className="w-5 h-5 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                    className="w-5 h-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-600 cursor-pointer"
                   />
                   <span className="text-sm font-medium text-slate-600">{opt.label}</span>
                 </label>
@@ -156,6 +159,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
           </div>
         </div>
       </div>
+      <AboutTool toolId={ToolID.PASSWORD_GENERATOR} />
     </div>
   );
 };
