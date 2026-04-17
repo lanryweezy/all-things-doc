@@ -1,13 +1,15 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException, Response, Form
+from fastapi import APIRouter, File, UploadFile, HTTPException, Form
 from fastapi.responses import StreamingResponse
-from typing import Optional, List
+from typing import List
 import io
+import zipfile
 
 # Import our processing modules
 from pdf_processing.pdf_utils import (
     merge_pdfs, split_pdf, compress_pdf, 
     extract_text_from_pdf
 )
+from parsing_utils import parse_split_points
 from ai_processing.ai_utils import TextProcessor, ocr_image, ocr_pdf
 
 router = APIRouter()
@@ -31,13 +33,8 @@ async def merge_pdfs_endpoint(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=400, detail=f"Error merging PDFs: {str(e)}")
 
 
-import io
-import zipfile
-
-# ... (other imports)
-
 @router.post("/pdf/split")
-async def split_pdf_endpoint(file: UploadFile = File(...), split_points: str = ""):
+async def split_pdf_endpoint(file: UploadFile = File(...), split_points: str = Form("")):
     """Split a PDF at specified page indices and return a ZIP archive."""
     try:
         content = await file.read()
@@ -46,7 +43,7 @@ async def split_pdf_endpoint(file: UploadFile = File(...), split_points: str = "
         original_filename = file.filename if file.filename else "file"
         base_filename = "".join(x for x in original_filename if x.isalnum() or x in "._-")
         
-        split_points_list = [int(x.strip()) for x in split_points.split(',') if x.strip().isdigit()]
+        split_points_list = parse_split_points(split_points)
         
         split_pdfs = split_pdf(content, split_points_list)
         
