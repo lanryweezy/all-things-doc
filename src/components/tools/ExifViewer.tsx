@@ -72,7 +72,7 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -87,7 +87,7 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
             <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col items-center p-6">
                <div className="w-full flex justify-between items-center mb-6">
                  <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{file.name}</span>
-                 <button onClick={clear} className="text-slate-400 hover:text-red-500">
+                 <button onClick={clear} className="text-slate-400 hover:text-cyan-500">
                     <Trash2 size={18} />
                  </button>
                </div>
@@ -97,7 +97,7 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
 
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
              <div className="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                <h3 className="text-sm font-bold text-doc-slate uppercase tracking-widest">Metadata Values</h3>
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">Metadata Values</h3>
                 <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">
                   {Object.keys(exifData || {}).length} Tags Found
                 </span>
@@ -107,7 +107,7 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
                   Object.entries(exifData).map(([key, val]) => (
                     <div key={key} className="p-4 hover:bg-slate-50 transition-colors flex justify-between items-start space-x-4">
                        <span className="text-xs font-bold text-slate-500 w-1/3 truncate" title={key}>{key}</span>
-                       <span className="text-sm font-mono text-doc-slate text-right break-all">{String(val)}</span>
+                       <span className="text-sm font-mono text-slate-900 text-right break-all">{String(val)}</span>
                     </div>
                   ))
                 ) : (

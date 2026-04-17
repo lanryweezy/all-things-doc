@@ -76,7 +76,7 @@ export const SpeechToText: React.FC<SpeechToTextProps> = ({ onBack }) => {
   if (!recognitionRef.current && typeof window !== 'undefined') {
     return (
       <div className="max-w-2xl mx-auto text-center py-12">
-        <h2 className="text-2xl font-bold text-doc-slate mb-4">Browser Not Supported</h2>
+        <h2 className="text-2xl font-bold text-slate-900 mb-4">Browser Not Supported</h2>
         <p className="text-slate-600">Your browser does not support the Speech Recognition API. Please try using Chrome or Edge.</p>
         <Button onClick={onBack} className="mt-6">Back to Tools</Button>
       </div>
@@ -93,7 +93,7 @@ export const SpeechToText: React.FC<SpeechToTextProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -113,9 +113,9 @@ export const SpeechToText: React.FC<SpeechToTextProps> = ({ onBack }) => {
           <div className="absolute top-4 right-4 flex items-center space-x-2">
             <span className="flex h-3 w-3 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
             </span>
-            <span className="text-xs font-bold text-red-500 uppercase tracking-widest">Listening</span>
+            <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest">Listening</span>
           </div>
         )}
 
@@ -131,7 +131,7 @@ export const SpeechToText: React.FC<SpeechToTextProps> = ({ onBack }) => {
           <button
             onClick={toggleListening}
             className={`w-20 h-20 rounded-full flex items-center justify-center transition-all shadow-lg transform active:scale-95 ${
-              isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-doc-slate text-white hover:bg-slate-800'
+              isListening ? 'bg-cyan-500 text-white animate-pulse' : 'bg-slate-900 text-white hover:bg-slate-800'
             }`}
           >
             {isListening ? <MicOff size={32} /> : <Mic size={32} />}

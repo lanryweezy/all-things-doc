@@ -90,7 +90,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -98,7 +98,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -176,7 +176,7 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
               <Button
                 onClick={handleDownload}
                 disabled={!qrDataUrl}
-                className="bg-doc-slate hover:bg-slate-800 flex-grow"
+                className="bg-slate-900 hover:bg-slate-800 flex-grow"
                 icon={<Download size={18} />}
               >
                 Download PNG

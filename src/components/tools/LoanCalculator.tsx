@@ -58,7 +58,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -71,7 +71,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-doc-slate"
+              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-slate-900"
             />
           </div>
 
@@ -84,7 +84,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
               step="0.1"
               value={rate}
               onChange={(e) => setRate(e.target.value)}
-              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-doc-slate"
+              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-slate-900"
             />
           </div>
 
@@ -96,7 +96,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
               type="number"
               value={years}
               onChange={(e) => setYears(e.target.value)}
-              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-doc-slate"
+              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-slate-900"
             />
           </div>
         </div>
@@ -110,11 +110,11 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center">
               <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">Total Interest</div>
-              <div className="text-xl font-bold text-doc-slate">${totalInterest}</div>
+              <div className="text-xl font-bold text-slate-900">${totalInterest}</div>
             </div>
             <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center">
               <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">Total Payoff</div>
-              <div className="text-xl font-bold text-doc-slate">${totalPayment}</div>
+              <div className="text-xl font-bold text-slate-900">${totalPayment}</div>
             </div>
           </div>
 

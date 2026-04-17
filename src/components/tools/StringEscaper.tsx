@@ -65,7 +65,7 @@ export const StringEscaper: React.FC<StringEscaperProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 space-y-6">
@@ -106,7 +106,7 @@ export const StringEscaper: React.FC<StringEscaperProps> = ({ onBack }) => {
         </div>
 
         <div className="flex justify-center">
-           <Button onClick={process} className="bg-doc-slate px-10" icon={<RefreshCw size={18} />}>
+           <Button onClick={process} className="bg-slate-900 px-10" icon={<RefreshCw size={18} />}>
              Run {mode}
            </Button>
         </div>

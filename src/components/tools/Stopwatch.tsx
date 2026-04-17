@@ -56,13 +56,13 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-10 flex flex-col items-center space-y-12">
         <div className="relative">
           <div className="w-80 h-80 rounded-full border-8 border-slate-50 flex items-center justify-center shadow-inner">
-             <div className="text-6xl font-mono font-black text-doc-slate tracking-tighter">
+             <div className="text-6xl font-mono font-black text-slate-900 tracking-tighter">
                {formatTime(time)}
              </div>
           </div>
@@ -104,7 +104,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ onBack }) => {
               {laps.map((lap, i) => (
                 <div key={i} className="flex justify-between p-4 font-mono text-sm">
                   <span className="text-slate-400">Lap {laps.length - i}</span>
-                  <span className="text-doc-slate font-bold">{formatTime(lap)}</span>
+                  <span className="text-slate-900 font-bold">{formatTime(lap)}</span>
                 </div>
               ))}
             </div>

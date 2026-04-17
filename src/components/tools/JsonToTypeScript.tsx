@@ -72,7 +72,7 @@ export const JsonToTypeScript: React.FC<JsonToTypeScriptProps> = ({ onBack }) =>
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
@@ -84,13 +84,13 @@ export const JsonToTypeScript: React.FC<JsonToTypeScriptProps> = ({ onBack }) =>
             className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
             placeholder='{"id": 1, "name": "Test"}'
           />
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-cyan-500 text-sm mt-2">{error}</p>}
         </div>
         <div className="flex flex-col">
           <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex justify-between items-center">
             <span>TypeScript Interface</span>
             {output && (
-              <button onClick={handleCopy} className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold">
+              <button onClick={handleCopy} className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold">
                 {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
                 {copied ? 'Copied' : 'Copy'}
               </button>
@@ -106,7 +106,7 @@ export const JsonToTypeScript: React.FC<JsonToTypeScriptProps> = ({ onBack }) =>
       </div>
 
       <div className="mt-6 flex justify-center flex-shrink-0">
-        <Button onClick={handleConvert} disabled={!input.trim()} className="bg-doc-slate" icon={<Code size={18} />}>
+        <Button onClick={handleConvert} disabled={!input.trim()} className="bg-slate-900" icon={<Code size={18} />}>
           Generate Interfaces
         </Button>
       </div>

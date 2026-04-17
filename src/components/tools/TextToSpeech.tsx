@@ -152,7 +152,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -160,7 +160,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -193,7 +193,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
+          <label className="block text-sm font-medium text-slate-900 mb-2">
             Enter Text to Speak
           </label>
           <textarea
@@ -229,7 +229,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
               <Button
                 onClick={handleStopLocal}
                 variant="outline"
-                className="border-red-200 text-cyan-600 hover:bg-red-50"
+                className="border-red-200 text-red-600 hover:bg-cyan-50"
                 icon={<Pause size={18} />}
               >
                 Stop

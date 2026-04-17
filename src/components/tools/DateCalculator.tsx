@@ -98,7 +98,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
@@ -131,7 +131,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                     type="date"
                     value={date1}
                     onChange={(e) => setDate1(e.target.value)}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-doc-slate"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   />
                 </div>
                 <div className="space-y-2">
@@ -140,7 +140,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                     type="date"
                     value={date2}
                     onChange={(e) => setDate2(e.target.value)}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-doc-slate"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   />
                 </div>
               </div>
@@ -169,7 +169,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                   type="date"
                   value={baseDate}
                   onChange={(e) => setBaseDate(e.target.value)}
-                  className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-doc-slate"
+                  className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                 />
               </div>
 
@@ -192,7 +192,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                         type="number"
                         value={field.value}
                         onChange={(e) => field.setter(parseInt(e.target.value) || 0)}
-                        className="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-center font-bold text-doc-slate outline-none"
+                        className="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-center font-bold text-slate-900 outline-none"
                       />
                       <button
                         onClick={() => field.setter(v => v + 1)}
@@ -221,7 +221,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                     type="time"
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-doc-slate"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-slate-900"
                   />
                 </div>
                 <div className="space-y-2">
@@ -229,7 +229,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                   <select
                     value={sourceTz}
                     onChange={(e) => setSourceTz(e.target.value)}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-doc-slate"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   >
                     <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>Local ({Intl.DateTimeFormat().resolvedOptions().timeZone})</option>
                     {commonTimezones.map(tz => <option key={tz} value={tz}>{tz}</option>)}
@@ -240,7 +240,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                   <select
                     value={targetTz}
                     onChange={(e) => setTargetTz(e.target.value)}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-doc-slate"
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   >
                     {commonTimezones.map(tz => <option key={tz} value={tz}>{tz}</option>)}
                   </select>

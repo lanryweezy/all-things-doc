@@ -307,7 +307,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                 role="button"
                 tabIndex={0}
                 aria-label={`Open ${tool.title}: ${tool.description}`}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-red-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 dark:focus:ring-offset-slate-900 relative overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 hover:shadow-lg hover:border-cyan-100 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 dark:focus:ring-offset-slate-900 relative overflow-hidden"
               >
                 <button
                   onClick={(e) => toggleFavorite(e, tool.id)}
@@ -320,7 +320,7 @@ export const ToolGrid: React.FC<ToolGridProps> = ({ onSelectTool }) => {
                   <Star size={14} className={favorites.includes(tool.id) ? 'fill-current' : ''} />
                 </button>
                 {isNew && !favorites.includes(tool.id) && (
-                  <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
+                  <div className="absolute top-3 left-3 bg-cyan-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
                     NEW
                   </div>
                 )}

@@ -104,7 +104,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -112,7 +112,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 animate-fade-in space-y-6">
                 <div className="flex flex-col md:flex-row md:items-end gap-6">
                   <div className="flex-grow">
-                    <label className="block text-sm font-medium text-doc-slate mb-2">
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
                       Target Format
                     </label>
                     <div className="grid grid-cols-4 gap-3">
@@ -143,7 +143,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                             py-3 px-4 rounded-lg text-sm font-semibold uppercase transition-all
                             ${
                               targetFormat === fmt
-                                ? 'bg-doc-slate text-white shadow-md'
+                                ? 'bg-slate-900 text-white shadow-md'
                                 : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                             }
                           `}
@@ -195,7 +195,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
             <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <ImageIcon size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-doc-slate mb-2">Conversion Complete!</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Conversion Complete!</h2>
             <p className="text-slate-500 mb-8">
               Your {targetFormat === 'pdf' ? 'PDF' : 'image'} is ready to download.
             </p>

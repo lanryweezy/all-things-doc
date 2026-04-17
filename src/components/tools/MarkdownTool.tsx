@@ -45,7 +45,7 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-5 h-5 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-2xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
 
         <div className="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl">
@@ -84,7 +84,7 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
 
         {(view === 'preview' || view === 'split') && (
           <div className="flex-1 flex flex-col min-w-0">
-            <div className="flex-grow w-full p-8 bg-white border border-slate-200 rounded-2xl overflow-y-auto prose prose-slate max-w-none prose-headings:text-doc-slate prose-a:text-cyan-600">
+            <div className="flex-grow w-full p-8 bg-white border border-slate-200 rounded-2xl overflow-y-auto prose prose-slate max-w-none prose-headings:text-slate-900 prose-a:text-cyan-600">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{input}</ReactMarkdown>
             </div>
           </div>
@@ -95,7 +95,7 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
         <Button onClick={handleCopy} variant="outline" icon={copied ? <Check size={18} /> : <Copy size={18} />}>
           {copied ? 'Copied!' : 'Copy Markdown'}
         </Button>
-        <Button onClick={handleDownload} className="bg-doc-slate" icon={<Download size={18} />}>
+        <Button onClick={handleDownload} className="bg-slate-900" icon={<Download size={18} />}>
           Download .md
         </Button>
       </div>

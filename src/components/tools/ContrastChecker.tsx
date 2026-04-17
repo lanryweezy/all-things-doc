@@ -66,7 +66,7 @@ export const ContrastChecker: React.FC<ContrastCheckerProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -110,7 +110,7 @@ export const ContrastChecker: React.FC<ContrastCheckerProps> = ({ onBack }) => {
             </div>
 
             <div className="flex flex-col items-center justify-center py-6 bg-slate-50 rounded-3xl border border-slate-100">
-               <div className="text-6xl font-black text-doc-slate mb-1">{contrast}:1</div>
+               <div className="text-6xl font-black text-slate-900 mb-1">{contrast}:1</div>
                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Contrast Ratio</div>
             </div>
 
@@ -134,7 +134,7 @@ export const ContrastChecker: React.FC<ContrastCheckerProps> = ({ onBack }) => {
         <div className="space-y-6">
            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col min-h-[400px]">
               <div
-                className="flex-1 p-12 flex flex-col justify-center items-center text-center space-y-4 transition-colors duration-500"
+                className="flex-1 p-12 flex flex-col justify-center items-center text-center space-y-4 transition-colors duration-700"
                 style={{ backgroundColor: bgColor, color: fgColor }}
               >
                  <h2 className="text-4xl font-black">Main Heading</h2>

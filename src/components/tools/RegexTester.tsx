@@ -37,7 +37,7 @@ export const RegexTester: React.FC<RegexTesterProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="flex-grow flex flex-col space-y-6 min-h-0">
@@ -68,7 +68,7 @@ export const RegexTester: React.FC<RegexTesterProps> = ({ onBack }) => {
           </div>
 
           {results.error && (
-            <div className="flex items-center text-red-500 text-sm bg-red-50 p-3 rounded-lg border border-red-100">
+            <div className="flex items-center text-cyan-500 text-sm bg-cyan-50 p-3 rounded-lg border border-cyan-100">
               <AlertCircle size={16} className="mr-2" />
               {results.error}
             </div>

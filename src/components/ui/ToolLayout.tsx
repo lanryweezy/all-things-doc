@@ -30,29 +30,27 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   }[maxWidth];
 
   return (
-    <div className={`${maxWidthClass} mx-auto px-1 sm:px-0`}>
+    <div className={`${maxWidthClass} mx-auto`}>
       <SeoHelmet tool={toolInfo} />
 
-      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <button
             onClick={onBack}
-            className="p-3 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition-all text-slate-500 dark:text-slate-400 active:scale-95"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500 dark:text-slate-400"
             aria-label="Back to tools"
           >
             <ArrowLeft size={20} />
           </button>
-          <div className={`p-2.5 rounded-2xl ${toolInfo.bgColor} shadow-sm transition-colors`}>
+          <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white transition-colors tracking-tight">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-doc-slate dark:text-white transition-colors">{toolInfo.title}</h1>
         </div>
-        {actions && <div className="flex items-center space-x-2 w-full md:w-auto">{actions}</div>}
+        {actions && <div className="flex space-x-2">{actions}</div>}
       </div>
 
-      <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-        {children}
-      </div>
+      {children}
 
       <AboutTool toolId={toolId} />
     </div>

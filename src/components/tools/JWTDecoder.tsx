@@ -94,7 +94,7 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -113,7 +113,7 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
                     onClick={loadSample}
                     className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors flex items-center text-xs font-bold"
                   >
-                    <Beaker size={16} className="mr-1" /> Load Sample
+                    <Beaker size={16} className="mr-1" /> Sample
                   </button>
                )}
                {token && (
@@ -145,7 +145,7 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Header</label>
                    <button onClick={() => handleCopy(decoded.header)} className="text-indigo-600 hover:text-indigo-700 font-bold text-xs">Copy JSON</button>
                 </div>
-                <pre className="p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs overflow-auto text-doc-slate">
+                <pre className="p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs overflow-auto text-slate-900">
                   {JSON.stringify(decoded.header, null, 2)}
                 </pre>
               </div>
@@ -156,7 +156,7 @@ export const JWTDecoder: React.FC<JWTDecoderProps> = ({ onBack }) => {
                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Payload</label>
                    <button onClick={() => handleCopy(decoded.payload)} className="text-indigo-600 hover:text-indigo-700 font-bold text-xs">Copy JSON</button>
                 </div>
-                <pre className="p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs overflow-auto text-doc-slate">
+                <pre className="p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs overflow-auto text-slate-900">
                   {JSON.stringify(decoded.payload, null, 2)}
                 </pre>
               </div>

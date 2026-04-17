@@ -68,7 +68,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
@@ -78,7 +78,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <Percent size={18} />
             <h2 className="text-sm font-bold uppercase tracking-widest">Find Percentage</h2>
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-xl font-bold text-doc-slate">
+          <div className="flex flex-wrap items-center gap-4 text-xl font-bold text-slate-900">
             <span>What is</span>
             <input
               type="number"
@@ -97,7 +97,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
           </div>
           <div
             onClick={() => handleCopy(s1Result)}
-            className="bg-red-50 p-6 rounded-2xl border border-red-100 flex justify-between items-center cursor-pointer hover:bg-red-100 transition-colors group"
+            className="bg-cyan-50 p-6 rounded-2xl border border-cyan-100 flex justify-between items-center cursor-pointer hover:bg-cyan-100 transition-colors group"
           >
             <span className="text-red-400 font-bold uppercase tracking-wider">Result</span>
             <div className="flex items-center space-x-4">
@@ -113,7 +113,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <Hash size={18} />
             <h2 className="text-sm font-bold uppercase tracking-widest">Find Ratio</h2>
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-xl font-bold text-doc-slate">
+          <div className="flex flex-wrap items-center gap-4 text-xl font-bold text-slate-900">
             <input
               type="number"
               value={s2X}
@@ -131,7 +131,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
           </div>
           <div
             onClick={() => handleCopy(s2Result)}
-            className="bg-red-50 p-6 rounded-2xl border border-red-100 flex justify-between items-center cursor-pointer hover:bg-red-100 transition-colors group"
+            className="bg-cyan-50 p-6 rounded-2xl border border-cyan-100 flex justify-between items-center cursor-pointer hover:bg-cyan-100 transition-colors group"
           >
             <span className="text-red-400 font-bold uppercase tracking-wider">Result</span>
             <div className="flex items-center space-x-4">
@@ -147,7 +147,7 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             {parseFloat(s3Result) >= 0 ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
             <h2 className="text-sm font-bold uppercase tracking-widest">Percentage Change</h2>
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-xl font-bold text-doc-slate">
+          <div className="flex flex-wrap items-center gap-4 text-xl font-bold text-slate-900">
             <span>From</span>
             <input
               type="number"

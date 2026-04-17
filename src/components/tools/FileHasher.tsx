@@ -68,7 +68,7 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
@@ -79,10 +79,10 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
             <div className="flex justify-between items-center bg-slate-50 p-6 rounded-2xl border border-slate-100">
                <div className="flex items-center space-x-4">
                   <div className="p-3 bg-white rounded-xl shadow-sm">
-                     <File size={24} className="text-doc-slate" />
+                     <File size={24} className="text-slate-900" />
                   </div>
                   <div>
-                     <div className="font-bold text-doc-slate truncate max-w-xs">{file.name}</div>
+                     <div className="font-bold text-slate-900 truncate max-w-xs">{file.name}</div>
                      <div className="text-xs text-slate-400">{(file.size / 1024).toFixed(1)} KB</div>
                   </div>
                </div>
@@ -102,7 +102,7 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
                   <div key={algo} className="space-y-2">
                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2">{algo}</label>
                     <div className="group relative">
-                       <div className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs break-all pr-12 text-doc-slate">
+                       <div className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs break-all pr-12 text-slate-900">
                          {val}
                        </div>
                        <button

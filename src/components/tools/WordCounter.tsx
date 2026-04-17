@@ -47,7 +47,7 @@ export const WordCounter: React.FC<WordCounterProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="space-y-6">
@@ -75,7 +75,7 @@ export const WordCounter: React.FC<WordCounterProps> = ({ onBack }) => {
               onClick={loadSample}
               className="text-xs font-bold text-cyan-600 hover:underline flex items-center"
             >
-              <Beaker size={14} className="mr-1" /> Load Sample
+              <Beaker size={14} className="mr-1" /> Sample
             </button>
           </div>
           <textarea
@@ -85,8 +85,8 @@ export const WordCounter: React.FC<WordCounterProps> = ({ onBack }) => {
             placeholder="Start typing or paste your text here..."
           />
           <div className="mt-4 flex justify-between items-center text-sm text-slate-500 font-medium">
-             <div>Reading Time: <span className="text-doc-slate font-bold">{Math.ceil(stats.words / 200)} min</span></div>
-             <div>Average Word Length: <span className="text-doc-slate font-bold">{stats.avgWordLen}</span></div>
+             <div>Reading Time: <span className="text-slate-900 font-bold">{Math.ceil(stats.words / 200)} min</span></div>
+             <div>Average Word Length: <span className="text-slate-900 font-bold">{stats.avgWordLen}</span></div>
           </div>
         </div>
 

@@ -73,7 +73,7 @@ export const PasswordStrengthChecker: React.FC<PasswordStrengthCheckerProps> = (
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

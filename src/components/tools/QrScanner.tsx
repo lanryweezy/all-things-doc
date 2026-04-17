@@ -71,7 +71,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-10">
@@ -81,7 +81,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
               <Scan size={48} />
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-doc-slate">Scan QR Code</h2>
+              <h2 className="text-2xl font-bold text-slate-900">Scan QR Code</h2>
               <p className="text-slate-500 max-w-sm">Upload an image containing a QR code to decode its contents instantly.</p>
             </div>
 
@@ -114,7 +114,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
               </button>
             </div>
 
-            <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 break-all font-mono text-lg text-doc-slate relative group">
+            <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 break-all font-mono text-lg text-slate-900 relative group">
               {result}
               <div className="absolute right-4 bottom-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={handleCopy} className="p-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-indigo-600">

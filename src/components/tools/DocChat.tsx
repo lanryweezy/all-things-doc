@@ -112,7 +112,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
       <div className="mb-4 flex-shrink-0">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-2"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-2"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -120,7 +120,7 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-2xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 

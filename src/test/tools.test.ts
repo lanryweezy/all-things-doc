@@ -7,7 +7,7 @@ import { ToolID } from '../types';
 describe('Tool Registry', () => {
   it('should have File Hasher registered', () => {
     expect(TOOLS[ToolID.FILE_HASHER]).toBeDefined();
-    expect(TOOLS[ToolID.FILE_HASHER].title).toBe('File Checksum');
+    expect(TOOLS[ToolID.FILE_HASHER].title).toBe('File Checksum (Hash)');
   });
 
   it('should have JWT Decoder registered', () => {

@@ -65,7 +65,7 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -73,7 +73,7 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -85,7 +85,7 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
               onClick={loadSample}
               className="text-xs font-bold text-cyan-600 hover:underline flex items-center"
             >
-              <Beaker size={14} className="mr-1" /> Load Sample
+              <Beaker size={14} className="mr-1" /> Sample
             </button>
           </div>
           <textarea

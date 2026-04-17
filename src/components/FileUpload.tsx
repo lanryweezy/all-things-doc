@@ -124,9 +124,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           relative border-2 border-dashed rounded-lg p-6 transition-all duration-200
           ${
             isDragOver
-              ? 'border-cyan-600 bg-red-50'
+              ? 'border-cyan-600 bg-cyan-50'
               : error
-                ? 'border-red-500 bg-red-50'
+                ? 'border-cyan-500 bg-cyan-50'
                 : selectedFile
                   ? 'border-green-500 bg-green-50'
                   : 'border-slate-300 hover:border-slate-400'
@@ -182,7 +182,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       </div>
 
       {error && (
-        <div className="mt-2 flex items-center text-cyan-600 text-sm">
+        <div className="mt-2 flex items-center text-red-600 text-sm">
           <AlertCircle className="w-4 h-4 mr-1 flex-shrink-0" />
           {error}
         </div>
@@ -198,7 +198,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             }
             setError('');
           }}
-          className="mt-2 text-sm text-red-600 hover:text-cyan-700"
+          className="mt-2 text-sm text-cyan-600 hover:text-cyan-700"
         >
           Remove file
         </button>

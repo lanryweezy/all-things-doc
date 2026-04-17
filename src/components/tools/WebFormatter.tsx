@@ -78,7 +78,7 @@ export const WebFormatter: React.FC<WebFormatterProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
         <div className="flex p-1 bg-slate-100 rounded-xl">
            {['html', 'css'].map(t => (

@@ -85,18 +85,18 @@ export const ScreenRecorder: React.FC<ScreenRecorderProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-10">
         {!videoUrl ? (
           <div className="flex flex-col items-center justify-center text-center space-y-10 py-10">
-            <div className={`w-32 h-32 rounded-full flex items-center justify-center transition-all duration-500 ${isRecording ? 'bg-rose-100 text-rose-600 animate-pulse' : 'bg-slate-100 text-slate-400'}`}>
+            <div className={`w-32 h-32 rounded-full flex items-center justify-center transition-all duration-700 ${isRecording ? 'bg-rose-100 text-rose-600 animate-pulse' : 'bg-slate-100 text-slate-400'}`}>
                <Video size={64} />
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-doc-slate">
+              <h2 className="text-2xl font-bold text-slate-900">
                 {isRecording ? 'Currently Recording...' : 'Quick Screen Capture'}
               </h2>
               <p className="text-slate-500 max-w-sm mx-auto">

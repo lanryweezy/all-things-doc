@@ -196,7 +196,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                   </button>
                   <button
                     onClick={clearSecret}
-                    className="px-3 py-2 bg-red-100 hover:bg-red-200 text-cyan-700 rounded-lg transition-colors"
+                    className="px-3 py-2 bg-cyan-100 hover:bg-red-200 text-cyan-700 rounded-lg transition-colors"
                   >
                     Clear
                   </button>

@@ -66,7 +66,7 @@ LIMIT 10;`;
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -84,7 +84,7 @@ LIMIT 10;`;
           <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex justify-between items-center">
             <span>Formatted SQL</span>
             {output && (
-              <button onClick={handleCopy} className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold">
+              <button onClick={handleCopy} className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold">
                 {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
                 {copied ? 'Copied' : 'Copy'}
               </button>
@@ -111,7 +111,7 @@ LIMIT 10;`;
           <option value="tsql">T-SQL (SQL Server)</option>
           <option value="mariadb">MariaDB</option>
         </select>
-        <Button onClick={handleFormat} disabled={!input.trim()} className="bg-doc-slate min-w-[150px]" icon={<Database size={18} />}>
+        <Button onClick={handleFormat} disabled={!input.trim()} className="bg-slate-900 min-w-[150px]" icon={<Database size={18} />}>
           Format SQL
         </Button>
         <Button
@@ -120,7 +120,7 @@ LIMIT 10;`;
           className="min-w-[150px] border-emerald-200 text-emerald-600 hover:bg-emerald-50"
           icon={<Beaker size={18} />}
         >
-          Load Sample
+          Sample
         </Button>
       </div>
     </div>

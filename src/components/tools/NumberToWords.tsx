@@ -64,7 +64,7 @@ export const NumberToWords: React.FC<NumberToWordsProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-10 space-y-8">
@@ -74,7 +74,7 @@ export const NumberToWords: React.FC<NumberToWordsProps> = ({ onBack }) => {
             type="number"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full p-6 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-4xl font-black text-doc-slate"
+            className="w-full p-6 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-4xl font-black text-slate-900"
           />
         </div>
 

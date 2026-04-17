@@ -57,7 +57,7 @@ export const SignatureGenerator: React.FC<SignatureGeneratorProps> = ({ onBack }
 
     ctx.lineWidth = 3;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#0f172a'; // doc-slate
+    ctx.strokeStyle = '#0f172a'; // slate-900
 
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -97,13 +97,13 @@ export const SignatureGenerator: React.FC<SignatureGeneratorProps> = ({ onBack }
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 flex flex-col items-center space-y-8">
         <div className="w-full flex justify-between items-center px-2">
            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Draw below</span>
-           <button onClick={clear} className="text-slate-400 hover:text-red-500 flex items-center text-xs font-bold transition-colors">
+           <button onClick={clear} className="text-slate-400 hover:text-cyan-500 flex items-center text-xs font-bold transition-colors">
               <Eraser size={14} className="mr-1" /> CLEAR PAD
            </button>
         </div>

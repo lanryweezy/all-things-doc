@@ -39,7 +39,7 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
 
         {diffResult && (
@@ -77,7 +77,7 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
               key={index}
               className={`px-2 whitespace-pre-wrap ${
                 part.added ? 'bg-green-50 text-green-700 border-l-4 border-green-500' :
-                part.removed ? 'bg-red-50 text-cyan-700 border-l-4 border-red-500 line-through' :
+                part.removed ? 'bg-cyan-50 text-cyan-700 border-l-4 border-cyan-500 line-through' :
                 'text-slate-600'
               }`}
             >
@@ -92,7 +92,7 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
           <Button
             onClick={handleCompare}
             disabled={!text1.trim() && !text2.trim()}
-            className="bg-doc-slate hover:bg-slate-800 min-w-[200px]"
+            className="bg-slate-900 hover:bg-slate-800 min-w-[200px]"
             icon={<GitCompare size={18} />}
           >
             Compare Text

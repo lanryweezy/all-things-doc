@@ -52,7 +52,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
       <div className="mb-6 flex-shrink-0">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -60,13 +60,13 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
+          <label className="block text-sm font-medium text-slate-900 mb-2">
             Input Text
           </label>
           <textarea
@@ -81,16 +81,16 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
               }
             }}
           />
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-cyan-500 text-sm mt-2">{error}</p>}
         </div>
 
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
+          <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
             <span>Result</span>
             {output && (
               <button
                 onClick={handleCopy}
-                className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
+                className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
               >
                 {copied ? (
                   <Check size={14} className="mr-1" />
@@ -113,7 +113,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
       <div className="mt-6 flex justify-center gap-4 flex-shrink-0">
         <Button
           onClick={handleEncode}
-          className="bg-doc-slate hover:bg-slate-800 min-w-[150px]"
+          className="bg-slate-900 hover:bg-slate-800 min-w-[150px]"
           icon={<ArrowRightLeft size={18} />}
         >
           Encode

@@ -186,7 +186,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -194,7 +194,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -224,7 +224,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-doc-slate focus:ring-2 focus:ring-cyan-600 outline-none"
+                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-slate-900 focus:ring-2 focus:ring-cyan-600 outline-none"
               />
               <label htmlFor="from-unit-select" className="block text-sm font-medium text-slate-500">From Unit</label>
               <select

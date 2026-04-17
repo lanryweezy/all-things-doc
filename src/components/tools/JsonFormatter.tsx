@@ -80,7 +80,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
       <div className="mb-6 flex-shrink-0">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -88,16 +88,16 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
+          <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
             <span>Input JSON</span>
             {isValid !== null && (
-              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-cyan-700'}`}>
+              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-cyan-100 text-cyan-700'}`}>
                 {isValid ? 'Valid JSON' : 'Invalid JSON'}
               </span>
             )}
@@ -114,16 +114,16 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
               }
             }}
           />
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-cyan-500 text-sm mt-2">{error}</p>}
         </div>
 
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
+          <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
             <span>Formatted Output</span>
             {output && (
               <button
                 onClick={handleCopy}
-                className="text-red-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
+                className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
               >
                 {copied ? (
                   <Check size={14} className="mr-1" />
@@ -158,7 +158,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
         </div>
         <Button
           onClick={handleFormat}
-          className="bg-doc-slate hover:bg-slate-800 min-w-[150px]"
+          className="bg-slate-900 hover:bg-slate-800 min-w-[150px]"
           icon={<AlignLeft size={18} />}
         >
           Format
@@ -176,7 +176,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           className="min-w-[150px] border-indigo-200 text-indigo-600 hover:bg-indigo-50"
           icon={<Beaker size={18} />}
         >
-          Load Sample
+          Sample
         </Button>
       </div>
 

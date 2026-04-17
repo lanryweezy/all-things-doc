@@ -82,7 +82,7 @@ export const ImageCompressor: React.FC<ImageCompressorProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
@@ -113,7 +113,7 @@ export const ImageCompressor: React.FC<ImageCompressorProps> = ({ onBack }) => {
                 </div>
 
                 <div className="flex justify-center">
-                  <Button onClick={handleCompress} isLoading={isProcessing} className="bg-doc-slate min-w-[200px]" icon={<Minimize2 size={18} />}>
+                  <Button onClick={handleCompress} isLoading={isProcessing} className="bg-slate-900 min-w-[200px]" icon={<Minimize2 size={18} />}>
                     Compress Image
                   </Button>
                 </div>

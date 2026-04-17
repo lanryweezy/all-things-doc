@@ -76,7 +76,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
         <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle size={40} />
         </div>
-        <h2 className="text-3xl font-bold text-doc-slate mb-3">PDF Organized!</h2>
+        <h2 className="text-3xl font-bold text-slate-900 mb-3">PDF Organized!</h2>
         <p className="text-slate-600 mb-8">Your new PDF with {pages.length} pages is ready.</p>
         <div className="flex justify-center space-x-4">
           <Button onClick={() => { setFile(null); setIsComplete(false); }} variant="outline">Start Over</Button>
@@ -99,7 +99,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -141,7 +141,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
                             </div>
                             <button
                               onClick={() => removePage(page.id)}
-                              className="absolute top-2 right-2 p-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-2 right-2 p-1 text-slate-300 hover:text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               <Trash2 size={14} />
                             </button>

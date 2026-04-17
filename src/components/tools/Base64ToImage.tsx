@@ -57,7 +57,7 @@ export const Base64ToImage: React.FC<Base64ToImageProps> = ({ onBack }) => {
         <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
           <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
         </div>
-        <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 space-y-8">
@@ -66,7 +66,7 @@ export const Base64ToImage: React.FC<Base64ToImageProps> = ({ onBack }) => {
             <div className="flex justify-between items-center px-1">
               <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">Base64 String</label>
               {input && (
-                <button onClick={handleClear} className="text-slate-400 hover:text-red-500 text-xs font-bold flex items-center">
+                <button onClick={handleClear} className="text-slate-400 hover:text-cyan-500 text-xs font-bold flex items-center">
                   <Trash2 size={14} className="mr-1" /> CLEAR
                 </button>
               )}
