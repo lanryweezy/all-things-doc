@@ -69,11 +69,10 @@ export const performOCR = async (imageBase64: string, mimeType: string): Promise
     try {
       // Convert base64 to blob for backend processing
       const byteCharacters = atob(imageBase64);
-      const byteNumbers = new Array(byteCharacters.length);
+      const byteArray = new Uint8Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+        byteArray[i] = byteCharacters.charCodeAt(i);
       }
-      const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: mimeType });
       const file = new File([blob], 'image', { type: mimeType });
 
@@ -141,11 +140,10 @@ export const processPdf = async (
     try {
       // Convert base64 to blob for backend processing
       const byteCharacters = atob(pdfBase64);
-      const byteNumbers = new Array(byteCharacters.length);
+      const byteArray = new Uint8Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+        byteArray[i] = byteCharacters.charCodeAt(i);
       }
-      const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: 'application/pdf' });
       const file = new File([blob], 'document.pdf', { type: 'application/pdf' });
 
