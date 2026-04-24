@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layers, Download } from 'lucide-react';
-import { ToolID } from '../types';
+import { ToolID, BeforeInstallPromptEvent } from '../types';
 import { TOOLS } from '../constants';
 
 interface HeaderProps {
@@ -9,13 +9,16 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ goHome, activeTool }) => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e) => {
+    const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
-    });
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstallClick = async () => {
