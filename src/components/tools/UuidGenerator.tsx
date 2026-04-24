@@ -23,7 +23,7 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
       return window.crypto.randomUUID();
     }
     // Fallback for older browsers
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = (Math.random() * 16) | 0;
       const v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
@@ -92,7 +92,7 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <h2 className="text-lg font-semibold text-doc-slate mb-4">Settings</h2>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -103,32 +103,36 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
                   min="1"
                   max="100"
                   value={count}
-                  onChange={(e) => setCount(parseInt(e.target.value))}
+                  onChange={e => setCount(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-slate-700">Hyphens</label>
-                <div 
+                <div
                   onClick={() => setHyphens(!hyphens)}
                   className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-colors ${hyphens ? 'bg-indigo-600' : 'bg-slate-300'}`}
                 >
-                  <div className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform ${hyphens ? 'translate-x-6' : 'translate-x-0'}`} />
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform ${hyphens ? 'translate-x-6' : 'translate-x-0'}`}
+                  />
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-slate-700">Uppercase</label>
-                <div 
+                <div
                   onClick={() => setUppercase(!uppercase)}
                   className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-colors ${uppercase ? 'bg-indigo-600' : 'bg-slate-300'}`}
                 >
-                  <div className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform ${uppercase ? 'translate-x-6' : 'translate-x-0'}`} />
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform ${uppercase ? 'translate-x-6' : 'translate-x-0'}`}
+                  />
                 </div>
               </div>
 
-              <Button 
+              <Button
                 onClick={generateUuids}
                 className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white"
                 icon={<RefreshCw size={18} />}
@@ -157,7 +161,7 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
 
             <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
               {uuids.map((uuid, index) => (
-                <div 
+                <div
                   key={index}
                   className="group flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all"
                 >
@@ -165,8 +169,8 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
                   <button
                     onClick={() => copyToClipboard(uuid, index)}
                     className={`p-2 rounded-lg transition-colors ml-2 ${
-                      copiedIndex === index 
-                        ? 'bg-green-100 text-green-600' 
+                      copiedIndex === index
+                        ? 'bg-green-100 text-green-600'
                         : 'text-slate-400 hover:text-indigo-600 hover:bg-white'
                     }`}
                     title="Copy to clipboard"

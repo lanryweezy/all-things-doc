@@ -122,7 +122,7 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
               min="4"
               max="50"
               value={length}
-              onChange={(e) => setLength(parseInt(e.target.value))}
+              onChange={e => setLength(parseInt(e.target.value))}
               className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
             />
             <div className="flex justify-between text-xs text-slate-400 font-medium">
@@ -141,8 +141,11 @@ export const PasswordGenerator: React.FC<PasswordGeneratorProps> = ({ onBack }) 
                 { label: 'Lowercase', state: includeLowercase, setter: setIncludeLowercase },
                 { label: 'Numbers', state: includeNumbers, setter: setIncludeNumbers },
                 { label: 'Symbols', state: includeSymbols, setter: setIncludeSymbols },
-              ].map((opt) => (
-                <label key={opt.label} className="flex items-center space-x-3 cursor-pointer group select-none">
+              ].map(opt => (
+                <label
+                  key={opt.label}
+                  className="flex items-center space-x-3 cursor-pointer group select-none"
+                >
                   <input
                     type="checkbox"
                     checked={opt.state}

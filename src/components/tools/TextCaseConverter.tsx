@@ -25,27 +25,39 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
     { name: 'lowercase', fn: (s: string) => s.toLowerCase() },
     {
       name: 'Title Case',
-      fn: (s: string) => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())
+      fn: (s: string) => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()),
     },
     {
       name: 'Sentence case',
-      fn: (s: string) => s.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase())
+      fn: (s: string) => s.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase()),
     },
     {
       name: 'camelCase',
-      fn: (s: string) => s.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
+      fn: (s: string) =>
+        s.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()),
     },
     {
       name: 'PascalCase',
-      fn: (s: string) => s.toLowerCase().replace(/(?:^|[^a-zA-Z0-9]+)(.)/g, (m, chr) => chr.toUpperCase())
+      fn: (s: string) =>
+        s.toLowerCase().replace(/(?:^|[^a-zA-Z0-9]+)(.)/g, (m, chr) => chr.toUpperCase()),
     },
     {
       name: 'snake_case',
-      fn: (s: string) => s.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')
+      fn: (s: string) =>
+        s
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '_')
+          .replace(/[^a-z0-9_]/g, ''),
     },
     {
       name: 'kebab-case',
-      fn: (s: string) => s.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      fn: (s: string) =>
+        s
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, ''),
     },
   ];
 
@@ -71,19 +83,24 @@ export const TextCaseConverter: React.FC<TextCaseConverterProps> = ({ onBack }) 
           <label className="block text-sm font-medium text-slate-500 mb-2">Input Text</label>
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="w-full h-40 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none"
             placeholder="Type or paste your text here..."
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {cases.map((c) => {
+          {cases.map(c => {
             const result = input ? c.fn(input) : '';
             return (
-              <div key={c.name} className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col justify-between group">
+              <div
+                key={c.name}
+                className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col justify-between group"
+              >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{c.name}</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    {c.name}
+                  </span>
                   <button
                     onClick={() => handleCopy(result)}
                     disabled={!result}

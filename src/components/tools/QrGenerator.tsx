@@ -76,10 +76,12 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Content (URL or Text)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Content (URL or Text)
+            </label>
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none text-sm"
               placeholder="Enter link or text for the QR code..."
             />
@@ -87,7 +89,9 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="qr-size" className="block text-sm font-medium text-slate-700 mb-1">Size: {size}px</label>
+              <label htmlFor="qr-size" className="block text-sm font-medium text-slate-700 mb-1">
+                Size: {size}px
+              </label>
               <input
                 id="qr-size"
                 type="range"
@@ -95,19 +99,21 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
                 max="512"
                 step="32"
                 value={size}
-                onChange={(e) => setSize(parseInt(e.target.value))}
+                onChange={e => setSize(parseInt(e.target.value))}
                 className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
               />
             </div>
             <div>
-              <label htmlFor="qr-margin" className="block text-sm font-medium text-slate-700 mb-1">Margin: {margin}</label>
+              <label htmlFor="qr-margin" className="block text-sm font-medium text-slate-700 mb-1">
+                Margin: {margin}
+              </label>
               <input
                 id="qr-margin"
                 type="range"
                 min="0"
                 max="10"
                 value={margin}
-                onChange={(e) => setMargin(parseInt(e.target.value))}
+                onChange={e => setMargin(parseInt(e.target.value))}
                 className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
               />
             </div>
@@ -139,7 +145,11 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
               className="flex items-center justify-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
               title="Copy link"
             >
-              {copied ? <Check size={20} className="text-green-600" /> : <Copy size={20} className="text-slate-500" />}
+              {copied ? (
+                <Check size={20} className="text-green-600" />
+              ) : (
+                <Copy size={20} className="text-slate-500" />
+              )}
             </button>
           </div>
         </div>

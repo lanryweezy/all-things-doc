@@ -12,7 +12,7 @@ export const Header: React.FC<HeaderProps> = ({ goHome, activeTool }) => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       setDeferredPrompt(e);
     });

@@ -39,12 +39,14 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
             if (m.status === 'recognizing text') {
               setProgress(Math.round(m.progress * 100));
             }
-          }
+          },
         });
 
         await worker.loadLanguage(localLang);
         await worker.initialize(localLang);
-        const { data: { text } } = await worker.recognize(file);
+        const {
+          data: { text },
+        } = await worker.recognize(file);
         await worker.terminate();
         setResult(text);
       }
@@ -100,7 +102,9 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
                 <button
                   onClick={() => setMode('local')}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                    mode === 'local' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'
+                    mode === 'local'
+                      ? 'bg-emerald-600 text-white shadow-md'
+                      : 'text-slate-500 hover:bg-slate-50'
                   }`}
                 >
                   <Cpu size={16} />
@@ -109,7 +113,9 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
                 <button
                   onClick={() => setMode('ai')}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                    mode === 'ai' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'
+                    mode === 'ai'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'text-slate-500 hover:bg-slate-50'
                   }`}
                 >
                   <Zap size={16} />
@@ -120,11 +126,13 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
 
             {mode === 'local' && (
               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                <label htmlFor="local-lang" className="block text-sm font-bold text-slate-700 mb-2">OCR Language</label>
+                <label htmlFor="local-lang" className="block text-sm font-bold text-slate-700 mb-2">
+                  OCR Language
+                </label>
                 <select
                   id="local-lang"
                   value={localLang}
-                  onChange={(e) => setLocalLang(e.target.value)}
+                  onChange={e => setLocalLang(e.target.value)}
                   className="w-full md:w-64 p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-medium"
                 >
                   <option value="eng">English</option>
@@ -141,7 +149,11 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
               <Button
                 onClick={handleExtract}
                 isLoading={isProcessing}
-                className={mode === 'ai' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'}
+                className={
+                  mode === 'ai'
+                    ? 'bg-indigo-600 hover:bg-indigo-700'
+                    : 'bg-emerald-600 hover:bg-emerald-700'
+                }
                 icon={<ScanLine size={18} />}
               >
                 Start Extraction
@@ -165,7 +177,9 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
               {mode === 'ai' ? 'Using AI to analyze document...' : 'Processing on your device...'}
             </div>
             <p className="text-xs text-slate-400 max-w-xs mx-auto">
-              {mode === 'local' ? 'Your file never leaves your browser.' : 'Optimizing text recognition with AI models.'}
+              {mode === 'local'
+                ? 'Your file never leaves your browser.'
+                : 'Optimizing text recognition with AI models.'}
             </p>
           </div>
         )}

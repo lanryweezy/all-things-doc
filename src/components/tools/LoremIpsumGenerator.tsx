@@ -9,7 +9,103 @@ interface LoremIpsumGeneratorProps {
 }
 
 const LOREM_TEXT = [
-  'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'curabitur', 'vel', 'hendrerit', 'libero', 'eleifend', 'blandit', 'nunc', 'ornare', 'odio', 'ut', 'orci', 'gravida', 'imperdiet', 'nullam', 'purus', 'lacinia', 'a', 'pretium', 'quis', 'congue', 'praesent', 'sagittis', 'laoreet', 'auctor', 'mauris', 'non', 'velit', 'eros', 'dictum', 'proin', 'accumsan', 'sapien', 'nec', 'massa', 'volutpat', 'venenatis', 'sed', 'eu', 'molestie', 'lacus', 'quisque', 'porttitor', 'ligula', 'dui', 'mollis', 'tempus', 'at', 'magna', 'vestibulum', 'turpis', 'ac', 'diam', 'tincidunt', 'id', 'condimentum', 'enim', 'sodales', 'in', 'hac', 'habitasse', 'platea', 'dictumst', 'aenean', 'neque', 'fusce', 'augue', 'leo', 'eget', 'semper', 'mattis', 'tortor', 'scelerisque', 'nulla', 'interdum', 'tellus', 'malesuada', 'rhoncus', 'porta', 'sem', 'aliquet', 'et', 'nam', 'suspendisse', 'potenti', 'vivamus', 'luctus', 'fringilla', 'erat', 'donec'
+  'lorem',
+  'ipsum',
+  'dolor',
+  'sit',
+  'amet',
+  'consectetur',
+  'adipiscing',
+  'elit',
+  'curabitur',
+  'vel',
+  'hendrerit',
+  'libero',
+  'eleifend',
+  'blandit',
+  'nunc',
+  'ornare',
+  'odio',
+  'ut',
+  'orci',
+  'gravida',
+  'imperdiet',
+  'nullam',
+  'purus',
+  'lacinia',
+  'a',
+  'pretium',
+  'quis',
+  'congue',
+  'praesent',
+  'sagittis',
+  'laoreet',
+  'auctor',
+  'mauris',
+  'non',
+  'velit',
+  'eros',
+  'dictum',
+  'proin',
+  'accumsan',
+  'sapien',
+  'nec',
+  'massa',
+  'volutpat',
+  'venenatis',
+  'sed',
+  'eu',
+  'molestie',
+  'lacus',
+  'quisque',
+  'porttitor',
+  'ligula',
+  'dui',
+  'mollis',
+  'tempus',
+  'at',
+  'magna',
+  'vestibulum',
+  'turpis',
+  'ac',
+  'diam',
+  'tincidunt',
+  'id',
+  'condimentum',
+  'enim',
+  'sodales',
+  'in',
+  'hac',
+  'habitasse',
+  'platea',
+  'dictumst',
+  'aenean',
+  'neque',
+  'fusce',
+  'augue',
+  'leo',
+  'eget',
+  'semper',
+  'mattis',
+  'tortor',
+  'scelerisque',
+  'nulla',
+  'interdum',
+  'tellus',
+  'malesuada',
+  'rhoncus',
+  'porta',
+  'sem',
+  'aliquet',
+  'et',
+  'nam',
+  'suspendisse',
+  'potenti',
+  'vivamus',
+  'luctus',
+  'fringilla',
+  'erat',
+  'donec',
 ];
 
 export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack }) => {
@@ -33,7 +129,8 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
     } else if (type === 'sentences') {
       const sentences = Array.from({ length: count }, (_, i) => {
         const wordCount = Math.floor(Math.random() * 10) + 8;
-        const sentence = (i === 0 && startWithLorem) ? ['lorem', 'ipsum', 'dolor', 'sit', 'amet'] : [];
+        const sentence =
+          i === 0 && startWithLorem ? ['lorem', 'ipsum', 'dolor', 'sit', 'amet'] : [];
         while (sentence.length < wordCount) sentence.push(getRandomWord());
         const s = sentence.join(' ');
         return s.charAt(0).toUpperCase() + s.slice(1) + '.';
@@ -44,7 +141,8 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
         const sentenceCount = Math.floor(Math.random() * 4) + 4;
         const sentences = Array.from({ length: sentenceCount }, (_, i) => {
           const wordCount = Math.floor(Math.random() * 10) + 10;
-          const sentence = (p === 0 && i === 0 && startWithLorem) ? ['lorem', 'ipsum', 'dolor', 'sit', 'amet'] : [];
+          const sentence =
+            p === 0 && i === 0 && startWithLorem ? ['lorem', 'ipsum', 'dolor', 'sit', 'amet'] : [];
           while (sentence.length < wordCount) sentence.push(getRandomWord());
           const s = sentence.join(' ');
           return s.charAt(0).toUpperCase() + s.slice(1) + '.';
@@ -87,23 +185,33 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label htmlFor="lorem-count" className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Count</label>
+            <label
+              htmlFor="lorem-count"
+              className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2"
+            >
+              Count
+            </label>
             <input
               id="lorem-count"
               type="number"
               min="1"
               max="100"
               value={count}
-              onChange={(e) => setCount(parseInt(e.target.value) || 1)}
+              onChange={e => setCount(parseInt(e.target.value) || 1)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-bold"
             />
           </div>
           <div>
-            <label htmlFor="lorem-type" className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Type</label>
+            <label
+              htmlFor="lorem-type"
+              className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2"
+            >
+              Type
+            </label>
             <select
               id="lorem-type"
               value={type}
-              onChange={(e) => setType(e.target.value as any)}
+              onChange={e => setType(e.target.value as any)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none font-bold"
             >
               <option value="paragraphs">Paragraphs</option>
@@ -112,7 +220,10 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
             </select>
           </div>
           <div className="flex flex-col justify-end">
-            <label htmlFor="start-with-lorem" className="flex items-center space-x-3 cursor-pointer group mb-1 select-none">
+            <label
+              htmlFor="start-with-lorem"
+              className="flex items-center space-x-3 cursor-pointer group mb-1 select-none"
+            >
               <input
                 id="start-with-lorem"
                 type="checkbox"
@@ -120,13 +231,17 @@ export const LoremIpsumGenerator: React.FC<LoremIpsumGeneratorProps> = ({ onBack
                 onChange={() => setStartWithLorem(!startWithLorem)}
                 className="w-5 h-5 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
               />
-              <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Start with "Lorem ipsum"</span>
+              <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                Start with "Lorem ipsum"
+              </span>
             </label>
           </div>
         </div>
 
         <div className="relative">
-          <label htmlFor="lorem-output" className="sr-only">Generated Lorem Ipsum</label>
+          <label htmlFor="lorem-output" className="sr-only">
+            Generated Lorem Ipsum
+          </label>
           <textarea
             id="lorem-output"
             readOnly

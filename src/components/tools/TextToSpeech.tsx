@@ -169,7 +169,9 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
             <button
               onClick={() => setMode('local')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                mode === 'local' ? 'bg-pink-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'
+                mode === 'local'
+                  ? 'bg-pink-600 text-white shadow-md'
+                  : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
               <Cpu size={16} />
@@ -178,7 +180,9 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
             <button
               onClick={() => setMode('ai')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                mode === 'ai' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'
+                mode === 'ai'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
               <Zap size={16} />
@@ -202,18 +206,24 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
         <div className="flex items-center justify-between">
           <div className="text-sm text-slate-500">
             {mode === 'ai' ? (
-              <span>Voice: <span className="font-medium text-slate-700">Kore (Balanced)</span></span>
+              <span>
+                Voice: <span className="font-medium text-slate-700">Kore (Balanced)</span>
+              </span>
             ) : (
               <div className="flex items-center space-x-2">
-                <label htmlFor="voice-select" className="sr-only">Choose Voice</label>
+                <label htmlFor="voice-select" className="sr-only">
+                  Choose Voice
+                </label>
                 <select
                   id="voice-select"
                   value={selectedVoice}
-                  onChange={(e) => setSelectedVoice(e.target.value)}
+                  onChange={e => setSelectedVoice(e.target.value)}
                   className="p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500 max-w-[200px]"
                 >
                   {voices.map(v => (
-                    <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>
+                    <option key={v.name} value={v.name}>
+                      {v.name} ({v.lang})
+                    </option>
                   ))}
                 </select>
               </div>
@@ -234,7 +244,11 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
               onClick={handleGenerate}
               isLoading={isProcessing}
               disabled={!text.trim()}
-              className={mode === 'ai' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-pink-600 hover:bg-pink-700'}
+              className={
+                mode === 'ai'
+                  ? 'bg-indigo-600 hover:bg-indigo-700'
+                  : 'bg-pink-600 hover:bg-pink-700'
+              }
               icon={<Play size={18} />}
             >
               {mode === 'local' ? (isSpeaking ? 'Restart' : 'Play Text') : 'Generate AI Audio'}

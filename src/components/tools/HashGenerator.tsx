@@ -53,9 +53,7 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-doc-slate mb-2">
-            Input Text
-          </label>
+          <label className="block text-sm font-medium text-doc-slate mb-2">Input Text</label>
           <textarea
             className="w-full h-32 p-4 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-doc-red outline-none resize-none font-mono text-sm"
             placeholder="Enter text to hash..."
@@ -78,7 +76,6 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
               onChange={e => setAlgo(e.target.value)}
               className="w-full md:w-64 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-doc-red outline-none"
             >
-              <option value="SHA-1">SHA-1</option>
               <option value="SHA-256">SHA-256</option>
               <option value="SHA-384">SHA-384</option>
               <option value="SHA-512">SHA-512</option>
@@ -97,18 +94,22 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
         {output && (
           <div className="mt-8 p-6 bg-slate-50 rounded-xl border border-slate-200 relative group">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{algo} Hash</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                {algo} Hash
+              </span>
               <button
                 onClick={handleCopy}
                 className="text-doc-red hover:text-red-700 text-xs flex items-center font-semibold"
               >
-                {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
+                {copied ? (
+                  <Check size={14} className="mr-1" />
+                ) : (
+                  <Copy size={14} className="mr-1" />
+                )}
                 {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
-            <div className="font-mono text-sm break-all text-slate-700">
-              {output}
-            </div>
+            <div className="font-mono text-sm break-all text-slate-700">{output}</div>
           </div>
         )}
       </div>

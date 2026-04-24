@@ -161,10 +161,15 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                 {(targetFormat === 'jpeg' || targetFormat === 'webp') && (
                   <div className="border-t border-slate-200 pt-6">
                     <div className="flex justify-between items-center mb-3">
-                      <label htmlFor="quality-slider" className="text-sm font-medium text-slate-700">
+                      <label
+                        htmlFor="quality-slider"
+                        className="text-sm font-medium text-slate-700"
+                      >
                         Image Quality / Compression
                       </label>
-                      <span className="text-sm font-bold text-doc-red">{Math.round(quality * 100)}%</span>
+                      <span className="text-sm font-bold text-doc-red">
+                        {Math.round(quality * 100)}%
+                      </span>
                     </div>
                     <input
                       id="quality-slider"
@@ -173,7 +178,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                       max="1.0"
                       step="0.05"
                       value={quality}
-                      onChange={(e) => setQuality(parseFloat(e.target.value))}
+                      onChange={e => setQuality(parseFloat(e.target.value))}
                       className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-doc-red"
                     />
                     <div className="flex justify-between text-xs text-slate-400 mt-2 italic">

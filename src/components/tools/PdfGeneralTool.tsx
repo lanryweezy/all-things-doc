@@ -70,8 +70,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       if (file && secondaryFiles.length === 0) return; // Need at least two
     } else if (toolId === ToolID.PDF_SPLIT) {
       if (!file || !paramValue) return; // Ensure file and split points are provided
-    }
-    else {
+    } else {
       if (!file) return;
     }
 
@@ -146,7 +145,9 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
         case ToolID.PDF_REDACT:
           if (file) {
             // For demo purposes, we'll redact a fixed area
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
+            result = await new Promise(resolve =>
+              setTimeout(() => resolve(new Uint8Array()), 1000)
+            );
             alert('PDF Redact functionality is a placeholder. Backend integration needed.');
           }
           break;
@@ -379,14 +380,20 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
               onClick={() => setParamValue('Left')}
               className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Left' ? 'bg-doc-slate text-white border-doc-slate' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
             >
-              <RotateCcw className={`mb-2 ${paramValue === 'Left' ? 'text-white' : 'text-doc-slate'}`} size={24} />
+              <RotateCcw
+                className={`mb-2 ${paramValue === 'Left' ? 'text-white' : 'text-doc-slate'}`}
+                size={24}
+              />
               <span className="text-sm font-medium">Left 90°</span>
             </button>
             <button
               onClick={() => setParamValue('Right')}
               className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Right' ? 'bg-doc-slate text-white border-doc-slate' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
             >
-              <RotateCw className={`mb-2 ${paramValue === 'Right' ? 'text-white' : 'text-doc-slate'}`} size={24} />
+              <RotateCw
+                className={`mb-2 ${paramValue === 'Right' ? 'text-white' : 'text-doc-slate'}`}
+                size={24}
+              />
               <span className="text-sm font-medium">Right 90°</span>
             </button>
           </div>

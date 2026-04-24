@@ -6,30 +6,82 @@ import { LoadingSpinner } from './components/LoadingSpinner';
 import { ToolID } from './types';
 
 // Lazy load tool components
-const ImageConverter = lazy(() => import('./components/tools/ImageConverter').then(module => ({ default: module.ImageConverter })));
-const SmartOCR = lazy(() => import('./components/tools/SmartOCR').then(module => ({ default: module.SmartOCR })));
-const TextAiTool = lazy(() => import('./components/tools/TextAiTool').then(module => ({ default: module.TextAiTool })));
-const PdfAiTool = lazy(() => import('./components/tools/PdfAiTool').then(module => ({ default: module.PdfAiTool })));
-const PdfGeneralTool = lazy(() => import('./components/tools/PdfGeneralTool').then(module => ({ default: module.PdfGeneralTool })));
-const DocChat = lazy(() => import('./components/tools/DocChat').then(module => ({ default: module.DocChat })));
-const TextToSpeech = lazy(() => import('./components/tools/TextToSpeech').then(module => ({ default: module.TextToSpeech })));
-const DataConverter = lazy(() => import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter })));
-const JwtSecretGenerator = lazy(() => import('./components/tools/JwtSecretGenerator').then(module => ({ default: module.JwtSecretGenerator })));
-const UuidGenerator = lazy(() => import('./components/tools/UuidGenerator').then(module => ({ default: module.UuidGenerator })));
-const JsonFormatter = lazy(() => import('./components/tools/JsonFormatter').then(module => ({ default: module.JsonFormatter })));
-const Base64Tool = lazy(() => import('./components/tools/Base64Tool').then(module => ({ default: module.Base64Tool })));
-const HashGenerator = lazy(() => import('./components/tools/HashGenerator').then(module => ({ default: module.HashGenerator })));
-const UnitConverter = lazy(() => import('./components/tools/UnitConverter').then(module => ({ default: module.UnitConverter })));
-const TextCaseConverter = lazy(() => import('./components/tools/TextCaseConverter').then(module => ({ default: module.TextCaseConverter })));
-const QrGenerator = lazy(() => import('./components/tools/QrGenerator').then(module => ({ default: module.QrGenerator })));
-const PasswordGenerator = lazy(() => import('./components/tools/PasswordGenerator').then(module => ({ default: module.PasswordGenerator })));
-const LoremIpsumGenerator = lazy(() => import('./components/tools/LoremIpsumGenerator').then(module => ({ default: module.LoremIpsumGenerator })));
-const ImageResizer = lazy(() => import('./components/tools/ImageResizer').then(module => ({ default: module.ImageResizer })));
+const ImageConverter = lazy(() =>
+  import('./components/tools/ImageConverter').then(module => ({ default: module.ImageConverter }))
+);
+const SmartOCR = lazy(() =>
+  import('./components/tools/SmartOCR').then(module => ({ default: module.SmartOCR }))
+);
+const TextAiTool = lazy(() =>
+  import('./components/tools/TextAiTool').then(module => ({ default: module.TextAiTool }))
+);
+const PdfAiTool = lazy(() =>
+  import('./components/tools/PdfAiTool').then(module => ({ default: module.PdfAiTool }))
+);
+const PdfGeneralTool = lazy(() =>
+  import('./components/tools/PdfGeneralTool').then(module => ({ default: module.PdfGeneralTool }))
+);
+const DocChat = lazy(() =>
+  import('./components/tools/DocChat').then(module => ({ default: module.DocChat }))
+);
+const TextToSpeech = lazy(() =>
+  import('./components/tools/TextToSpeech').then(module => ({ default: module.TextToSpeech }))
+);
+const DataConverter = lazy(() =>
+  import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter }))
+);
+const JwtSecretGenerator = lazy(() =>
+  import('./components/tools/JwtSecretGenerator').then(module => ({
+    default: module.JwtSecretGenerator,
+  }))
+);
+const UuidGenerator = lazy(() =>
+  import('./components/tools/UuidGenerator').then(module => ({ default: module.UuidGenerator }))
+);
+const JsonFormatter = lazy(() =>
+  import('./components/tools/JsonFormatter').then(module => ({ default: module.JsonFormatter }))
+);
+const Base64Tool = lazy(() =>
+  import('./components/tools/Base64Tool').then(module => ({ default: module.Base64Tool }))
+);
+const HashGenerator = lazy(() =>
+  import('./components/tools/HashGenerator').then(module => ({ default: module.HashGenerator }))
+);
+const UnitConverter = lazy(() =>
+  import('./components/tools/UnitConverter').then(module => ({ default: module.UnitConverter }))
+);
+const TextCaseConverter = lazy(() =>
+  import('./components/tools/TextCaseConverter').then(module => ({
+    default: module.TextCaseConverter,
+  }))
+);
+const QrGenerator = lazy(() =>
+  import('./components/tools/QrGenerator').then(module => ({ default: module.QrGenerator }))
+);
+const PasswordGenerator = lazy(() =>
+  import('./components/tools/PasswordGenerator').then(module => ({
+    default: module.PasswordGenerator,
+  }))
+);
+const LoremIpsumGenerator = lazy(() =>
+  import('./components/tools/LoremIpsumGenerator').then(module => ({
+    default: module.LoremIpsumGenerator,
+  }))
+);
+const ImageResizer = lazy(() =>
+  import('./components/tools/ImageResizer').then(module => ({ default: module.ImageResizer }))
+);
 
 // Lazy load legal pages
-const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
-const TermsOfUse = lazy(() => import('./components/legal/TermsOfUse').then(module => ({ default: module.TermsOfUse })));
-const Sitemap = lazy(() => import('./components/legal/Sitemap').then(module => ({ default: module.Sitemap })));
+const PrivacyPolicy = lazy(() =>
+  import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy }))
+);
+const TermsOfUse = lazy(() =>
+  import('./components/legal/TermsOfUse').then(module => ({ default: module.TermsOfUse }))
+);
+const Sitemap = lazy(() =>
+  import('./components/legal/Sitemap').then(module => ({ default: module.Sitemap }))
+);
 
 // Loading fallback
 const PageLoader = () => (

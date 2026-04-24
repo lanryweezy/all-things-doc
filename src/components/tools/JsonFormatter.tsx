@@ -67,9 +67,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
-            Input JSON
-          </label>
+          <label className="block text-sm font-medium text-doc-slate mb-2">Input JSON</label>
           <textarea
             className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-300 focus:ring-doc-red'}`}
             placeholder='{"key": "value"}'
@@ -116,7 +114,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           <span className="text-sm text-slate-500 mr-2">Indentation:</span>
           <select
             value={indent}
-            onChange={(e) => setIndent(parseInt(e.target.value))}
+            onChange={e => setIndent(parseInt(e.target.value))}
             className="bg-transparent text-sm font-semibold outline-none"
           >
             <option value="2">2 Spaces</option>
@@ -131,11 +129,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
         >
           Format
         </Button>
-        <Button
-          onClick={handleMinify}
-          variant="outline"
-          className="min-w-[150px]"
-        >
+        <Button onClick={handleMinify} variant="outline" className="min-w-[150px]">
           Minify
         </Button>
       </div>
