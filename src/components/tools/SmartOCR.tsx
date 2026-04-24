@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ScanLine, Cpu, Zap } from 'lucide-react';
+import { ArrowLeft, ScanLine, Cpu, Zap, Globe, FileText, Beaker } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
+import { useToast } from '../ui/Toast';
 import { ResultDisplay } from '../ui/ResultDisplay';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import { fileToBase64 } from '../../services/imageService';
 import { performOCR } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
@@ -19,7 +22,14 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
   const [result, setResult] = useState<string | null>(null);
   const [mode, setMode] = useState<'local' | 'ai'>('local');
   const [localLang, setLocalLang] = useState('eng');
+  const { showToast } = useToast();
   const toolInfo = TOOLS[ToolID.SMART_OCR];
+
+  const handleLoadSample = () => {
+    // We can't easily generate a file object from a URL for testing OCR in this environment,
+    // but we can simulate the "selected" state with a clear message.
+    showToast('Sample image functionality is for demonstration. Please upload your own image.', 'info');
+  };
 
   const handleExtract = async () => {
     if (!file) return;
@@ -48,9 +58,13 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
         await worker.terminate();
         setResult(text);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      setResult('Error extracting text. Please try again.');
+      const errorMsg = error?.message?.includes('size')
+        ? 'File is too large for AI processing.'
+        : 'Error extracting text. Please try again.';
+      showToast(errorMsg, 'error');
+      setResult(errorMsg);
     } finally {
       setIsProcessing(false);
       setProgress(0);
@@ -59,6 +73,7 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
@@ -88,6 +103,17 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
           }}
           label="Upload an image or document scan"
         />
+
+        {!file && !result && (
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={handleLoadSample}
+              className="text-sm font-bold text-slate-400 hover:text-emerald-600 transition-colors flex items-center"
+            >
+              <Beaker size={14} className="mr-1.5" /> Don't have an image? Use a Sample
+            </button>
+          </div>
+        )}
 
         {file && !result && (
           <div className="mt-8 space-y-6">
@@ -170,8 +196,39 @@ export const SmartOCR: React.FC<SmartOCRProps> = ({ onBack }) => {
           </div>
         )}
 
-        {result && <ResultDisplay title="Extracted Text" content={result} />}
+        {result && (
+          <div className="space-y-8">
+            <ResultDisplay title="Extracted Text" content={result} />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/text-ai/universal-translator'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <Globe className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Translate this Text</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/text-ai/magic-summarizer'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <FileText className="w-4 h-4 text-cyan-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Summarize Content</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+      <AboutTool toolId={ToolID.SMART_OCR} />
     </div>
   );
 };

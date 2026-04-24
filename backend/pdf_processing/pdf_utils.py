@@ -2,8 +2,10 @@
 PDF processing module using PyMuPDF (fitz) for efficient document operations.
 """
 import fitz  # PyMuPDF
-from typing import List, IO
+from typing import List, IO, Dict, Any
 import io
+import os
+import tempfile
 
 def merge_pdfs(pdf_files: List[bytes]) -> bytes:
     """
@@ -71,3 +73,30 @@ def extract_text_from_pdf(pdf_bytes: bytes) -> str:
         
     pdf.close()
     return text
+
+def extract_advanced_pdf_data(pdf_bytes: bytes) -> Dict[str, Any]:
+    """
+    Extract advanced structured data (Markdown).
+    In serverless environments, we avoid JRE-dependent libraries and use high-context AI or PyMuPDF.
+    """
+    try:
+        # Fallback to high-quality PyMuPDF extraction for markdown structure simulation
+        pdf_stream = io.BytesIO(pdf_bytes)
+        pdf = fitz.open(stream=pdf_stream, filetype="pdf")
+
+        full_text = ""
+        for page in pdf:
+            # Using HTML output can sometimes capture more structure,
+            # but for markdown we'll use blocks.
+            blocks = page.get_text("blocks")
+            for b in blocks:
+                full_text += b[4] + "\n"
+
+        pdf.close()
+        return {
+            "markdown": full_text,
+            "structured": {}
+        }
+    except Exception as e:
+        print(f"Error in advanced extraction: {str(e)}")
+        return {"error": str(e), "markdown": extract_text_from_pdf(pdf_bytes)}

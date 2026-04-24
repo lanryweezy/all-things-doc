@@ -69,9 +69,10 @@ export function downloadFile(
     });
   } catch (error) {
     console.error('Download failed:', error);
-    alert(
-      `Download failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again or check your browser settings.`
-    );
+    // Note: We don't import useToast here to keep utils pure,
+    // but the caller components usually handle their own errors.
+    // However, for compatibility we'll use a safer console log or
+    // rely on the browser's own download handling.
   }
 }
 

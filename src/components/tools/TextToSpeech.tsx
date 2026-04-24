@@ -1,6 +1,9 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Play, Download, Link, Cpu, Zap, Pause } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { generateSpeech } from '../../services/geminiService';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -21,6 +24,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string>('');
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.TEXT_TO_SPEECH];
 
@@ -54,6 +58,39 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
   const handleStopLocal = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
+  };
+
+  // Helper to create a WAV header for raw PCM data
+  const getWavHeader = (dataLength: number, sampleRate: number, numChannels: number) => {
+    const buffer = new ArrayBuffer(44);
+    const view = new DataView(buffer);
+
+    const writeString = (v: DataView, offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        v.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+
+    // RIFF chunk descriptor
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + dataLength, true);
+    writeString(view, 8, 'WAVE');
+
+    // fmt sub-chunk
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true); // PCM format
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * numChannels * 2, true); // byte rate
+    view.setUint16(32, numChannels * 2, true); // block align
+    view.setUint16(34, 16, true); // bits per sample
+
+    // data sub-chunk
+    writeString(view, 36, 'data');
+    view.setUint32(40, dataLength, true);
+
+    return buffer;
   };
 
   const handleGenerate = async () => {
@@ -92,42 +129,9 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to generate speech.');
+      showToast('Failed to generate speech.', 'error');
     } finally {
       setIsProcessing(false);
-    }
-  };
-
-  // Helper to create a WAV header for raw PCM data
-  const getWavHeader = (dataLength: number, sampleRate: number, numChannels: number) => {
-    const buffer = new ArrayBuffer(44);
-    const view = new DataView(buffer);
-
-    // RIFF chunk descriptor
-    writeString(view, 0, 'RIFF');
-    view.setUint32(4, 36 + dataLength, true);
-    writeString(view, 8, 'WAVE');
-
-    // fmt sub-chunk
-    writeString(view, 12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true); // PCM format
-    view.setUint16(22, numChannels, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * numChannels * 2, true); // byte rate
-    view.setUint16(32, numChannels * 2, true); // block align
-    view.setUint16(34, 16, true); // bits per sample
-
-    // data sub-chunk
-    writeString(view, 36, 'data');
-    view.setUint32(40, dataLength, true);
-
-    return buffer;
-  };
-
-  const writeString = (view: DataView, offset: number, string: string) => {
-    for (let i = 0; i < string.length; i++) {
-      view.setUint8(offset + i, string.charCodeAt(i));
     }
   };
 
@@ -138,16 +142,17 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
       downloadBinary(audioData, filename, 'audio/wav');
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -155,7 +160,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -188,7 +193,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
+          <label className="block text-sm font-medium text-slate-900 mb-2">
             Enter Text to Speak
           </label>
           <textarea
@@ -224,7 +229,7 @@ export const TextToSpeech: React.FC<TextToSpeechProps> = ({ onBack }) => {
               <Button
                 onClick={handleStopLocal}
                 variant="outline"
-                className="border-red-200 text-red-600 hover:bg-red-50"
+                className="border-red-200 text-red-600 hover:bg-cyan-50"
                 icon={<Pause size={18} />}
               >
                 Stop

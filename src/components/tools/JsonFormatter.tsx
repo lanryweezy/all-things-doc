@@ -1,5 +1,7 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, AlignLeft, Copy, Check } from 'lucide-react';
+import { ArrowLeft, AlignLeft, Copy, Check, Beaker, Code, Database, FileCode } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
@@ -14,19 +16,23 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [indent, setIndent] = useState(2);
+  const [isValid, setIsValid] = useState<boolean | null>(null);
 
   const toolInfo = TOOLS[ToolID.JSON_FORMATTER];
 
   const handleFormat = () => {
     setError(null);
+    setIsValid(null);
     if (!input.trim()) return;
 
     try {
-      // Use a faster way to check if input is already an object or needs parsing
-      const parsed = typeof input === 'string' ? JSON.parse(input) : input;
+      const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed, null, indent === 0 ? '\t' : indent));
+      setIsValid(true);
     } catch (err) {
-      setError(`Invalid JSON: ${(err as Error).message}`);
+      const msg = (err as Error).message;
+      setError(`Invalid JSON: ${msg}`);
+      setIsValid(false);
     }
   };
 
@@ -48,12 +54,33 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleLoadSample = () => {
+    const sample = {
+      user: {
+        id: 1,
+        name: "John Doe",
+        email: "john@example.com",
+        roles: ["admin", "editor"],
+        settings: {
+          theme: "dark",
+          notifications: true
+        }
+      },
+      status: "active",
+      timestamp: new Date().toISOString()
+    };
+    setInput(JSON.stringify(sample));
+    setOutput('');
+    setIsValid(null);
+    setError(null);
+  };
+
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-140px)] flex flex-col">
       <div className="mb-6 flex-shrink-0">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -61,17 +88,22 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
-            Input JSON
+          <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
+            <span>Input JSON</span>
+            {isValid !== null && (
+              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-cyan-100 text-cyan-700'}`}>
+                {isValid ? 'Valid JSON' : 'Invalid JSON'}
+              </span>
+            )}
           </label>
           <textarea
-            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-300 focus:ring-doc-red'}`}
+            className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : isValid ? 'border-green-300 focus:ring-green-200' : 'border-slate-300 focus:ring-cyan-600'}`}
             placeholder='{"key": "value"}'
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -82,16 +114,16 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
               }
             }}
           />
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-cyan-500 text-sm mt-2">{error}</p>}
         </div>
 
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
+          <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
             <span>Formatted Output</span>
             {output && (
               <button
                 onClick={handleCopy}
-                className="text-doc-red hover:text-red-700 text-xs flex items-center font-semibold"
+                className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
               >
                 {copied ? (
                   <Check size={14} className="mr-1" />
@@ -126,7 +158,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
         </div>
         <Button
           onClick={handleFormat}
-          className="bg-doc-slate hover:bg-slate-800 min-w-[150px]"
+          className="bg-slate-900 hover:bg-slate-800 min-w-[150px]"
           icon={<AlignLeft size={18} />}
         >
           Format
@@ -138,7 +170,55 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
         >
           Minify
         </Button>
+        <Button
+          onClick={handleLoadSample}
+          variant="outline"
+          className="min-w-[150px] border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+          icon={<Beaker size={18} />}
+        >
+          Sample
+        </Button>
       </div>
+
+      {isValid && (
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-100 pt-8">
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/json-to-typescript'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Code className="w-4 h-4 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Generate TS Interface</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/json-to-csv'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Database className="w-4 h-4 text-cyan-700" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Convert to CSV</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/json-to-yaml'}>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <FileCode className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-sm text-slate-700 font-bold">Convert to YAML</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

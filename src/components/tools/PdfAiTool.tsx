@@ -19,6 +19,10 @@ import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 import { jsPDF } from 'jspdf';
 import { downloadText, downloadBinary } from '../../utils/downloadUtils';
+import { useToast } from '../ui/Toast';
+import { FileEdit, Minimize2, Beaker } from 'lucide-react';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 
 interface PdfAiToolProps {
   toolId:
@@ -35,10 +39,42 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<'markdown' | 'text'>('markdown');
+  const [advanced, setAdvanced] = useState(false);
   const [progress, setProgress] = useState<number | undefined>(undefined);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[toolId];
+
+  const handleLoadSample = async () => {
+    try {
+      setIsProcessing(true);
+      setProgress(0);
+
+      // Artificial delay to simulate file analysis
+      for (let i = 0; i <= 100; i += 20) {
+        setProgress(i);
+        await new Promise(r => setTimeout(r, 200));
+      }
+
+      let sampleResult = '';
+      if (toolId === ToolID.PDF_TO_EXCEL || toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) {
+        sampleResult = "Date,Description,Amount\n2023-10-01,Sample Transaction,$-100.00\n2023-10-05,Monthly Subscription,$-15.00";
+      } else if (toolId === ToolID.PDF_TO_POWERPOINT) {
+        sampleResult = "# Slide 1: Introduction\n* Key Concept 1\n* Key Concept 2\n\n# Slide 2: Analysis\n* Data Point A\n* Data Point B";
+      } else {
+        sampleResult = "This is a sample document extraction result. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+      }
+
+      setResult(sampleResult);
+      showToast('Loaded sample extraction data', 'info');
+    } catch (err) {
+      showToast('Failed to load sample', 'error');
+    } finally {
+      setIsProcessing(false);
+      setProgress(undefined);
+    }
+  };
 
   // Manage download URLs for different content types
   useEffect(() => {
@@ -98,7 +134,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       if (toolId === ToolID.PDF_OCR) mode = 'OCR';
       if (toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) mode = 'BANK_STATEMENT';
 
-      const output = await processPdf(base64, mode, outputFormat);
+      const output = await processPdf(base64, mode, outputFormat, advanced);
 
       clearInterval(progressInterval);
       setProgress(100);
@@ -140,7 +176,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       downloadText(result, filename);
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 
@@ -151,7 +187,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       downloadText(result, filename);
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Download failed. Please try again or check your browser settings.');
+      showToast('Download failed. Please try again.', 'error');
     }
   };
 
@@ -189,7 +225,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
       downloadBinary(uint8Array, 'searchable_document.pdf', 'application/pdf');
     } catch (error) {
       console.error('PDF generation failed:', error);
-      alert('Failed to generate PDF. Please try again or check your browser settings.');
+      showToast('Failed to generate PDF. Please try again.', 'error');
     }
   };
 
@@ -240,10 +276,11 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -251,7 +288,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -265,6 +302,17 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
           }}
           label="Upload a PDF Document"
         />
+
+        {!file && !result && !isProcessing && (
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={handleLoadSample}
+              className="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors flex items-center"
+            >
+              <Beaker size={14} className="mr-1.5" /> Don't have a PDF? Use Sample Data
+            </button>
+          </div>
+        )}
 
         {isProcessing && (
           <div className="mt-6">
@@ -281,10 +329,40 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
         {file && !result && !isProcessing && (
           <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="flex-grow">
+            <div className="flex-grow space-y-4">
+              {[
+                ToolID.PDF_TO_WORD,
+                ToolID.PDF_TO_EXCEL,
+                ToolID.PDF_BANK_STATEMENT_CONVERTER,
+                ToolID.PDF_OCR,
+              ].includes(toolId) && (
+                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between group cursor-pointer hover:bg-indigo-100/50 transition-colors" onClick={() => setAdvanced(!advanced)}>
+                  <div className="space-y-0.5">
+                    <label
+                      htmlFor="advanced-mode"
+                      className="text-sm font-bold text-indigo-900 cursor-pointer"
+                    >
+                      Advanced AI Extraction
+                    </label>
+                    <p className="text-xs text-indigo-600 font-medium">
+                      Use Deep Context analysis for complex layouts and tables.
+                    </p>
+                  </div>
+                  <div className={`
+                    w-12 h-6 rounded-full p-1 transition-colors duration-200 ease-in-out
+                    ${advanced ? 'bg-indigo-600' : 'bg-indigo-200'}
+                  `}>
+                    <div className={`
+                      w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out
+                      ${advanced ? 'translate-x-6' : 'translate-x-0'}
+                    `} />
+                  </div>
+                </div>
+              )}
+
               {(toolId === ToolID.PDF_TO_WORD || toolId === ToolID.PDF_OCR) && (
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  <label className="block text-sm font-semibold text-doc-slate mb-3">
+                  <label className="block text-sm font-semibold text-slate-900 mb-3">
                     Output Format
                   </label>
                   <div className="flex space-x-6">
@@ -296,11 +374,11 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                           value="markdown"
                           checked={outputFormat === 'markdown'}
                           onChange={() => setOutputFormat('markdown')}
-                          className="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded-full checked:border-doc-red checked:bg-doc-red transition-all"
+                          className="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded-full checked:border-cyan-600 checked:bg-cyan-600 transition-all"
                         />
                         <div className="absolute w-2 h-2 bg-white rounded-full opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></div>
                       </div>
-                      <span className="ml-2 text-sm text-slate-700 font-medium group-hover:text-doc-slate">
+                      <span className="ml-2 text-sm text-slate-700 font-medium group-hover:text-slate-900">
                         Markdown
                       </span>
                     </label>
@@ -312,11 +390,11 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                           value="text"
                           checked={outputFormat === 'text'}
                           onChange={() => setOutputFormat('text')}
-                          className="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded-full checked:border-doc-red checked:bg-doc-red transition-all"
+                          className="peer appearance-none w-5 h-5 border-2 border-slate-300 rounded-full checked:border-cyan-600 checked:bg-cyan-600 transition-all"
                         />
                         <div className="absolute w-2 h-2 bg-white rounded-full opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></div>
                       </div>
-                      <span className="ml-2 text-sm text-slate-700 font-medium group-hover:text-doc-slate">
+                      <span className="ml-2 text-sm text-slate-700 font-medium group-hover:text-slate-900">
                         Plain Text
                       </span>
                     </label>
@@ -344,7 +422,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
         )}
 
         {result && (
-          <>
+          <div className="space-y-8">
             <ResultDisplay
               title={
                 toolId === ToolID.PDF_TO_EXCEL
@@ -451,7 +529,7 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                         setTimeout(() => URL.revokeObjectURL(url), 100);
                       } catch (error) {
                         console.error('Alternative download failed:', error);
-                        alert('Alternative download failed. Please try the main download button.');
+                        showToast('Alternative download failed.', 'error');
                       }
                     }}
                     className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 transition-colors"
@@ -463,9 +541,36 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                 )}
               </div>
             )}
-          </>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf-organize'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <FileEdit className="w-4 h-4 text-fuchsia-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Organize PDF Pages</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-compress'}>
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <Minimize2 className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-sm text-slate-700 font-bold">Compress PDF</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
+      <AboutTool toolId={toolId} />
     </div>
   );
 };

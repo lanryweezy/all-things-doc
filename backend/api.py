@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException, Form
+from fastapi import APIRouter, File, UploadFile, HTTPException, Response, Form
 from fastapi.responses import StreamingResponse
 from typing import List
 import io
@@ -7,7 +7,7 @@ import zipfile
 # Import our processing modules
 from pdf_processing.pdf_utils import (
     merge_pdfs, split_pdf, compress_pdf, 
-    extract_text_from_pdf
+    extract_text_from_pdf, extract_advanced_pdf_data
 )
 from parsing_utils import parse_split_points
 from ai_processing.ai_utils import TextProcessor, ocr_image, ocr_pdf
@@ -81,10 +81,12 @@ async def compress_pdf_endpoint(file: UploadFile = File(...)):
 
 
 @router.post("/pdf/extract-text")
-async def extract_text_pdf_endpoint(file: UploadFile = File(...)):
-    """Extract text from a PDF file"""
+async def extract_text_pdf_endpoint(file: UploadFile = File(...), advanced: bool = Form(False)):
+    """Extract text from a PDF file with optional advanced structured data"""
     try:
         content = await file.read()
+        if advanced:
+            return extract_advanced_pdf_data(content)
         text = extract_text_from_pdf(content)
         return {"text": text}
     except Exception as e:

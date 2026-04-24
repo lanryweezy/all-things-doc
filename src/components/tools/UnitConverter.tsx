@@ -1,6 +1,9 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, Copy, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -38,6 +41,67 @@ const UNIT_TYPES = {
     megabytes: 1 / (1024 * 1024),
     gigabytes: 1 / (1024 * 1024 * 1024),
     terabytes: 1 / (1024 * 1024 * 1024 * 1024),
+  },
+  Area: {
+    square_meters: 1,
+    square_kilometers: 0.000001,
+    square_miles: 0.0000003861,
+    acres: 0.000247105,
+    hectares: 0.0001,
+    square_feet: 10.7639,
+  },
+  Speed: {
+    meters_per_second: 1,
+    kilometers_per_hour: 3.6,
+    miles_per_hour: 2.23694,
+    knots: 1.94384,
+    mach: 0.00293867,
+  },
+  Volume: {
+    liters: 1,
+    milliliters: 1000,
+    cubic_meters: 0.001,
+    gallons: 0.264172,
+    quarts: 1.05669,
+    pints: 2.11338,
+    cups: 4.22675,
+    fluid_ounces: 33.814,
+  },
+  Pressure: {
+    pascals: 1,
+    kilopascals: 0.001,
+    bar: 0.00001,
+    psi: 0.000145038,
+    atm: 0.0000098692,
+  },
+  Time: {
+    seconds: 1,
+    minutes: 1 / 60,
+    hours: 1 / 3600,
+    days: 1 / 86400,
+    weeks: 1 / 604800,
+    months: 1 / 2629800,
+    years: 1 / 31557600,
+  },
+  Energy: {
+    joules: 1,
+    kilojoules: 0.001,
+    calories: 0.239006,
+    kilocalories: 0.000239006,
+    watt_hours: 0.000277778,
+    kilowatt_hours: 0.000000277778,
+  },
+  Power: {
+    watts: 1,
+    kilowatts: 0.001,
+    horsepower: 0.00134102,
+    btu_per_minute: 0.056869,
+  },
+  Fuel: {
+    mpg_us: 1,
+    mpg_uk: 1.20095,
+    km_per_liter: 0.425144,
+    liters_per_100km: 'special_l100km',
   }
 };
 
@@ -48,6 +112,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
   const [inputValue, setInputValue] = useState('1');
   const [result, setResult] = useState<string>('');
   const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.UNIT_CONVERTER];
 
@@ -77,9 +142,26 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
         setResult(resultValue.toFixed(4).replace(/\.?0+$/, ''));
       }
     } else {
-      const units = UNIT_TYPES[type] as Record<string, number>;
-      const baseValue = val / units[fromUnit];
-      const finalValue = baseValue * units[toUnit];
+      const units = UNIT_TYPES[type] as Record<string, any>;
+
+      let finalValue: number;
+
+      // Special handling for Fuel (L/100km is inverse)
+      if (type === 'Fuel') {
+        let kmpl: number;
+        if (fromUnit === 'mpg_us') kmpl = val * 0.425144;
+        else if (fromUnit === 'mpg_uk') kmpl = val * 0.354006;
+        else if (fromUnit === 'km_per_liter') kmpl = val;
+        else kmpl = 100 / val; // liters_per_100km
+
+        if (toUnit === 'mpg_us') finalValue = kmpl / 0.425144;
+        else if (toUnit === 'mpg_uk') finalValue = kmpl / 0.354006;
+        else if (toUnit === 'km_per_liter') finalValue = kmpl;
+        else finalValue = 100 / kmpl;
+      } else {
+        const baseValue = val / units[fromUnit];
+        finalValue = baseValue * units[toUnit];
+      }
 
       if (Math.abs(finalValue) < 0.000001 && finalValue !== 0) {
         setResult(finalValue.toExponential(6));
@@ -94,15 +176,17 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(result);
     setCopied(true);
+    showToast('Result copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -110,19 +194,19 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
-        <div className="flex justify-center border-b border-slate-100 pb-6">
-          <div className="inline-flex p-1 bg-slate-100 rounded-xl">
+        <div className="flex justify-center border-b border-slate-100 pb-6 overflow-x-auto custom-scrollbar">
+          <div className="inline-flex p-1 bg-slate-100 rounded-xl whitespace-nowrap min-w-max">
             {Object.keys(UNIT_TYPES).map((t) => (
               <button
                 key={t}
                 onClick={() => setType(t as any)}
                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                  type === t ? 'bg-white shadow-sm text-doc-red' : 'text-slate-500 hover:text-slate-700'
+                  type === t ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {t}
@@ -133,21 +217,21 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
-            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">From</label>
+            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">From Value</label>
             <div className="space-y-3">
               <input
                 id="unit-input"
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-doc-slate focus:ring-2 focus:ring-doc-red outline-none"
+                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-slate-900 focus:ring-2 focus:ring-cyan-600 outline-none"
               />
-              <label htmlFor="from-unit-select" className="sr-only">From Unit</label>
+              <label htmlFor="from-unit-select" className="block text-sm font-medium text-slate-500">From Unit</label>
               <select
                 id="from-unit-select"
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
-                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-doc-red"
+                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-cyan-600"
               >
                 {Object.keys(UNIT_TYPES[type]).map((u) => (
                   <option key={u} value={u}>{u.replace('_', ' ')}</option>
@@ -157,22 +241,22 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           </div>
 
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-500">To</label>
+            <label className="block text-sm font-medium text-slate-500">To Value</label>
             <div className="space-y-3">
-              <div className="w-full p-4 bg-doc-red/5 border border-doc-red/10 rounded-xl text-2xl font-bold text-doc-red min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
+              <div className="w-full p-4 bg-cyan-600/5 border border-cyan-600/10 rounded-xl text-2xl font-bold text-cyan-600 min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
                 <span>{result || '0'}</span>
                 {result && (
-                  <button onClick={handleCopy} className="text-doc-red/60 hover:text-doc-red" aria-label="Copy result">
+                  <button onClick={handleCopy} className="text-cyan-600/60 hover:text-cyan-600" aria-label="Copy result">
                     {copied ? <Check size={20} /> : <Copy size={20} />}
                   </button>
                 )}
               </div>
-              <label htmlFor="to-unit-select" className="sr-only">To Unit</label>
+              <label htmlFor="to-unit-select" className="block text-sm font-medium text-slate-500">To Unit</label>
               <select
                 id="to-unit-select"
                 value={toUnit}
                 onChange={(e) => setToUnit(e.target.value)}
-                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-doc-red"
+                className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-cyan-600"
               >
                 {Object.keys(UNIT_TYPES[type]).map((u) => (
                   <option key={u} value={u}>{u.replace('_', ' ')}</option>

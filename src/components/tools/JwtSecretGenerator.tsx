@@ -1,6 +1,9 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Copy, Check, RefreshCw, Key as KeyIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
 
@@ -16,6 +19,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeUppercase, setIncludeUppercase] = useState(true);
   const [includeLowercase, setIncludeLowercase] = useState(true);
+  const { showToast } = useToast();
 
   const toolInfo = TOOLS[ToolID.JWT_SECRET_GENERATOR];
 
@@ -32,7 +36,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
     if (includeSymbols) charset += symbols;
 
     if (charset === '') {
-      alert('Please select at least one character type');
+      showToast('Please select at least one character type', 'error');
       return;
     }
 
@@ -67,6 +71,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button
@@ -191,7 +196,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                   </button>
                   <button
                     onClick={clearSecret}
-                    className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors"
+                    className="px-3 py-2 bg-cyan-100 hover:bg-red-200 text-cyan-700 rounded-lg transition-colors"
                   >
                     Clear
                   </button>

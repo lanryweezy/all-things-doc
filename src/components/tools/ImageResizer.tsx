@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Maximize, Copy, Check, Download, Image as ImageIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -100,10 +102,11 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -111,7 +114,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
@@ -136,7 +139,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                         type="number"
                         value={width}
                         onChange={(e) => handleWidthChange(parseInt(e.target.value) || 0)}
-                        className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none"
+                        className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none"
                       />
                     </div>
                     <div>
@@ -145,7 +148,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                         type="number"
                         value={height}
                         onChange={(e) => handleHeightChange(parseInt(e.target.value) || 0)}
-                        className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-doc-red outline-none"
+                        className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none"
                       />
                     </div>
                   </div>
@@ -155,7 +158,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                       type="checkbox"
                       checked={maintainAspectRatio}
                       onChange={() => setMaintainAspectRatio(!maintainAspectRatio)}
-                      className="w-5 h-5 rounded border-slate-300 text-doc-red focus:ring-doc-red cursor-pointer"
+                      className="w-5 h-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-600 cursor-pointer"
                     />
                     <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Maintain Aspect Ratio</span>
                   </label>
@@ -163,7 +166,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                   <Button
                     onClick={handleResize}
                     isLoading={isProcessing}
-                    className="w-full bg-doc-slate hover:bg-slate-800"
+                    className="w-full bg-slate-900 hover:bg-slate-800"
                     icon={<Maximize size={18} />}
                   >
                     Resize Image
@@ -191,7 +194,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
               </Button>
               <Button
                 onClick={handleDownload}
-                className="bg-doc-red hover:bg-red-700"
+                className="bg-cyan-600 hover:bg-cyan-700"
                 icon={<Download size={18} />}
               >
                 Download Resized Image

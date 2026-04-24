@@ -1,10 +1,9 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { Button } from './ui/Button';
 
 interface Props {
   children: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
@@ -24,75 +23,52 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo);
-
-    // Log to console for debugging
-    console.group('Error Details');
-    console.error('Error:', error.message);
-    console.error('Stack:', error.stack);
-    console.error('Component Stack:', errorInfo.componentStack);
-    console.groupEnd();
-
-    // Call optional error handler
-    if (this.props.onError) {
-      this.props.onError(error, errorInfo);
-    }
   }
 
   private handleReset = () => {
     this.setState({ hasError: false, error: null });
+    window.location.href = '/';
   };
 
   public render() {
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
-
       return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full">
-            <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <AlertCircle className="h-6 w-6 text-red-600" />
-              </div>
-
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">Something went wrong</h2>
-
-              <p className="text-slate-600 mb-6">
-                We apologize for the inconvenience. An unexpected error occurred.
-              </p>
-
-              {this.state.error && (
-                <details className="mb-6 text-left">
-                  <summary className="text-sm text-slate-500 cursor-pointer hover:text-slate-700">
-                    Error details (for debugging)
-                  </summary>
-                  <pre className="mt-2 text-xs bg-slate-100 p-3 rounded overflow-auto max-h-32">
-                    {this.state.error.message}
-                  </pre>
-                </details>
-              )}
-
-              <div className="flex space-x-3">
-                <button
-                  onClick={this.handleReset}
-                  className="flex-1 bg-doc-red text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  Try Again
-                </button>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="flex-1 bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors"
-                >
-                  Reload Page
-                </button>
-              </div>
+        <div className="min-h-[60vh] flex items-center justify-center p-4 transition-colors">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-8 md:p-12 max-w-lg w-full text-center animate-in zoom-in duration-500">
+            <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-8">
+              <AlertTriangle size={40} />
             </div>
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-4 uppercase tracking-tight">Something went wrong</h1>
+            <p className="text-slate-500 dark:text-slate-400 mb-8 font-medium">
+              An unexpected error occurred. Don't worry, your data is safe (we don't store it anyway).
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                onClick={() => window.location.reload()}
+                className="flex-1 bg-cyan-600 hover:bg-cyan-700 transition-colors"
+                icon={<RefreshCw size={18} />}
+              >
+                Retry Page
+              </Button>
+              <Button
+                onClick={this.handleReset}
+                variant="outline"
+                className="flex-1 transition-colors"
+                icon={<Home size={18} />}
+              >
+                Go Home
+              </Button>
+            </div>
+            {process.env.NODE_ENV === 'development' && this.state.error && (
+              <pre className="mt-8 p-4 bg-slate-50 dark:bg-slate-950 rounded-xl text-left text-xs text-slate-400 overflow-auto max-h-40 font-mono">
+                {this.state.error.toString()}
+              </pre>
+            )}
           </div>
         </div>
       );
     }
 
-    return this.props.children;
+    return this.children;
   }
 }

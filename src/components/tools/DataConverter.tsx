@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ArrowRightLeft, Copy, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, Copy, Check, Beaker } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TOOLS } from '../../constants';
 import { ToolID } from '../../types';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 
 interface DataConverterProps {
-  toolId: ToolID.JSON_TO_CSV | ToolID.CSV_TO_JSON | ToolID.XML_TO_JSON | ToolID.JSON_TO_XML;
+  toolId: ToolID.JSON_TO_CSV | ToolID.CSV_TO_JSON | ToolID.XML_TO_JSON | ToolID.JSON_TO_XML | ToolID.YAML_TO_JSON | ToolID.JSON_TO_YAML;
   onBack: () => void;
 }
 
@@ -41,6 +43,10 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         return 'XML';
       case ToolID.JSON_TO_XML:
         return 'JSON';
+      case ToolID.YAML_TO_JSON:
+        return 'YAML';
+      case ToolID.JSON_TO_YAML:
+        return 'JSON';
       default:
         return '';
     }
@@ -56,6 +62,10 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         return 'JSON';
       case ToolID.JSON_TO_XML:
         return 'XML';
+      case ToolID.YAML_TO_JSON:
+        return 'JSON';
+      case ToolID.JSON_TO_YAML:
+        return 'YAML';
       default:
         return '';
     }
@@ -76,7 +86,7 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
     }
   };
 
-  const handleConvert = () => {
+  const handleConvert = async () => {
     setError(null);
     if (!input.trim()) return;
 
@@ -246,6 +256,14 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         } else {
           setOutput(`<root>${jsonToXml(jsonData)}</root>`);
         }
+      } else if (toolId === ToolID.YAML_TO_JSON) {
+        const yaml = await import('js-yaml');
+        const data = yaml.load(input);
+        setOutput(JSON.stringify(data, null, 2));
+      } else if (toolId === ToolID.JSON_TO_YAML) {
+        const yaml = await import('js-yaml');
+        const data = JSON.parse(input);
+        setOutput(yaml.dump(data));
       }
     } catch (err) {
       setError(`Conversion Failed: ${(err as Error).message}`);
@@ -258,12 +276,39 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleLoadSample = () => {
+    let sample = '';
+    switch (toolId) {
+      case ToolID.JSON_TO_CSV:
+      case ToolID.JSON_TO_XML:
+      case ToolID.JSON_TO_YAML:
+        sample = JSON.stringify([
+          { id: 1, name: "John Doe", role: "Admin", email: "john@example.com" },
+          { id: 2, name: "Jane Smith", role: "User", email: "jane@example.com" }
+        ], null, 2);
+        break;
+      case ToolID.CSV_TO_JSON:
+        sample = 'id,name,role,email\n1,John Doe,Admin,john@example.com\n2,Jane Smith,User,jane@example.com';
+        break;
+      case ToolID.XML_TO_JSON:
+        sample = '<users>\n  <user>\n    <id>1</id>\n    <name>John Doe</name>\n  </user>\n</users>';
+        break;
+      case ToolID.YAML_TO_JSON:
+        sample = 'users:\n  - id: 1\n    name: John Doe\n  - id: 2\n    name: Jane Smith';
+        break;
+    }
+    setInput(sample);
+    setOutput('');
+    setError(null);
+  };
+
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-140px)] flex flex-col">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-6 flex-shrink-0">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -271,13 +316,13 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
+          <label className="block text-sm font-medium text-slate-900 mb-2">
             Input {getInputLabel()}
           </label>
           <textarea
@@ -292,11 +337,11 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
               }
             }}
           />
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-cyan-500 text-sm mt-2">{error}</p>}
         </div>
 
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-doc-slate mb-2 flex justify-between items-center">
+          <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
             <span>Output {getOutputLabel()}</span>
             {output && (
               <button
@@ -321,7 +366,7 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center flex-shrink-0">
+      <div className="mt-6 flex justify-center gap-4 flex-shrink-0">
         <Button
           onClick={handleConvert}
           className="bg-cyan-700 hover:bg-cyan-800 min-w-[200px]"
@@ -329,6 +374,17 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
         >
           Convert
         </Button>
+        <Button
+          onClick={handleLoadSample}
+          variant="outline"
+          className="min-w-[150px] border-cyan-200 text-cyan-700 hover:bg-cyan-50"
+          icon={<Beaker size={18} />}
+        >
+          Sample
+        </Button>
+      </div>
+      <div className="flex-shrink-0">
+        <AboutTool toolId={toolId} />
       </div>
     </div>
   );

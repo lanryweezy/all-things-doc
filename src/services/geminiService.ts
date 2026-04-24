@@ -5,21 +5,19 @@ import {
   performOcrImage as backendOcrImage,
   performOcrPdf as backendOcrPdf,
 } from './backendService';
-
-// Check if we have a backend available
-const BACKEND_AVAILABLE = !!import.meta.env.VITE_BACKEND_URL;
+import { isBackendAvailable } from './apiCheck';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
 const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
-const MODEL_NAME = 'gemini-2.5-flash';
+const MODEL_NAME = 'gemini-1.5-flash';
 
-export const isApiAvailable = () => !!ai || BACKEND_AVAILABLE;
+export const isApiAvailable = () => !!ai || isBackendAvailable();
 
 // Use backend for summarization if available, otherwise Gemini
 export const summarizeText = async (text: string): Promise<string> => {
   if (!text) return '';
 
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendSummarize(text);
     } catch (error) {
@@ -43,7 +41,7 @@ export const summarizeText = async (text: string): Promise<string> => {
 export const translateText = async (text: string, targetLanguage: string): Promise<string> => {
   if (!text) return '';
 
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendTranslate(text, targetLanguage);
     } catch (error) {
@@ -65,7 +63,7 @@ export const translateText = async (text: string, targetLanguage: string): Promi
 
 // Use backend for OCR if available, otherwise Gemini
 export const performOCR = async (imageBase64: string, mimeType: string): Promise<string> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       // Convert base64 to blob for backend processing
       const byteCharacters = atob(imageBase64);
@@ -135,9 +133,11 @@ export const convertCode = async (code: string, targetLang: string): Promise<str
 export const processPdf = async (
   pdfBase64: string,
   mode: 'WORD' | 'EXCEL' | 'PPT' | 'OCR' | 'BANK_STATEMENT',
-  outputFormat: 'markdown' | 'text' = 'markdown'
+  outputFormat: 'markdown' | 'text' = 'markdown',
+  advanced: boolean = false
 ): Promise<string> => {
-  if (mode === 'OCR' && BACKEND_AVAILABLE) {
+
+  if (mode === 'OCR' && isBackendAvailable()) {
     try {
       // Convert base64 to blob for backend processing
       const byteCharacters = atob(pdfBase64);
@@ -190,6 +190,11 @@ export const processPdf = async (
       break;
   }
 
+  // Enhance prompt if advanced mode is on
+  if (advanced) {
+    prompt = `[ADVANCED MODE: DEEP EXTRACTION]\n${prompt}\nPerform an exhaustive analysis of the document. Ensure no small details, footer text, or complex table data is missed. Focus on structural integrity and perfect formatting.`;
+  }
+
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: {
@@ -220,8 +225,9 @@ export const generateSpeech = async (text: string) => {
   if (!ai) {
     return null; // Return null for demo mode - text-to-speech requires API key
   }
+  // Note: Multimodal output (AUDIO) is currently supported in Gemini 2.0 Flash
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-preview-tts',
+    model: 'gemini-2.0-flash-exp',
     contents: [{ parts: [{ text }] }],
     config: {
       responseModalities: [Modality.AUDIO],

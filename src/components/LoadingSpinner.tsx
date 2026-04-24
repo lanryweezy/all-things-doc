@@ -21,7 +21,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     <div className={`flex flex-col items-center justify-center p-4 ${className}`}>
       <div className="relative">
         <div
-          className={`${sizeClasses[size]} border-2 border-slate-200 border-t-doc-red rounded-full animate-spin`}
+          className={`${sizeClasses[size]} border-2 border-slate-200 border-t-cyan-600 rounded-full animate-spin`}
         ></div>
       </div>
       {message && <p className="mt-3 text-slate-600 text-sm font-medium">{message}</p>}
@@ -37,13 +37,13 @@ export const ProcessingProgress: React.FC<{ progress?: number; message?: string 
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="w-6 h-6 border-2 border-slate-200 border-t-doc-red rounded-full animate-spin"></div>
+          <div className="w-6 h-6 border-2 border-slate-200 border-t-cyan-600 rounded-full animate-spin"></div>
           <p className="text-slate-700 font-medium">{message}</p>
         </div>
         {progress !== undefined && (
           <div className="w-full bg-slate-200 rounded-full h-2">
             <div
-              className="bg-doc-red h-2 rounded-full transition-all duration-300 ease-out"
+              className="bg-cyan-600 h-2 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>

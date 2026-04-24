@@ -99,6 +99,47 @@ export enum ToolID {
   IMAGE_RESIZER = 'image-resizer',
   IMAGE_COMPRESSOR = 'image-compressor',
   MARKDOWN_TOOL = 'markdown-tool',
+  DIFF_CHECKER = 'diff-checker',
+  EXIF_REMOVER = 'exif-remover',
+  JSON_TO_TYPESCRIPT = 'json-to-typescript',
+  SQL_FORMATTER = 'sql-formatter',
+  YAML_TO_JSON = 'yaml-to-json',
+  JSON_TO_YAML = 'json-to-yaml',
+  HTML_TO_MARKDOWN = 'html-to-markdown',
+  SVG_CONVERTER = 'svg-converter',
+  REGEX_TESTER = 'regex-tester',
+  COLOR_PALETTE = 'color-palette',
+  IMAGE_CROPPER = 'image-cropper',
+  SPEECH_TO_TEXT = 'speech-to-text',
+  WORD_COUNTER = 'word-counter',
+  TEXT_CLEANER = 'text-cleaner',
+  IMAGE_TO_BASE64 = 'image-to-base64',
+  LINE_UTILS = 'line-utils',
+  URL_ENCODER = 'url-encoder',
+  CSV_EDITOR = 'csv-editor',
+  DATE_CALCULATOR = 'date-calculator',
+  PERCENTAGE_CALCULATOR = 'percentage-calculator',
+  LOAN_CALCULATOR = 'loan-calculator',
+  BMI_CALCULATOR = 'bmi-calculator',
+  COLOR_CONVERTER = 'color-converter',
+  QR_SCANNER = 'qr-scanner',
+  STOPWATCH = 'stopwatch',
+  RANDOM_GENERATOR = 'random-generator',
+  ASPECT_RATIO_CALCULATOR = 'aspect-ratio-calculator',
+  UNIX_TIMESTAMP_CONVERTER = 'unix-timestamp-converter',
+  NUMBER_TO_WORDS = 'number-to-words',
+  MORSE_CODE_CONVERTER = 'morse-code-converter',
+  STRING_ESCAPER = 'string-escaper',
+  BASE64_TO_IMAGE = 'base64-to-image',
+  PASSWORD_STRENGTH_CHECKER = 'password-strength-checker',
+  COLOR_CONTRAST_CHECKER = 'color-contrast-checker',
+  SCREEN_RECORDER = 'screen-recorder',
+  WEB_FORMATTER = 'web-formatter',
+  PRIVACY_REDACTOR = 'privacy-redactor',
+  EXIF_VIEWER = 'exif-viewer',
+  SIGNATURE_GENERATOR = 'signature-generator',
+  FILE_HASHER = 'file-hasher',
+  JWT_DECODER = 'jwt-decoder',
 }
 
 export enum ToolCategory {
@@ -132,13 +173,4 @@ export interface ProcessingState {
 export interface ImageFile {
   file: File;
   preview: string;
-}
-
-export interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
 }
