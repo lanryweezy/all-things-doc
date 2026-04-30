@@ -20,21 +20,21 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const showToast = useCallback((message: string, type: ToastType = 'success') => {
     const id = Date.now();
-    setToasts((prev) => [...prev, { id, message, type }]);
+    setToasts(prev => [...prev, { id, message, type }]);
     setTimeout(() => {
-      setToasts((prev) => prev.filter((toast) => toast.id !== id));
+      setToasts(prev => prev.filter(toast => toast.id !== id));
     }, 3000);
   }, []);
 
   const removeToast = (id: number) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    setToasts(prev => prev.filter(toast => toast.id !== id));
   };
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
       <div className="fixed bottom-4 right-4 z-[9999] space-y-2">
-        {toasts.map((toast) => (
+        {toasts.map(toast => (
           <div
             key={toast.id}
             className={`
@@ -43,8 +43,8 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 toast.type === 'success'
                   ? 'bg-emerald-50 border-emerald-100 text-emerald-800'
                   : toast.type === 'error'
-                  ? 'bg-cyan-50 border-cyan-100 text-red-800'
-                  : 'bg-blue-50 border-blue-100 text-blue-800'
+                    ? 'bg-cyan-50 border-cyan-100 text-red-800'
+                    : 'bg-blue-50 border-blue-100 text-blue-800'
               }
             `}
           >

@@ -4,74 +4,226 @@ import App from './App';
 import { ToolGrid } from './components/ToolGrid';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ToolID } from './types';
+const PricingPage = React.lazy(() => import('./components/pages/PricingPage'));
 
 // Lazy load tool components
-const ImageConverter = lazy(() => import('./components/tools/ImageConverter').then(module => ({ default: module.ImageConverter })));
-const SmartOCR = lazy(() => import('./components/tools/SmartOCR').then(module => ({ default: module.SmartOCR })));
-const TextAiTool = lazy(() => import('./components/tools/TextAiTool').then(module => ({ default: module.TextAiTool })));
-const PdfAiTool = lazy(() => import('./components/tools/PdfAiTool').then(module => ({ default: module.PdfAiTool })));
-const PdfGeneralTool = lazy(() => import('./components/tools/PdfGeneralTool').then(module => ({ default: module.PdfGeneralTool })));
-const DocChat = lazy(() => import('./components/tools/DocChat').then(module => ({ default: module.DocChat })));
-const TextToSpeech = lazy(() => import('./components/tools/TextToSpeech').then(module => ({ default: module.TextToSpeech })));
-const DataConverter = lazy(() => import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter })));
-const JwtSecretGenerator = lazy(() => import('./components/tools/JwtSecretGenerator').then(module => ({ default: module.JwtSecretGenerator })));
-const UuidGenerator = lazy(() => import('./components/tools/UuidGenerator').then(module => ({ default: module.UuidGenerator })));
-const JsonFormatter = lazy(() => import('./components/tools/JsonFormatter').then(module => ({ default: module.JsonFormatter })));
-const Base64Tool = lazy(() => import('./components/tools/Base64Tool').then(module => ({ default: module.Base64Tool })));
-const HashGenerator = lazy(() => import('./components/tools/HashGenerator').then(module => ({ default: module.HashGenerator })));
-const UnitConverter = lazy(() => import('./components/tools/UnitConverter').then(module => ({ default: module.UnitConverter })));
-const TextCaseConverter = lazy(() => import('./components/tools/TextCaseConverter').then(module => ({ default: module.TextCaseConverter })));
-const QrGenerator = lazy(() => import('./components/tools/QrGenerator').then(module => ({ default: module.QrGenerator })));
-const PasswordGenerator = lazy(() => import('./components/tools/PasswordGenerator').then(module => ({ default: module.PasswordGenerator })));
-const PasswordStrengthChecker = lazy(() => import('./components/tools/PasswordStrengthChecker').then(module => ({ default: module.PasswordStrengthChecker })));
-const LoremIpsumGenerator = lazy(() => import('./components/tools/LoremIpsumGenerator').then(module => ({ default: module.LoremIpsumGenerator })));
-const ImageResizer = lazy(() => import('./components/tools/ImageResizer').then(module => ({ default: module.ImageResizer })));
-const MarkdownTool = lazy(() => import('./components/tools/MarkdownTool').then(module => ({ default: module.MarkdownTool })));
-const DiffChecker = lazy(() => import('./components/tools/DiffChecker').then(module => ({ default: module.DiffChecker })));
-const ExifRemover = lazy(() => import('./components/tools/ExifRemover').then(module => ({ default: module.ExifRemover })));
-const JsonToTypeScript = lazy(() => import('./components/tools/JsonToTypeScript').then(module => ({ default: module.JsonToTypeScript })));
-const SqlFormatter = lazy(() => import('./components/tools/SqlFormatter').then(module => ({ default: module.SqlFormatter })));
-const HtmlToMarkdown = lazy(() => import('./components/tools/HtmlToMarkdown').then(module => ({ default: module.HtmlToMarkdown })));
-const PdfOrganize = lazy(() => import('./components/tools/PdfOrganize').then(module => ({ default: module.PdfOrganize })));
-const TextCleaner = lazy(() => import('./components/tools/TextCleaner').then(module => ({ default: module.TextCleaner })));
-const LineUtils = lazy(() => import('./components/tools/LineUtils').then(module => ({ default: module.LineUtils })));
-const UrlEncoder = lazy(() => import('./components/tools/UrlEncoder').then(module => ({ default: module.UrlEncoder })));
-const CsvEditor = lazy(() => import('./components/tools/CsvEditor').then(module => ({ default: module.CsvEditor })));
-const DateCalculator = lazy(() => import('./components/tools/DateCalculator').then(module => ({ default: module.DateCalculator })));
-const PercentageCalculator = lazy(() => import('./components/tools/PercentageCalculator').then(module => ({ default: module.PercentageCalculator })));
-const LoanCalculator = lazy(() => import('./components/tools/LoanCalculator').then(module => ({ default: module.LoanCalculator })));
-const BmiCalculator = lazy(() => import('./components/tools/BmiCalculator').then(module => ({ default: module.BmiCalculator })));
-const ColorConverter = lazy(() => import('./components/tools/ColorConverter').then(module => ({ default: module.ColorConverter })));
-const ContrastChecker = lazy(() => import('./components/tools/ContrastChecker').then(module => ({ default: module.ContrastChecker })));
-const QrScanner = lazy(() => import('./components/tools/QrScanner').then(module => ({ default: module.QrScanner })));
-const ScreenRecorder = lazy(() => import('./components/tools/ScreenRecorder').then(module => ({ default: module.ScreenRecorder })));
-const WebFormatter = lazy(() => import('./components/tools/WebFormatter').then(module => ({ default: module.WebFormatter })));
-const PrivacyRedactor = lazy(() => import('./components/tools/PrivacyRedactor').then(module => ({ default: module.PrivacyRedactor })));
-const ExifViewer = lazy(() => import('./components/tools/ExifViewer').then(module => ({ default: module.ExifViewer })));
-const SignatureGenerator = lazy(() => import('./components/tools/SignatureGenerator').then(module => ({ default: module.SignatureGenerator })));
-const Stopwatch = lazy(() => import('./components/tools/Stopwatch').then(module => ({ default: module.Stopwatch })));
-const RandomGenerator = lazy(() => import('./components/tools/RandomGenerator').then(module => ({ default: module.RandomGenerator })));
-const AspectRatioCalculator = lazy(() => import('./components/tools/AspectRatioCalculator').then(module => ({ default: module.AspectRatioCalculator })));
-const UnixTimestampConverter = lazy(() => import('./components/tools/UnixTimestampConverter').then(module => ({ default: module.UnixTimestampConverter })));
-const NumberToWords = lazy(() => import('./components/tools/NumberToWords').then(module => ({ default: module.NumberToWords })));
-const MorseCodeConverter = lazy(() => import('./components/tools/MorseCodeConverter').then(module => ({ default: module.MorseCodeConverter })));
-const StringEscaper = lazy(() => import('./components/tools/StringEscaper').then(module => ({ default: module.StringEscaper })));
-const Base64ToImage = lazy(() => import('./components/tools/Base64ToImage').then(module => ({ default: module.Base64ToImage })));
-const ImageToBase64 = lazy(() => import('./components/tools/ImageToBase64').then(module => ({ default: module.ImageToBase64 })));
-const WordCounter = lazy(() => import('./components/tools/WordCounter').then(module => ({ default: module.WordCounter })));
-const SvgConverter = lazy(() => import('./components/tools/SvgConverter').then(module => ({ default: module.SvgConverter })));
-const ColorPalette = lazy(() => import('./components/tools/ColorPalette').then(module => ({ default: module.ColorPalette })));
-const RegexTester = lazy(() => import('./components/tools/RegexTester').then(module => ({ default: module.RegexTester })));
-const ImageCropper = lazy(() => import('./components/tools/ImageCropper').then(module => ({ default: module.ImageCropper })));
-const SpeechToText = lazy(() => import('./components/tools/SpeechToText').then(module => ({ default: module.SpeechToText })));
-const ImageCompressor = lazy(() => import('./components/tools/ImageCompressor').then(module => ({ default: module.ImageCompressor })));
-const FileHasher = lazy(() => import('./components/tools/FileHasher').then(module => ({ default: module.FileHasher })));
-const JWTDecoder = lazy(() => import('./components/tools/JWTDecoder').then(module => ({ default: module.JWTDecoder })));
+const ImageConverter = lazy(() =>
+  import('./components/tools/ImageConverter').then(module => ({ default: module.ImageConverter }))
+);
+const SmartOCR = lazy(() =>
+  import('./components/tools/SmartOCR').then(module => ({ default: module.SmartOCR }))
+);
+const TextAiTool = lazy(() =>
+  import('./components/tools/TextAiTool').then(module => ({ default: module.TextAiTool }))
+);
+const PdfAiTool = lazy(() =>
+  import('./components/tools/PdfAiTool').then(module => ({ default: module.PdfAiTool }))
+);
+const PdfGeneralTool = lazy(() =>
+  import('./components/tools/PdfGeneralTool').then(module => ({ default: module.PdfGeneralTool }))
+);
+const DocChat = lazy(() =>
+  import('./components/tools/DocChat').then(module => ({ default: module.DocChat }))
+);
+const TextToSpeech = lazy(() =>
+  import('./components/tools/TextToSpeech').then(module => ({ default: module.TextToSpeech }))
+);
+const DataConverter = lazy(() =>
+  import('./components/tools/DataConverter').then(module => ({ default: module.DataConverter }))
+);
+const JwtSecretGenerator = lazy(() =>
+  import('./components/tools/JwtSecretGenerator').then(module => ({
+    default: module.JwtSecretGenerator,
+  }))
+);
+const UuidGenerator = lazy(() =>
+  import('./components/tools/UuidGenerator').then(module => ({ default: module.UuidGenerator }))
+);
+const JsonFormatter = lazy(() =>
+  import('./components/tools/JsonFormatter').then(module => ({ default: module.JsonFormatter }))
+);
+const Base64Tool = lazy(() =>
+  import('./components/tools/Base64Tool').then(module => ({ default: module.Base64Tool }))
+);
+const HashGenerator = lazy(() =>
+  import('./components/tools/HashGenerator').then(module => ({ default: module.HashGenerator }))
+);
+const UnitConverter = lazy(() =>
+  import('./components/tools/UnitConverter').then(module => ({ default: module.UnitConverter }))
+);
+const TextCaseConverter = lazy(() =>
+  import('./components/tools/TextCaseConverter').then(module => ({
+    default: module.TextCaseConverter,
+  }))
+);
+const QrGenerator = lazy(() =>
+  import('./components/tools/QrGenerator').then(module => ({ default: module.QrGenerator }))
+);
+const PasswordGenerator = lazy(() =>
+  import('./components/tools/PasswordGenerator').then(module => ({
+    default: module.PasswordGenerator,
+  }))
+);
+const PasswordStrengthChecker = lazy(() =>
+  import('./components/tools/PasswordStrengthChecker').then(module => ({
+    default: module.PasswordStrengthChecker,
+  }))
+);
+const LoremIpsumGenerator = lazy(() =>
+  import('./components/tools/LoremIpsumGenerator').then(module => ({
+    default: module.LoremIpsumGenerator,
+  }))
+);
+const ImageResizer = lazy(() =>
+  import('./components/tools/ImageResizer').then(module => ({ default: module.ImageResizer }))
+);
+const MarkdownTool = lazy(() =>
+  import('./components/tools/MarkdownTool').then(module => ({ default: module.MarkdownTool }))
+);
+const DiffChecker = lazy(() =>
+  import('./components/tools/DiffChecker').then(module => ({ default: module.DiffChecker }))
+);
+const ExifRemover = lazy(() =>
+  import('./components/tools/ExifRemover').then(module => ({ default: module.ExifRemover }))
+);
+const JsonToTypeScript = lazy(() =>
+  import('./components/tools/JsonToTypeScript').then(module => ({
+    default: module.JsonToTypeScript,
+  }))
+);
+const SqlFormatter = lazy(() =>
+  import('./components/tools/SqlFormatter').then(module => ({ default: module.SqlFormatter }))
+);
+const HtmlToMarkdown = lazy(() =>
+  import('./components/tools/HtmlToMarkdown').then(module => ({ default: module.HtmlToMarkdown }))
+);
+const PdfOrganize = lazy(() =>
+  import('./components/tools/PdfOrganize').then(module => ({ default: module.PdfOrganize }))
+);
+const TextCleaner = lazy(() =>
+  import('./components/tools/TextCleaner').then(module => ({ default: module.TextCleaner }))
+);
+const LineUtils = lazy(() =>
+  import('./components/tools/LineUtils').then(module => ({ default: module.LineUtils }))
+);
+const UrlEncoder = lazy(() =>
+  import('./components/tools/UrlEncoder').then(module => ({ default: module.UrlEncoder }))
+);
+const CsvEditor = lazy(() =>
+  import('./components/tools/CsvEditor').then(module => ({ default: module.CsvEditor }))
+);
+const DateCalculator = lazy(() =>
+  import('./components/tools/DateCalculator').then(module => ({ default: module.DateCalculator }))
+);
+const PercentageCalculator = lazy(() =>
+  import('./components/tools/PercentageCalculator').then(module => ({
+    default: module.PercentageCalculator,
+  }))
+);
+const LoanCalculator = lazy(() =>
+  import('./components/tools/LoanCalculator').then(module => ({ default: module.LoanCalculator }))
+);
+const BmiCalculator = lazy(() =>
+  import('./components/tools/BmiCalculator').then(module => ({ default: module.BmiCalculator }))
+);
+const ColorConverter = lazy(() =>
+  import('./components/tools/ColorConverter').then(module => ({ default: module.ColorConverter }))
+);
+const ContrastChecker = lazy(() =>
+  import('./components/tools/ContrastChecker').then(module => ({ default: module.ContrastChecker }))
+);
+const QrScanner = lazy(() =>
+  import('./components/tools/QrScanner').then(module => ({ default: module.QrScanner }))
+);
+const ScreenRecorder = lazy(() =>
+  import('./components/tools/ScreenRecorder').then(module => ({ default: module.ScreenRecorder }))
+);
+const WebFormatter = lazy(() =>
+  import('./components/tools/WebFormatter').then(module => ({ default: module.WebFormatter }))
+);
+const PrivacyRedactor = lazy(() =>
+  import('./components/tools/PrivacyRedactor').then(module => ({ default: module.PrivacyRedactor }))
+);
+const ExifViewer = lazy(() =>
+  import('./components/tools/ExifViewer').then(module => ({ default: module.ExifViewer }))
+);
+const SignatureGenerator = lazy(() =>
+  import('./components/tools/SignatureGenerator').then(module => ({
+    default: module.SignatureGenerator,
+  }))
+);
+const Stopwatch = lazy(() =>
+  import('./components/tools/Stopwatch').then(module => ({ default: module.Stopwatch }))
+);
+const RandomGenerator = lazy(() =>
+  import('./components/tools/RandomGenerator').then(module => ({ default: module.RandomGenerator }))
+);
+const AspectRatioCalculator = lazy(() =>
+  import('./components/tools/AspectRatioCalculator').then(module => ({
+    default: module.AspectRatioCalculator,
+  }))
+);
+const UnixTimestampConverter = lazy(() =>
+  import('./components/tools/UnixTimestampConverter').then(module => ({
+    default: module.UnixTimestampConverter,
+  }))
+);
+const NumberToWords = lazy(() =>
+  import('./components/tools/NumberToWords').then(module => ({ default: module.NumberToWords }))
+);
+const MorseCodeConverter = lazy(() =>
+  import('./components/tools/MorseCodeConverter').then(module => ({
+    default: module.MorseCodeConverter,
+  }))
+);
+const StringEscaper = lazy(() =>
+  import('./components/tools/StringEscaper').then(module => ({ default: module.StringEscaper }))
+);
+const Base64ToImage = lazy(() =>
+  import('./components/tools/Base64ToImage').then(module => ({ default: module.Base64ToImage }))
+);
+const ImageToBase64 = lazy(() =>
+  import('./components/tools/ImageToBase64').then(module => ({ default: module.ImageToBase64 }))
+);
+const WordCounter = lazy(() =>
+  import('./components/tools/WordCounter').then(module => ({ default: module.WordCounter }))
+);
+const SvgConverter = lazy(() =>
+  import('./components/tools/SvgConverter').then(module => ({ default: module.SvgConverter }))
+);
+const ColorPalette = lazy(() =>
+  import('./components/tools/ColorPalette').then(module => ({ default: module.ColorPalette }))
+);
+const RegexTester = lazy(() =>
+  import('./components/tools/RegexTester').then(module => ({ default: module.RegexTester }))
+);
+const ImageCropper = lazy(() =>
+  import('./components/tools/ImageCropper').then(module => ({ default: module.ImageCropper }))
+);
+const SpeechToText = lazy(() =>
+  import('./components/tools/SpeechToText').then(module => ({ default: module.SpeechToText }))
+);
+const ImageCompressor = lazy(() =>
+  import('./components/tools/ImageCompressor').then(module => ({ default: module.ImageCompressor }))
+);
+const FileHasher = lazy(() =>
+  import('./components/tools/FileHasher').then(module => ({ default: module.FileHasher }))
+);
+const JWTDecoder = lazy(() =>
+  import('./components/tools/JWTDecoder').then(module => ({ default: module.JWTDecoder }))
+);
 
 // Lazy load legal pages
-const PrivacyPolicy = lazy(() => import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
-const TermsOfUse = lazy(() => import('./components/legal/TermsOfUse').then(module => ({ default: module.TermsOfUse })));
-const Sitemap = lazy(() => import('./components/legal/Sitemap').then(module => ({ default: module.Sitemap })));
+const PrivacyPolicy = lazy(() =>
+  import('./components/legal/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy }))
+);
+const TermsOfUse = lazy(() =>
+  import('./components/legal/TermsOfUse').then(module => ({ default: module.TermsOfUse }))
+);
+const Sitemap = lazy(() =>
+  import('./components/legal/Sitemap').then(module => ({ default: module.Sitemap }))
+);
+const PricingPage = lazy(() => import('./components/pages/PricingPage'));
 
 // Loading fallback
 const PageLoader = () => (
@@ -334,9 +486,14 @@ function getToolPath(toolId: ToolID): string | null {
 
   // Data Tools
   if (
-    [ToolID.JSON_TO_CSV, ToolID.CSV_TO_JSON, ToolID.XML_TO_JSON, ToolID.JSON_TO_XML, ToolID.YAML_TO_JSON, ToolID.JSON_TO_YAML].includes(
-      toolId
-    )
+    [
+      ToolID.JSON_TO_CSV,
+      ToolID.CSV_TO_JSON,
+      ToolID.XML_TO_JSON,
+      ToolID.JSON_TO_XML,
+      ToolID.YAML_TO_JSON,
+      ToolID.JSON_TO_YAML,
+    ].includes(toolId)
   ) {
     return `/tools/data-converter/${toolId}`;
   }
@@ -760,6 +917,24 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <UrlEncoderWrapper />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: 'pricing',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PricingPage />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: 'pricing',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PricingPage />
           </Suspense>
         ),
       },

@@ -7,7 +7,13 @@ import { AboutTool } from '../ui/AboutTool';
 import { SeoHelmet } from '../SeoHelmet';
 
 interface DataConverterProps {
-  toolId: ToolID.JSON_TO_CSV | ToolID.CSV_TO_JSON | ToolID.XML_TO_JSON | ToolID.JSON_TO_XML | ToolID.YAML_TO_JSON | ToolID.JSON_TO_YAML;
+  toolId:
+    | ToolID.JSON_TO_CSV
+    | ToolID.CSV_TO_JSON
+    | ToolID.XML_TO_JSON
+    | ToolID.JSON_TO_XML
+    | ToolID.YAML_TO_JSON
+    | ToolID.JSON_TO_YAML;
   onBack: () => void;
 }
 
@@ -282,16 +288,22 @@ export const DataConverter: React.FC<DataConverterProps> = ({ toolId, onBack }) 
       case ToolID.JSON_TO_CSV:
       case ToolID.JSON_TO_XML:
       case ToolID.JSON_TO_YAML:
-        sample = JSON.stringify([
-          { id: 1, name: "John Doe", role: "Admin", email: "john@example.com" },
-          { id: 2, name: "Jane Smith", role: "User", email: "jane@example.com" }
-        ], null, 2);
+        sample = JSON.stringify(
+          [
+            { id: 1, name: 'John Doe', role: 'Admin', email: 'john@example.com' },
+            { id: 2, name: 'Jane Smith', role: 'User', email: 'jane@example.com' },
+          ],
+          null,
+          2
+        );
         break;
       case ToolID.CSV_TO_JSON:
-        sample = 'id,name,role,email\n1,John Doe,Admin,john@example.com\n2,Jane Smith,User,jane@example.com';
+        sample =
+          'id,name,role,email\n1,John Doe,Admin,john@example.com\n2,Jane Smith,User,jane@example.com';
         break;
       case ToolID.XML_TO_JSON:
-        sample = '<users>\n  <user>\n    <id>1</id>\n    <name>John Doe</name>\n  </user>\n</users>';
+        sample =
+          '<users>\n  <user>\n    <id>1</id>\n    <name>John Doe</name>\n  </user>\n</users>';
         break;
       case ToolID.YAML_TO_JSON:
         sample = 'users:\n  - id: 1\n    name: John Doe\n  - id: 2\n    name: Jane Smith';

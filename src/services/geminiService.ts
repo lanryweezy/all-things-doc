@@ -135,7 +135,6 @@ export const processPdf = async (
   outputFormat: 'markdown' | 'text' = 'markdown',
   advanced: boolean = false
 ): Promise<string> => {
-
   if (mode === 'OCR' && isBackendAvailable()) {
     try {
       // Convert base64 to blob for backend processing

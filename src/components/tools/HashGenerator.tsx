@@ -64,9 +64,7 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-slate-900 mb-2">
-            Input Text
-          </label>
+          <label className="block text-sm font-medium text-slate-900 mb-2">Input Text</label>
           <textarea
             className="w-full h-32 p-4 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
             placeholder="Enter text to hash..."
@@ -107,39 +105,47 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
 
         {output && (
           <div className="space-y-4">
-          <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 relative group">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{algo} Hash</span>
+            <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 relative group">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  {algo} Hash
+                </span>
+                <button
+                  onClick={handleCopy}
+                  className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
+                >
+                  {copied ? (
+                    <Check size={14} className="mr-1" />
+                  ) : (
+                    <Copy size={14} className="mr-1" />
+                  )}
+                  {copied ? 'Copied' : 'Copy'}
+                </button>
+              </div>
+              <div className="font-mono text-sm break-all text-slate-700">{output}</div>
+            </div>
+
+            <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-white rounded-lg shadow-sm">
+                  <Hash className="w-4 h-4 text-indigo-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-indigo-900 uppercase tracking-wider">
+                    Related Tool
+                  </p>
+                  <p className="text-sm text-indigo-700 font-medium">
+                    Need to hash a file instead of text?
+                  </p>
+                </div>
+              </div>
               <button
-                onClick={handleCopy}
-                className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
+                onClick={() => (window.location.href = '/tools/file-hasher')}
+                className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
               >
-                {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
-                {copied ? 'Copied' : 'Copy'}
+                <LinkIcon size={14} className="mr-1.5" /> Try File Checksum
               </button>
             </div>
-            <div className="font-mono text-sm break-all text-slate-700">
-              {output}
-            </div>
-          </div>
-
-          <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Hash className="w-4 h-4 text-indigo-600" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-indigo-900 uppercase tracking-wider">Related Tool</p>
-                <p className="text-sm text-indigo-700 font-medium">Need to hash a file instead of text?</p>
-              </div>
-            </div>
-            <button
-              onClick={() => window.location.href = '/tools/file-hasher'}
-              className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
-            >
-              <LinkIcon size={14} className="mr-1.5" /> Try File Checksum
-            </button>
-          </div>
           </div>
         )}
       </div>

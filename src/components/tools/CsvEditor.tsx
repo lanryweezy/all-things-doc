@@ -32,7 +32,7 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = event => {
       const text = event.target?.result as string;
       parseCsv(text);
     };
@@ -62,10 +62,7 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
   };
 
   const handleDownload = () => {
-    const csvContent = [
-      headers.join(','),
-      ...data.map(row => row.join(','))
-    ].join('\n');
+    const csvContent = [headers.join(','), ...data.map(row => row.join(','))].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -122,11 +119,19 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
             className="hidden"
             ref={fileInputRef}
           />
-          <Button onClick={() => fileInputRef.current?.click()} variant="outline" icon={<FileUp size={18} />}>
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            variant="outline"
+            icon={<FileUp size={18} />}
+          >
             Upload
           </Button>
           {data.length > 0 && (
-            <Button onClick={handleDownload} className="bg-emerald-600" icon={<Download size={18} />}>
+            <Button
+              onClick={handleDownload}
+              className="bg-emerald-600"
+              icon={<Download size={18} />}
+            >
               Download
             </Button>
           )}
@@ -142,13 +147,22 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
             <Table size={40} />
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">No CSV data loaded</h2>
-          <p className="text-slate-500 mb-8">Click here to upload a CSV file or start with a blank table</p>
+          <p className="text-slate-500 mb-8">
+            Click here to upload a CSV file or start with a blank table
+          </p>
           <div className="flex justify-center space-x-4">
-            <Button onClick={(e) => { e.stopPropagation(); setHeaders(['Column 1', 'Column 2']); setData([['', '']]); }} variant="outline">
+            <Button
+              onClick={e => {
+                e.stopPropagation();
+                setHeaders(['Column 1', 'Column 2']);
+                setData([['', '']]);
+              }}
+              variant="outline"
+            >
               Create Blank Table
             </Button>
             <Button
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 setHeaders(['Date', 'Description', 'Category', 'Amount']);
                 setData([
@@ -156,7 +170,7 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
                   ['2023-10-02', 'Employer Corp', 'Salary', '$5,000.00'],
                   ['2023-10-05', 'Gas Station', 'Transport', '$-65.20'],
                   ['2023-10-10', 'Monthly Rent', 'Housing', '$-1,800.00'],
-                  ['2023-10-15', 'Coffee Shop', 'Food', '$-5.50']
+                  ['2023-10-15', 'Coffee Shop', 'Food', '$-5.50'],
                 ]);
               }}
               className="bg-emerald-600"
@@ -169,18 +183,25 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
         <div className="space-y-4">
           <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
+                size={18}
+              />
               <input
                 type="text"
                 placeholder="Search table..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
               />
             </div>
             <div className="flex space-x-2">
-              <Button onClick={addRow} variant="outline" size="sm" icon={<Plus size={16} />}>Add Row</Button>
-              <Button onClick={addColumn} variant="outline" size="sm" icon={<Plus size={16} />}>Add Column</Button>
+              <Button onClick={addRow} variant="outline" size="sm" icon={<Plus size={16} />}>
+                Add Row
+              </Button>
+              <Button onClick={addColumn} variant="outline" size="sm" icon={<Plus size={16} />}>
+                Add Column
+              </Button>
             </div>
           </div>
 
@@ -190,10 +211,13 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
                 <thead className="sticky top-0 bg-slate-50 border-b border-slate-200 z-10">
                   <tr>
                     {headers.map((header, i) => (
-                      <th key={i} className="p-4 text-sm font-bold text-slate-600 whitespace-nowrap">
+                      <th
+                        key={i}
+                        className="p-4 text-sm font-bold text-slate-600 whitespace-nowrap"
+                      >
                         <input
                           value={header}
-                          onChange={(e) => {
+                          onChange={e => {
                             const newHeaders = [...headers];
                             newHeaders[i] = e.target.value;
                             setHeaders(newHeaders);
@@ -212,7 +236,7 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
                         <td key={colIndex} className="p-2">
                           <input
                             value={cell}
-                            onChange={(e) => handleCellChange(rowIndex, colIndex, e.target.value)}
+                            onChange={e => handleCellChange(rowIndex, colIndex, e.target.value)}
                             className="w-full p-2 bg-transparent border-none focus:bg-white focus:ring-2 focus:ring-emerald-500 rounded outline-none transition-all"
                           />
                         </td>
@@ -232,31 +256,43 @@ export const CsvEditor: React.FC<CsvEditorProps> = ({ onBack }) => {
             </div>
           </div>
           <div className="flex justify-between text-xs text-slate-400 px-2 font-medium">
-            <span>Rows: {data.length} | Columns: {headers.length}</span>
+            <span>
+              Rows: {data.length} | Columns: {headers.length}
+            </span>
             <span>All edits are local to your browser</span>
           </div>
         </div>
       )}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-100 pt-8">
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/csv-to-json'}>
+        <div
+          className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+          onClick={() => (window.location.href = '/tools/data-converter/csv-to-json')}
+        >
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-white rounded-lg shadow-sm">
               <FileJson className="w-4 h-4 text-cyan-600" />
             </div>
             <div className="text-left">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Next Step?
+              </p>
               <p className="text-sm text-slate-700 font-bold">Convert to JSON</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/csv-to-excel'}>
+        <div
+          className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+          onClick={() => (window.location.href = '/tools/data-converter/csv-to-excel')}
+        >
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-white rounded-lg shadow-sm">
               <ArrowRightLeft className="w-4 h-4 text-emerald-600" />
             </div>
             <div className="text-left">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Next Step?
+              </p>
               <p className="text-sm text-slate-700 font-bold">Convert to Excel</p>
             </div>
           </div>

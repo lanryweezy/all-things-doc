@@ -25,7 +25,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = event => {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
@@ -82,7 +82,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
             </div>
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-slate-900">Scan QR Code</h2>
-              <p className="text-slate-500 max-w-sm">Upload an image containing a QR code to decode its contents instantly.</p>
+              <p className="text-slate-500 max-w-sm">
+                Upload an image containing a QR code to decode its contents instantly.
+              </p>
             </div>
 
             <input
@@ -108,8 +110,13 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
         ) : (
           <div className="space-y-8 animate-fade-in">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Scanned Result</h3>
-              <button onClick={handleReset} className="text-slate-400 hover:text-indigo-600 flex items-center text-sm font-bold">
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+                Scanned Result
+              </h3>
+              <button
+                onClick={handleReset}
+                className="text-slate-400 hover:text-indigo-600 flex items-center text-sm font-bold"
+              >
                 <RefreshCw size={14} className="mr-1" /> New Scan
               </button>
             </div>
@@ -117,11 +124,19 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
             <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 break-all font-mono text-lg text-slate-900 relative group">
               {result}
               <div className="absolute right-4 bottom-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={handleCopy} className="p-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-indigo-600">
+                <button
+                  onClick={handleCopy}
+                  className="p-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-indigo-600"
+                >
                   <Copy size={18} />
                 </button>
                 {result.startsWith('http') && (
-                  <a href={result} target="_blank" rel="noopener noreferrer" className="p-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-indigo-600">
+                  <a
+                    href={result}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-indigo-600"
+                  >
                     <ExternalLink size={18} />
                   </a>
                 )}
@@ -129,9 +144,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({ onBack }) => {
             </div>
 
             <div className="flex justify-center">
-               <Button onClick={handleCopy} className="bg-indigo-600 px-8" icon={<Copy size={18} />}>
-                 Copy Result
-               </Button>
+              <Button onClick={handleCopy} className="bg-indigo-600 px-8" icon={<Copy size={18} />}>
+                Copy Result
+              </Button>
             </div>
           </div>
         )}

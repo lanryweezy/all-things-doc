@@ -12,14 +12,48 @@ interface MorseCodeConverterProps {
 }
 
 const MORSE_CODE_MAP: Record<string, string> = {
-  'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
-  'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
-  'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
-  'Y': '-.--', 'Z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
-  '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'
+  A: '.-',
+  B: '-...',
+  C: '-.-.',
+  D: '-..',
+  E: '.',
+  F: '..-.',
+  G: '--.',
+  H: '....',
+  I: '..',
+  J: '.---',
+  K: '-.-',
+  L: '.-..',
+  M: '--',
+  N: '-.',
+  O: '---',
+  P: '.--.',
+  Q: '--.-',
+  R: '.-.',
+  S: '...',
+  T: '-',
+  U: '..-',
+  V: '...-',
+  W: '.--',
+  X: '-..-',
+  Y: '-.--',
+  Z: '--..',
+  '1': '.----',
+  '2': '..---',
+  '3': '...--',
+  '4': '....-',
+  '5': '.....',
+  '6': '-....',
+  '7': '--...',
+  '8': '---..',
+  '9': '----.',
+  '0': '-----',
+  ' ': '/',
 };
 
-const REVERSE_MORSE_MAP = Object.fromEntries(Object.entries(MORSE_CODE_MAP).map(([k, v]) => [v, k]));
+const REVERSE_MORSE_MAP = Object.fromEntries(
+  Object.entries(MORSE_CODE_MAP).map(([k, v]) => [v, k])
+);
 
 export const MorseCodeConverter: React.FC<MorseCodeConverterProps> = ({ onBack }) => {
   const [text, setText] = useState('');
@@ -34,11 +68,18 @@ export const MorseCodeConverter: React.FC<MorseCodeConverterProps> = ({ onBack }
   };
 
   const encode = (input: string) => {
-    return input.toUpperCase().split('').map(char => MORSE_CODE_MAP[char] || char).join(' ');
+    return input
+      .toUpperCase()
+      .split('')
+      .map(char => MORSE_CODE_MAP[char] || char)
+      .join(' ');
   };
 
   const decode = (input: string) => {
-    return input.split(' ').map(code => REVERSE_MORSE_MAP[code] || code).join('');
+    return input
+      .split(' ')
+      .map(code => REVERSE_MORSE_MAP[code] || code)
+      .join('');
   };
 
   const handleTextChange = (val: string) => {
@@ -99,26 +140,35 @@ export const MorseCodeConverter: React.FC<MorseCodeConverterProps> = ({ onBack }
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 space-y-8">
         <div className="space-y-4">
-          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">Text</label>
+          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">
+            Text
+          </label>
           <textarea
             value={text}
-            onChange={(e) => handleTextChange(e.target.value)}
+            onChange={e => handleTextChange(e.target.value)}
             className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none font-bold"
             placeholder="Hello world..."
           />
         </div>
 
         <div className="flex justify-center">
-           <Button onClick={playMorse} variant="outline" className="rounded-full px-6" icon={<Volume2 size={18} />}>
-             Audio Preview
-           </Button>
+          <Button
+            onClick={playMorse}
+            variant="outline"
+            className="rounded-full px-6"
+            icon={<Volume2 size={18} />}
+          >
+            Audio Preview
+          </Button>
         </div>
 
         <div className="space-y-4">
-          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">Morse Code</label>
+          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">
+            Morse Code
+          </label>
           <textarea
             value={morse}
-            onChange={(e) => handleMorseChange(e.target.value)}
+            onChange={e => handleMorseChange(e.target.value)}
             className="w-full h-32 p-4 bg-slate-900 text-amber-400 border border-slate-800 rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none font-mono text-xl"
             placeholder=".... . .-.. .-.. ---"
           />

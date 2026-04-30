@@ -79,7 +79,7 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
       const ctx = canvas.getContext('2d');
       ctx?.drawImage(img, 0, 0, width, height);
 
-      canvas.toBlob((blob) => {
+      canvas.toBlob(blob => {
         if (blob) {
           setResizedBlob(blob);
           setPreviewUrl(URL.createObjectURL(blob));
@@ -134,20 +134,24 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Width (px)</label>
+                      <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+                        Width (px)
+                      </label>
                       <input
                         type="number"
                         value={width}
-                        onChange={(e) => handleWidthChange(parseInt(e.target.value) || 0)}
+                        onChange={e => handleWidthChange(parseInt(e.target.value) || 0)}
                         className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Height (px)</label>
+                      <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+                        Height (px)
+                      </label>
                       <input
                         type="number"
                         value={height}
-                        onChange={(e) => handleHeightChange(parseInt(e.target.value) || 0)}
+                        onChange={e => handleHeightChange(parseInt(e.target.value) || 0)}
                         className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none"
                       />
                     </div>
@@ -160,7 +164,9 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
                       onChange={() => setMaintainAspectRatio(!maintainAspectRatio)}
                       className="w-5 h-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-600 cursor-pointer"
                     />
-                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Maintain Aspect Ratio</span>
+                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                      Maintain Aspect Ratio
+                    </span>
                   </label>
 
                   <Button
@@ -186,7 +192,11 @@ export const ImageResizer: React.FC<ImageResizerProps> = ({ onBack }) => {
         ) : (
           <div className="text-center space-y-6 animate-fade-in">
             <div className="inline-block p-4 bg-green-50 rounded-2xl border border-green-100 mb-4">
-              <img src={previewUrl!} alt="Resized" className="max-w-full max-h-[400px] rounded-lg shadow-md" />
+              <img
+                src={previewUrl!}
+                alt="Resized"
+                className="max-w-full max-h-[400px] rounded-lg shadow-md"
+              />
             </div>
             <div className="flex justify-center space-x-4">
               <Button onClick={() => setResizedBlob(null)} variant="outline">

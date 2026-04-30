@@ -25,9 +25,21 @@ export const PrivacyRedactor: React.FC<PrivacyRedactorProps> = ({ onBack }) => {
   };
 
   const redactPatterns = [
-    { label: 'Emails', regex: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, replacement: '[EMAIL]' },
-    { label: 'Phone Numbers', regex: /(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g, replacement: '[PHONE]' },
-    { label: 'IP Addresses', regex: /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, replacement: '[IP]' },
+    {
+      label: 'Emails',
+      regex: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
+      replacement: '[EMAIL]',
+    },
+    {
+      label: 'Phone Numbers',
+      regex: /(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g,
+      replacement: '[PHONE]',
+    },
+    {
+      label: 'IP Addresses',
+      regex: /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g,
+      replacement: '[IP]',
+    },
     { label: 'Credit Cards', regex: /\b(?:\d[ -]*?){13,16}\b/g, replacement: '[CARD]' },
   ];
 
@@ -60,10 +72,12 @@ export const PrivacyRedactor: React.FC<PrivacyRedactorProps> = ({ onBack }) => {
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0 bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
         <div className="flex flex-col space-y-4">
-          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">Input Text</label>
+          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">
+            Input Text
+          </label>
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="flex-grow w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-sm resize-none"
             placeholder="Paste text containing emails, phones, etc..."
           />
@@ -71,10 +85,19 @@ export const PrivacyRedactor: React.FC<PrivacyRedactorProps> = ({ onBack }) => {
 
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between items-center px-1">
-            <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">Redacted Text</label>
+            <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+              Redacted Text
+            </label>
             {output && (
-              <button onClick={handleCopy} className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center">
-                {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
+              <button
+                onClick={handleCopy}
+                className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center"
+              >
+                {copied ? (
+                  <Check size={14} className="mr-1" />
+                ) : (
+                  <Copy size={14} className="mr-1" />
+                )}
                 {copied ? 'COPIED!' : 'COPY'}
               </button>
             )}
@@ -88,7 +111,12 @@ export const PrivacyRedactor: React.FC<PrivacyRedactorProps> = ({ onBack }) => {
       </div>
 
       <div className="mt-6 flex justify-center flex-shrink-0">
-        <Button onClick={handleRedact} disabled={!input.trim()} className="bg-indigo-600 px-12 py-4" icon={<RefreshCw size={18} />}>
+        <Button
+          onClick={handleRedact}
+          disabled={!input.trim()}
+          className="bg-indigo-600 px-12 py-4"
+          icon={<RefreshCw size={18} />}
+        >
           Auto Redact PII
         </Button>
       </div>

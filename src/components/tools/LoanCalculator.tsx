@@ -37,9 +37,15 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
       const total = monthly * n;
       const interest = total - p;
 
-      setMonthlyPayment(monthly.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-      setTotalPayment(total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-      setTotalInterest(interest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+      setMonthlyPayment(
+        monthly.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      );
+      setTotalPayment(
+        total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      );
+      setTotalInterest(
+        interest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      );
     } else if (p > 0 && r === 0 && n > 0) {
       const monthly = p / n;
       setMonthlyPayment(monthly.toFixed(2));
@@ -70,7 +76,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
             <input
               type="number"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={e => setAmount(e.target.value)}
               className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-slate-900"
             />
           </div>
@@ -83,7 +89,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
               type="number"
               step="0.1"
               value={rate}
-              onChange={(e) => setRate(e.target.value)}
+              onChange={e => setRate(e.target.value)}
               className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-slate-900"
             />
           </div>
@@ -95,7 +101,7 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
             <input
               type="number"
               value={years}
-              onChange={(e) => setYears(e.target.value)}
+              onChange={e => setYears(e.target.value)}
               className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-bold text-slate-900"
             />
           </div>
@@ -103,23 +109,30 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({ onBack }) => {
 
         <div className="space-y-6">
           <div className="bg-emerald-600 p-8 rounded-3xl text-white shadow-xl shadow-emerald-100 flex flex-col items-center justify-center text-center">
-            <div className="text-emerald-100 font-bold uppercase tracking-widest text-sm mb-2">Monthly Payment</div>
+            <div className="text-emerald-100 font-bold uppercase tracking-widest text-sm mb-2">
+              Monthly Payment
+            </div>
             <div className="text-5xl font-black">${monthlyPayment}</div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center">
-              <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">Total Interest</div>
+              <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">
+                Total Interest
+              </div>
               <div className="text-xl font-bold text-slate-900">${totalInterest}</div>
             </div>
             <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center">
-              <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">Total Payoff</div>
+              <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">
+                Total Payoff
+              </div>
               <div className="text-xl font-bold text-slate-900">${totalPayment}</div>
             </div>
           </div>
 
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-sm text-slate-500 italic">
-            Note: This is a basic calculator for estimation purposes. Real-world loans may include taxes, insurance, and variable fees.
+            Note: This is a basic calculator for estimation purposes. Real-world loans may include
+            taxes, insurance, and variable fees.
           </div>
         </div>
       </div>

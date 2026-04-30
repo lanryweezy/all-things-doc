@@ -54,7 +54,10 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
                   </a>
                 </li>
                 <li>
-                  <a href="/sitemap" className="text-cyan-600 hover:text-cyan-700 transition-colors">
+                  <a
+                    href="/sitemap"
+                    className="text-cyan-600 hover:text-cyan-700 transition-colors"
+                  >
                     Sitemap
                   </a>
                 </li>
@@ -64,12 +67,22 @@ export const Sitemap: React.FC<SitemapProps> = ({ onBack }) => {
             <section>
               <h2 className="text-xl font-semibold text-doc-slate mb-4">Legal</h2>
               <ul className="space-y-2">
-                 <li>
-                    <a href="/privacy-policy" className="text-cyan-600 hover:text-cyan-700 transition-colors">Privacy Policy</a>
-                 </li>
-                 <li>
-                    <a href="/terms-of-use" className="text-cyan-600 hover:text-cyan-700 transition-colors">Terms of Use</a>
-                 </li>
+                <li>
+                  <a
+                    href="/privacy-policy"
+                    className="text-cyan-600 hover:text-cyan-700 transition-colors"
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/terms-of-use"
+                    className="text-cyan-600 hover:text-cyan-700 transition-colors"
+                  >
+                    Terms of Use
+                  </a>
+                </li>
               </ul>
             </section>
 

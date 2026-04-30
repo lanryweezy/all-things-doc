@@ -30,9 +30,17 @@ export const StringEscaper: React.FC<StringEscaperProps> = ({ onBack }) => {
       let result = '';
       if (mode === 'escape') {
         if (type === 'html') {
-          result = input.replace(/[&<>"']/g, (m) => ({
-            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-          }[m] || m));
+          result = input.replace(
+            /[&<>"']/g,
+            m =>
+              ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+              })[m] || m
+          );
         } else if (type === 'json' || type === 'js') {
           result = JSON.stringify(input).slice(1, -1);
         }
@@ -71,54 +79,61 @@ export const StringEscaper: React.FC<StringEscaperProps> = ({ onBack }) => {
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 space-y-6">
         <div className="flex flex-wrap gap-4 justify-between items-center">
           <div className="flex p-1 bg-slate-100 rounded-xl">
-             {['escape', 'unescape'].map(m => (
-               <button
-                 key={m}
-                 onClick={() => setMode(m as any)}
-                 className={`px-6 py-2 text-sm font-bold rounded-lg capitalize transition-all ${mode === m ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
-               >
-                 {m}
-               </button>
-             ))}
+            {['escape', 'unescape'].map(m => (
+              <button
+                key={m}
+                onClick={() => setMode(m as any)}
+                className={`px-6 py-2 text-sm font-bold rounded-lg capitalize transition-all ${mode === m ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
+              >
+                {m}
+              </button>
+            ))}
           </div>
 
           <div className="flex space-x-2">
-             {['html', 'json', 'js'].map(t => (
-               <button
-                 key={t}
-                 onClick={() => setType(t as any)}
-                 className={`px-4 py-2 text-xs font-black uppercase rounded-lg border transition-all ${type === t ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-200 text-slate-400 hover:border-indigo-200'}`}
-               >
-                 {t}
-               </button>
-             ))}
+            {['html', 'json', 'js'].map(t => (
+              <button
+                key={t}
+                onClick={() => setType(t as any)}
+                className={`px-4 py-2 text-xs font-black uppercase rounded-lg border transition-all ${type === t ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-200 text-slate-400 hover:border-indigo-200'}`}
+              >
+                {t}
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="space-y-4">
-          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">Input String</label>
+          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">
+            Input String
+          </label>
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="w-full h-40 p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-sm"
             placeholder="Paste text here..."
           />
         </div>
 
         <div className="flex justify-center">
-           <Button onClick={process} className="bg-slate-900 px-10" icon={<RefreshCw size={18} />}>
-             Run {mode}
-           </Button>
+          <Button onClick={process} className="bg-slate-900 px-10" icon={<RefreshCw size={18} />}>
+            Run {mode}
+          </Button>
         </div>
 
         <div className="space-y-4">
           <div className="flex justify-between items-center px-1">
-             <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">Output</label>
-             {output && (
-               <button onClick={handleCopy} className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center">
-                  <Copy size={14} className="mr-1" /> COPY
-               </button>
-             )}
+            <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+              Output
+            </label>
+            {output && (
+              <button
+                onClick={handleCopy}
+                className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center"
+              >
+                <Copy size={14} className="mr-1" /> COPY
+              </button>
+            )}
           </div>
           <textarea
             readOnly

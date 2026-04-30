@@ -58,16 +58,16 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
     const sample = {
       user: {
         id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        roles: ["admin", "editor"],
+        name: 'John Doe',
+        email: 'john@example.com',
+        roles: ['admin', 'editor'],
         settings: {
-          theme: "dark",
-          notifications: true
-        }
+          theme: 'dark',
+          notifications: true,
+        },
       },
-      status: "active",
-      timestamp: new Date().toISOString()
+      status: 'active',
+      timestamp: new Date().toISOString(),
     };
     setInput(JSON.stringify(sample));
     setOutput('');
@@ -97,7 +97,9 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           <label className="block text-sm font-medium text-slate-900 mb-2 flex justify-between items-center">
             <span>Input JSON</span>
             {isValid !== null && (
-              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-cyan-100 text-cyan-700'}`}>
+              <span
+                className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${isValid ? 'bg-green-100 text-green-700' : 'bg-cyan-100 text-cyan-700'}`}
+              >
                 {isValid ? 'Valid JSON' : 'Invalid JSON'}
               </span>
             )}
@@ -148,7 +150,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
           <span className="text-sm text-slate-500 mr-2">Indentation:</span>
           <select
             value={indent}
-            onChange={(e) => setIndent(parseInt(e.target.value))}
+            onChange={e => setIndent(parseInt(e.target.value))}
             className="bg-transparent text-sm font-semibold outline-none"
           >
             <option value="2">2 Spaces</option>
@@ -163,11 +165,7 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
         >
           Format
         </Button>
-        <Button
-          onClick={handleMinify}
-          variant="outline"
-          className="min-w-[150px]"
-        >
+        <Button onClick={handleMinify} variant="outline" className="min-w-[150px]">
           Minify
         </Button>
         <Button
@@ -182,37 +180,52 @@ export const JsonFormatter: React.FC<JsonFormatterProps> = ({ onBack }) => {
 
       {isValid && (
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-100 pt-8">
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/json-to-typescript'}>
+          <div
+            className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+            onClick={() => (window.location.href = '/tools/json-to-typescript')}
+          >
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <Code className="w-4 h-4 text-blue-600" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Next Step?
+                </p>
                 <p className="text-sm text-slate-700 font-bold">Generate TS Interface</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/json-to-csv'}>
+          <div
+            className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+            onClick={() => (window.location.href = '/tools/data-converter/json-to-csv')}
+          >
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <Database className="w-4 h-4 text-cyan-700" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Next Step?
+                </p>
                 <p className="text-sm text-slate-700 font-bold">Convert to CSV</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/data-converter/json-to-yaml'}>
+          <div
+            className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+            onClick={() => (window.location.href = '/tools/data-converter/json-to-yaml')}
+          >
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <FileCode className="w-4 h-4 text-amber-600" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Next Step?
+                </p>
                 <p className="text-sm text-slate-700 font-bold">Convert to YAML</p>
               </div>
             </div>

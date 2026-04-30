@@ -59,11 +59,14 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
 
       let sampleResult = '';
       if (toolId === ToolID.PDF_TO_EXCEL || toolId === ToolID.PDF_BANK_STATEMENT_CONVERTER) {
-        sampleResult = "Date,Description,Amount\n2023-10-01,Sample Transaction,$-100.00\n2023-10-05,Monthly Subscription,$-15.00";
+        sampleResult =
+          'Date,Description,Amount\n2023-10-01,Sample Transaction,$-100.00\n2023-10-05,Monthly Subscription,$-15.00';
       } else if (toolId === ToolID.PDF_TO_POWERPOINT) {
-        sampleResult = "# Slide 1: Introduction\n* Key Concept 1\n* Key Concept 2\n\n# Slide 2: Analysis\n* Data Point A\n* Data Point B";
+        sampleResult =
+          '# Slide 1: Introduction\n* Key Concept 1\n* Key Concept 2\n\n# Slide 2: Analysis\n* Data Point A\n* Data Point B';
       } else {
-        sampleResult = "This is a sample document extraction result. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        sampleResult =
+          'This is a sample document extraction result. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
       }
 
       setResult(sampleResult);
@@ -336,7 +339,10 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                 ToolID.PDF_BANK_STATEMENT_CONVERTER,
                 ToolID.PDF_OCR,
               ].includes(toolId) && (
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between group cursor-pointer hover:bg-indigo-100/50 transition-colors" onClick={() => setAdvanced(!advanced)}>
+                <div
+                  className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between group cursor-pointer hover:bg-indigo-100/50 transition-colors"
+                  onClick={() => setAdvanced(!advanced)}
+                >
                   <div className="space-y-0.5">
                     <label
                       htmlFor="advanced-mode"
@@ -348,14 +354,18 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
                       Use Deep Context analysis for complex layouts and tables.
                     </p>
                   </div>
-                  <div className={`
+                  <div
+                    className={`
                     w-12 h-6 rounded-full p-1 transition-colors duration-200 ease-in-out
                     ${advanced ? 'bg-indigo-600' : 'bg-indigo-200'}
-                  `}>
-                    <div className={`
+                  `}
+                  >
+                    <div
+                      className={`
                       w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out
                       ${advanced ? 'translate-x-6' : 'translate-x-0'}
-                    `} />
+                    `}
+                    />
                   </div>
                 </div>
               )}
@@ -543,25 +553,35 @@ export const PdfAiTool: React.FC<PdfAiToolProps> = ({ toolId, onBack }) => {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf-organize'}>
+              <div
+                className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => (window.location.href = '/tools/pdf-organize')}
+              >
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-white rounded-lg shadow-sm">
                     <FileEdit className="w-4 h-4 text-fuchsia-600" />
                   </div>
                   <div className="text-left">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Next Step?
+                    </p>
                     <p className="text-sm text-slate-700 font-bold">Organize PDF Pages</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-compress'}>
+              <div
+                className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => (window.location.href = '/tools/pdf/pdf-compress')}
+              >
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-white rounded-lg shadow-sm">
                     <Minimize2 className="w-4 h-4 text-green-600" />
                   </div>
                   <div className="text-left">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Next Step?
+                    </p>
                     <p className="text-sm text-slate-700 font-bold">Compress PDF</p>
                   </div>
                 </div>

@@ -64,42 +64,65 @@ export const Base64ToImage: React.FC<Base64ToImageProps> = ({ onBack }) => {
         {!imgUrl ? (
           <div className="space-y-4">
             <div className="flex justify-between items-center px-1">
-              <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">Base64 String</label>
+              <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+                Base64 String
+              </label>
               {input && (
-                <button onClick={handleClear} className="text-slate-400 hover:text-cyan-500 text-xs font-bold flex items-center">
+                <button
+                  onClick={handleClear}
+                  className="text-slate-400 hover:text-cyan-500 text-xs font-bold flex items-center"
+                >
                   <Trash2 size={14} className="mr-1" /> CLEAR
                 </button>
               )}
             </div>
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               className="w-full h-64 p-6 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-xs text-slate-600 resize-none"
               placeholder="Paste data:image/... or raw base64 string here..."
             />
             <div className="flex justify-center">
-               <Button onClick={handleProcess} disabled={!input.trim()} className="bg-blue-600 px-12" icon={<ImageIcon size={18} />}>
-                 Decode to Image
-               </Button>
+              <Button
+                onClick={handleProcess}
+                disabled={!input.trim()}
+                className="bg-blue-600 px-12"
+                icon={<ImageIcon size={18} />}
+              >
+                Decode to Image
+              </Button>
             </div>
           </div>
         ) : (
           <div className="space-y-8 animate-fade-in">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Decoded Preview</h3>
-              <button onClick={handleClear} className="text-blue-600 hover:text-blue-700 text-sm font-bold">
-                 Try another string
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+                Decoded Preview
+              </h3>
+              <button
+                onClick={handleClear}
+                className="text-blue-600 hover:text-blue-700 text-sm font-bold"
+              >
+                Try another string
               </button>
             </div>
 
             <div className="bg-slate-100 rounded-3xl border border-slate-200 overflow-hidden flex items-center justify-center min-h-[300px] p-10 group relative">
-               <img src={imgUrl} alt="Decoded" className="max-w-full max-h-[500px] shadow-2xl rounded-lg group-hover:scale-[1.02] transition-transform" />
+              <img
+                src={imgUrl}
+                alt="Decoded"
+                className="max-w-full max-h-[500px] shadow-2xl rounded-lg group-hover:scale-[1.02] transition-transform"
+              />
             </div>
 
             <div className="flex justify-center space-x-4">
-               <Button onClick={handleDownload} className="bg-emerald-600 px-8" icon={<Download size={18} />}>
-                 Download Image
-               </Button>
+              <Button
+                onClick={handleDownload}
+                className="bg-emerald-600 px-8"
+                icon={<Download size={18} />}
+              >
+                Download Image
+              </Button>
             </div>
           </div>
         )}

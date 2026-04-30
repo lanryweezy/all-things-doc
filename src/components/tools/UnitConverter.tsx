@@ -102,7 +102,7 @@ const UNIT_TYPES = {
     mpg_uk: 1.20095,
     km_per_liter: 0.425144,
     liters_per_100km: 'special_l100km',
-  }
+  },
 };
 
 export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
@@ -128,11 +128,11 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
 
     if (type === 'Temperature') {
       let celsius = val;
-      if (fromUnit === 'fahrenheit') celsius = (val - 32) * 5/9;
+      if (fromUnit === 'fahrenheit') celsius = ((val - 32) * 5) / 9;
       if (fromUnit === 'kelvin') celsius = val - 273.15;
 
       let finalVal = celsius;
-      if (toUnit === 'fahrenheit') finalVal = (celsius * 9/5) + 32;
+      if (toUnit === 'fahrenheit') finalVal = (celsius * 9) / 5 + 32;
       if (toUnit === 'kelvin') finalVal = celsius + 273.15;
 
       const resultValue = finalVal;
@@ -201,12 +201,14 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
         <div className="flex justify-center border-b border-slate-100 pb-6 overflow-x-auto custom-scrollbar">
           <div className="inline-flex p-1 bg-slate-100 rounded-xl whitespace-nowrap min-w-max">
-            {Object.keys(UNIT_TYPES).map((t) => (
+            {Object.keys(UNIT_TYPES).map(t => (
               <button
                 key={t}
                 onClick={() => setType(t as any)}
                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                  type === t ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500 hover:text-slate-700'
+                  type === t
+                    ? 'bg-white shadow-sm text-cyan-600'
+                    : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {t}
@@ -217,24 +219,33 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
-            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">From Value</label>
+            <label htmlFor="unit-input" className="block text-sm font-medium text-slate-500">
+              From Value
+            </label>
             <div className="space-y-3">
               <input
                 id="unit-input"
                 type="number"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={e => setInputValue(e.target.value)}
                 className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-2xl font-bold text-slate-900 focus:ring-2 focus:ring-cyan-600 outline-none"
               />
-              <label htmlFor="from-unit-select" className="block text-sm font-medium text-slate-500">From Unit</label>
+              <label
+                htmlFor="from-unit-select"
+                className="block text-sm font-medium text-slate-500"
+              >
+                From Unit
+              </label>
               <select
                 id="from-unit-select"
                 value={fromUnit}
-                onChange={(e) => setFromUnit(e.target.value)}
+                onChange={e => setFromUnit(e.target.value)}
                 className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-cyan-600"
               >
-                {Object.keys(UNIT_TYPES[type]).map((u) => (
-                  <option key={u} value={u}>{u.replace('_', ' ')}</option>
+                {Object.keys(UNIT_TYPES[type]).map(u => (
+                  <option key={u} value={u}>
+                    {u.replace('_', ' ')}
+                  </option>
                 ))}
               </select>
             </div>
@@ -243,23 +254,35 @@ export const UnitConverter: React.FC<UnitConverterProps> = ({ onBack }) => {
           <div className="space-y-4">
             <label className="block text-sm font-medium text-slate-500">To Value</label>
             <div className="space-y-3">
-              <div className="w-full p-4 bg-cyan-600/5 border border-cyan-600/10 rounded-xl text-2xl font-bold text-cyan-600 min-h-[64px] flex items-center justify-between" role="status" aria-live="polite">
+              <div
+                className="w-full p-4 bg-cyan-600/5 border border-cyan-600/10 rounded-xl text-2xl font-bold text-cyan-600 min-h-[64px] flex items-center justify-between"
+                role="status"
+                aria-live="polite"
+              >
                 <span>{result || '0'}</span>
                 {result && (
-                  <button onClick={handleCopy} className="text-cyan-600/60 hover:text-cyan-600" aria-label="Copy result">
+                  <button
+                    onClick={handleCopy}
+                    className="text-cyan-600/60 hover:text-cyan-600"
+                    aria-label="Copy result"
+                  >
                     {copied ? <Check size={20} /> : <Copy size={20} />}
                   </button>
                 )}
               </div>
-              <label htmlFor="to-unit-select" className="block text-sm font-medium text-slate-500">To Unit</label>
+              <label htmlFor="to-unit-select" className="block text-sm font-medium text-slate-500">
+                To Unit
+              </label>
               <select
                 id="to-unit-select"
                 value={toUnit}
-                onChange={(e) => setToUnit(e.target.value)}
+                onChange={e => setToUnit(e.target.value)}
                 className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-cyan-600"
               >
-                {Object.keys(UNIT_TYPES[type]).map((u) => (
-                  <option key={u} value={u}>{u.replace('_', ' ')}</option>
+                {Object.keys(UNIT_TYPES[type]).map(u => (
+                  <option key={u} value={u}>
+                    {u.replace('_', ' ')}
+                  </option>
                 ))}
               </select>
             </div>

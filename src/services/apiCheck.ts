@@ -12,7 +12,7 @@ export const checkBackendHealth = async (): Promise<boolean> => {
 
     const response = await fetch(`${url}/health`, {
       signal: controller.signal,
-      cache: 'no-store'
+      cache: 'no-store',
     });
 
     clearTimeout(id);

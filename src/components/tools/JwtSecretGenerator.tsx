@@ -53,7 +53,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
 
   const copyToClipboard = async () => {
     if (!secret) return;
-    
+
     try {
       await navigator.clipboard.writeText(secret);
       setCopied(true);
@@ -71,7 +71,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-      <SeoHelmet tool={toolInfo as any} />
+        <SeoHelmet tool={toolInfo as any} />
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button
@@ -85,15 +85,13 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${toolInfo.bgColor} mb-4`}>
+          <div
+            className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${toolInfo.bgColor} mb-4`}
+          >
             <KeyIcon className={`w-8 h-8 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
-            {toolInfo.title}
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            {toolInfo.description}
-          </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">{toolInfo.title}</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">{toolInfo.description}</p>
         </div>
 
         {/* Main Content */}
@@ -101,7 +99,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
           {/* Configuration Options */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-slate-900 mb-4">Configuration</h2>
-            
+
             {/* Length Slider */}
             <div className="mb-6">
               <label htmlFor="jwt-length" className="block text-sm font-medium text-slate-700 mb-2">
@@ -113,7 +111,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                 min="16"
                 max="128"
                 value={length}
-                onChange={(e) => setLength(parseInt(e.target.value))}
+                onChange={e => setLength(parseInt(e.target.value))}
                 className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
               />
               <div className="flex justify-between text-xs text-slate-500 mt-1">
@@ -128,7 +126,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                 <input
                   type="checkbox"
                   checked={includeLowercase}
-                  onChange={(e) => setIncludeLowercase(e.target.checked)}
+                  onChange={e => setIncludeLowercase(e.target.checked)}
                   className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
                 <span className="text-sm text-slate-700 select-none">Lowercase</span>
@@ -137,7 +135,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                 <input
                   type="checkbox"
                   checked={includeUppercase}
-                  onChange={(e) => setIncludeUppercase(e.target.checked)}
+                  onChange={e => setIncludeUppercase(e.target.checked)}
                   className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
                 <span className="text-sm text-slate-700 select-none">Uppercase</span>
@@ -146,7 +144,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                 <input
                   type="checkbox"
                   checked={includeNumbers}
-                  onChange={(e) => setIncludeNumbers(e.target.checked)}
+                  onChange={e => setIncludeNumbers(e.target.checked)}
                   className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
                 <span className="text-sm text-slate-700 select-none">Numbers</span>
@@ -155,7 +153,7 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                 <input
                   type="checkbox"
                   checked={includeSymbols}
-                  onChange={(e) => setIncludeSymbols(e.target.checked)}
+                  onChange={e => setIncludeSymbols(e.target.checked)}
                   className="w-5 h-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
                 />
                 <span className="text-sm text-slate-700 select-none">Symbols</span>
@@ -206,7 +204,8 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
                 {secret}
               </div>
               <p className="text-sm text-slate-500 mt-2">
-                This secret is {secret.length} characters long and contains a mix of character types for maximum security.
+                This secret is {secret.length} characters long and contains a mix of character types
+                for maximum security.
               </p>
             </div>
           )}
@@ -227,9 +226,10 @@ export const JwtSecretGenerator: React.FC<JwtSecretGeneratorProps> = ({ onBack }
           <div className="mt-6 bg-yellow-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-yellow-900 mb-3">Security Note</h3>
             <p className="text-yellow-800">
-              This tool generates cryptographically secure random secrets using your browser's built-in random number generator. 
-              The secret is generated locally in your browser and never sent to any server. Make sure to store your secret 
-              securely and never share it publicly.
+              This tool generates cryptographically secure random secrets using your browser's
+              built-in random number generator. The secret is generated locally in your browser and
+              never sent to any server. Make sure to store your secret securely and never share it
+              publicly.
             </p>
           </div>
         </div>

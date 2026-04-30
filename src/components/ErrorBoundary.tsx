@@ -38,9 +38,12 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-8">
               <AlertTriangle size={40} />
             </div>
-            <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-4 uppercase tracking-tight">Something went wrong</h1>
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-4 uppercase tracking-tight">
+              Something went wrong
+            </h1>
             <p className="text-slate-500 dark:text-slate-400 mb-8 font-medium">
-              An unexpected error occurred. Don't worry, your data is safe (we don't store it anyway).
+              An unexpected error occurred. Don't worry, your data is safe (we don't store it
+              anyway).
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button

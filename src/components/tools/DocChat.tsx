@@ -74,10 +74,13 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
           },
         ]);
       } else {
-        setMessages(prev => [...prev, {
-          role: 'model',
-          text: `Added ${uploadedFile.name} to the conversation context.`,
-        }]);
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'model',
+            text: `Added ${uploadedFile.name} to the conversation context.`,
+          },
+        ]);
       }
     } catch (error) {
       console.error(error);
@@ -180,14 +183,18 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
             </div>
 
             <div className="px-6 py-3 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
-               <div className="flex -space-x-2 overflow-hidden">
-                 {files.map((f, i) => (
-                   <div key={i} title={f.name} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-cyan-600 flex items-center justify-center text-[10px] text-white font-bold">
-                     DOC
-                   </div>
-                 ))}
-               </div>
-               <button
+              <div className="flex -space-x-2 overflow-hidden">
+                {files.map((f, i) => (
+                  <div
+                    key={i}
+                    title={f.name}
+                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-cyan-600 flex items-center justify-center text-[10px] text-white font-bold"
+                  >
+                    DOC
+                  </div>
+                ))}
+              </div>
+              <button
                 onClick={() => {
                   const input = document.createElement('input');
                   input.type = 'file';
@@ -195,9 +202,9 @@ export const DocChat: React.FC<DocChatProps> = ({ onBack }) => {
                   input.click();
                 }}
                 className="text-xs font-bold text-cyan-600 hover:underline"
-               >
-                 + Add another
-               </button>
+              >
+                + Add another
+              </button>
             </div>
             <div className="p-4 bg-white border-t border-slate-200">
               <div className="flex items-center space-x-2">

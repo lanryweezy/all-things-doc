@@ -18,7 +18,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   onBack,
   children,
   maxWidth = '4xl',
-  actions
+  actions,
 }) => {
   const toolInfo = TOOLS[toolId];
   if (!toolInfo) return <>{children}</>;
@@ -45,7 +45,9 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate dark:text-white transition-colors">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-doc-slate dark:text-white transition-colors">
+            {toolInfo.title}
+          </h1>
         </div>
         {actions && <div className="flex space-x-2">{actions}</div>}
       </div>

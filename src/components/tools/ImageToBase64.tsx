@@ -21,7 +21,7 @@ export const ImageToBase64: React.FC<ImageToBase64Props> = ({ onBack }) => {
   const handleFileSelect = (f: File) => {
     setFile(f);
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       setBase64(e.target?.result as string);
     };
     reader.readAsDataURL(f);
@@ -46,16 +46,29 @@ export const ImageToBase64: React.FC<ImageToBase64Props> = ({ onBack }) => {
       </div>
 
       <div className="flex-grow flex flex-col min-h-0 bg-white rounded-3xl shadow-sm border border-slate-200 p-8 space-y-6">
-        <FileUpload accept="image/*" onFileSelect={handleFileSelect} label="Upload Image to Convert to Base64" />
+        <FileUpload
+          accept="image/*"
+          onFileSelect={handleFileSelect}
+          label="Upload Image to Convert to Base64"
+        />
 
         {base64 && (
           <div className="flex-grow flex flex-col min-h-0 space-y-4 animate-fade-in">
             <div className="flex items-center justify-between">
-               <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Base64 Data URI</span>
-               <button onClick={handleCopy} className="text-cyan-600 hover:text-cyan-700 text-xs font-bold flex items-center">
-                  {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
-                  {copied ? 'COPIED!' : 'COPY CODE'}
-               </button>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                Base64 Data URI
+              </span>
+              <button
+                onClick={handleCopy}
+                className="text-cyan-600 hover:text-cyan-700 text-xs font-bold flex items-center"
+              >
+                {copied ? (
+                  <Check size={14} className="mr-1" />
+                ) : (
+                  <Copy size={14} className="mr-1" />
+                )}
+                {copied ? 'COPIED!' : 'COPY CODE'}
+              </button>
             </div>
             <textarea
               readOnly
@@ -63,12 +76,12 @@ export const ImageToBase64: React.FC<ImageToBase64Props> = ({ onBack }) => {
               className="flex-grow w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-[10px] resize-none outline-none text-slate-600"
             />
             <div className="flex items-center space-x-4 p-4 bg-blue-50 rounded-2xl border border-blue-100">
-               <div className="h-12 w-12 bg-white rounded-lg flex items-center justify-center border border-blue-200 overflow-hidden">
-                  <img src={base64} alt="Preview" className="max-w-full max-h-full object-contain" />
-               </div>
-               <div className="text-sm text-blue-800 font-medium">
-                  {file?.name} • {(base64.length / 1024).toFixed(1)} KB
-               </div>
+              <div className="h-12 w-12 bg-white rounded-lg flex items-center justify-center border border-blue-200 overflow-hidden">
+                <img src={base64} alt="Preview" className="max-w-full max-h-full object-contain" />
+              </div>
+              <div className="text-sm text-blue-800 font-medium">
+                {file?.name} • {(base64.length / 1024).toFixed(1)} KB
+              </div>
             </div>
           </div>
         )}

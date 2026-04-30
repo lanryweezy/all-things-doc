@@ -33,7 +33,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
     setError(null);
     try {
       const binString = atob(input);
-      const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0)!);
+      const bytes = Uint8Array.from(binString, m => m.codePointAt(0)!);
       setOutput(new TextDecoder().decode(bytes));
     } catch (err) {
       setError('Decoding failed: Invalid Base64 string.');
@@ -66,9 +66,7 @@ export const Base64Tool: React.FC<Base64ToolProps> = ({ onBack }) => {
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium text-slate-900 mb-2">
-            Input Text
-          </label>
+          <label className="block text-sm font-medium text-slate-900 mb-2">Input Text</label>
           <textarea
             className={`flex-grow w-full p-4 bg-white border rounded-xl focus:ring-2 outline-none font-mono text-xs md:text-sm resize-none ${error ? 'border-red-300 focus:ring-red-200' : 'border-slate-300 focus:ring-cyan-600'}`}
             placeholder="Enter text or base64 here..."

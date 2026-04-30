@@ -156,8 +156,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                   {Array.isArray(accept) && accept.length > 0 && accept[0] !== ''
                     ? `Accepted: ${accept.join(', ')}`
                     : typeof accept === 'string' && accept !== '' && accept !== '*/*'
-                    ? `Accepted: ${accept}`
-                    : 'All file types accepted'}
+                      ? `Accepted: ${accept}`
+                      : 'All file types accepted'}
                   {maxSizeInMB && ` • Max ${maxSizeInMB}MB`}
                 </p>
               </div>

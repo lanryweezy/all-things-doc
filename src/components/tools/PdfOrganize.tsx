@@ -1,7 +1,15 @@
 import { AboutTool } from '../ui/AboutTool';
 import { SeoHelmet } from '../SeoHelmet';
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Trash2, Download, RefreshCw, LayoutGrid, GripVertical, CheckCircle } from 'lucide-react';
+import {
+  ArrowLeft,
+  Trash2,
+  Download,
+  RefreshCw,
+  LayoutGrid,
+  GripVertical,
+  CheckCircle,
+} from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { useToast } from '../ui/Toast';
@@ -79,8 +87,20 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
         <h2 className="text-3xl font-bold text-slate-900 mb-3">PDF Organized!</h2>
         <p className="text-slate-600 mb-8">Your new PDF with {pages.length} pages is ready.</p>
         <div className="flex justify-center space-x-4">
-          <Button onClick={() => { setFile(null); setIsComplete(false); }} variant="outline">Start Over</Button>
-          <Button onClick={() => downloadBinary(resultData!, 'organized.pdf', 'application/pdf')} className="bg-emerald-600" icon={<Download size={18} />}>
+          <Button
+            onClick={() => {
+              setFile(null);
+              setIsComplete(false);
+            }}
+            variant="outline"
+          >
+            Start Over
+          </Button>
+          <Button
+            onClick={() => downloadBinary(resultData!, 'organized.pdf', 'application/pdf')}
+            className="bg-emerald-600"
+            icon={<Download size={18} />}
+          >
             Download PDF
           </Button>
         </div>
@@ -105,7 +125,11 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
 
       {!file ? (
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-          <FileUpload accept="application/pdf" onFileSelect={setFile} label="Upload PDF to Organize Pages" />
+          <FileUpload
+            accept="application/pdf"
+            onFileSelect={setFile}
+            label="Upload PDF to Organize Pages"
+          />
         </div>
       ) : (
         <div className="space-y-6">
@@ -113,8 +137,15 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-slate-700">Drag to reorder, click X to delete</h3>
               <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-slate-500">{pages.length} Pages remaining</span>
-                <Button onClick={handleProcess} isLoading={isProcessing} className="bg-cyan-600" icon={<RefreshCw size={18} />}>
+                <span className="text-sm font-medium text-slate-500">
+                  {pages.length} Pages remaining
+                </span>
+                <Button
+                  onClick={handleProcess}
+                  isLoading={isProcessing}
+                  className="bg-cyan-600"
+                  icon={<RefreshCw size={18} />}
+                >
                   Save Changes
                 </Button>
               </div>
@@ -122,7 +153,7 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
 
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="pages" direction="horizontal">
-                {(provided) => (
+                {provided => (
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
@@ -130,13 +161,16 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
                   >
                     {pages.map((page, index) => (
                       <Draggable key={page.id} draggableId={page.id} index={index}>
-                        {(provided) => (
+                        {provided => (
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             className="relative group bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all select-none"
                           >
-                            <div {...provided.dragHandleProps} className="absolute top-2 left-2 p-1 text-slate-300 hover:text-slate-500 cursor-grab">
+                            <div
+                              {...provided.dragHandleProps}
+                              className="absolute top-2 left-2 p-1 text-slate-300 hover:text-slate-500 cursor-grab"
+                            >
                               <GripVertical size={14} />
                             </div>
                             <button
@@ -146,9 +180,13 @@ export const PdfOrganize: React.FC<PdfOrganizeProps> = ({ onBack }) => {
                               <Trash2 size={14} />
                             </button>
                             <div className="aspect-[3/4] bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 mb-2">
-                              <span className="text-2xl font-bold text-slate-300">{page.originalIndex + 1}</span>
+                              <span className="text-2xl font-bold text-slate-300">
+                                {page.originalIndex + 1}
+                              </span>
                             </div>
-                            <div className="text-center text-xs font-bold text-slate-400">PAGE {index + 1}</div>
+                            <div className="text-center text-xs font-bold text-slate-400">
+                              PAGE {index + 1}
+                            </div>
                           </div>
                         )}
                       </Draggable>
