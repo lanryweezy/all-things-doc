@@ -47,7 +47,7 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
 
       img.onload = () => {
         ctx?.drawImage(img, 0, 0, width, height);
-        canvas.toBlob((blob) => {
+        canvas.toBlob(blob => {
           if (blob) {
             setResultBlob(blob);
             setPreviewUrl(URL.createObjectURL(blob));
@@ -90,18 +90,25 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
             {file && (
               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">Resolution Scale: {scale}x</label>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">
+                    Resolution Scale: {scale}x
+                  </label>
                   <input
                     type="range"
                     min="1"
                     max="10"
                     value={scale}
-                    onChange={(e) => setScale(parseInt(e.target.value))}
+                    onChange={e => setScale(parseInt(e.target.value))}
                     className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                   />
                 </div>
                 <div className="flex justify-center">
-                  <Button onClick={handleConvert} isLoading={isProcessing} className="bg-slate-900 min-w-[200px]" icon={<RefreshCw size={18} />}>
+                  <Button
+                    onClick={handleConvert}
+                    isLoading={isProcessing}
+                    className="bg-slate-900 min-w-[200px]"
+                    icon={<RefreshCw size={18} />}
+                  >
                     Convert to PNG
                   </Button>
                 </div>
@@ -110,10 +117,20 @@ export const SvgConverter: React.FC<SvgConverterProps> = ({ onBack }) => {
           </div>
         ) : (
           <div className="text-center space-y-6">
-            <img src={previewUrl!} alt="Preview" className="max-w-full max-h-[400px] mx-auto rounded-lg shadow-sm border border-slate-100" />
+            <img
+              src={previewUrl!}
+              alt="Preview"
+              className="max-w-full max-h-[400px] mx-auto rounded-lg shadow-sm border border-slate-100"
+            />
             <div className="flex justify-center space-x-4">
-              <Button onClick={() => setResultBlob(null)} variant="outline">Convert Another</Button>
-              <Button onClick={handleDownload} className="bg-emerald-600" icon={<Download size={18} />}>
+              <Button onClick={() => setResultBlob(null)} variant="outline">
+                Convert Another
+              </Button>
+              <Button
+                onClick={handleDownload}
+                className="bg-emerald-600"
+                icon={<Download size={18} />}
+              >
                 Download PNG
               </Button>
             </div>

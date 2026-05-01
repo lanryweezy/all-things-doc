@@ -2,7 +2,7 @@ import {
   mergePdfs as backendMergePdfs,
   splitPdf as backendSplitPdf,
   compressPdf as backendCompressPdf,
-  extractTextFromPdf as backendExtractTextFromPdf
+  extractTextFromPdf as backendExtractTextFromPdf,
 } from './backendService';
 import { isBackendAvailable } from './apiCheck';
 
@@ -23,7 +23,7 @@ export const mergePdfs = async (files: File[]): Promise<Blob> => {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await PDFDocument.load(arrayBuffer);
     const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-    copiedPages.forEach((page) => mergedPdf.addPage(page));
+    copiedPages.forEach(page => mergedPdf.addPage(page));
   }
 
   const pdfBytes = await mergedPdf.save();
@@ -50,7 +50,7 @@ export const splitPdf = async (file: File, splitPoints: number[]): Promise<Blob>
 
   for (let i = 0; i < sortedPoints.length - 1; i++) {
     const start = sortedPoints[i];
-    const end = sortedPoints[i+1];
+    const end = sortedPoints[i + 1];
     if (start >= end) continue;
 
     const newPdf = await PDFDocument.create();
@@ -58,7 +58,7 @@ export const splitPdf = async (file: File, splitPoints: number[]): Promise<Blob>
     const copiedPages = await newPdf.copyPages(pdfDoc, pagesToCopy);
     copiedPages.forEach(page => newPdf.addPage(page));
     const pdfBytes = await newPdf.save();
-    zip.file(`part-${i+1}.pdf`, pdfBytes);
+    zip.file(`part-${i + 1}.pdf`, pdfBytes);
   }
 
   return await zip.generateAsync({ type: 'blob' });
@@ -95,7 +95,7 @@ export const imageToPdf = async (file: File): Promise<Uint8Array> => {
 
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
@@ -111,7 +111,7 @@ export const imageToPdf = async (file: File): Promise<Uint8Array> => {
         const pdf = new jsPDF({
           orientation: img.width > img.height ? 'l' : 'p',
           unit: 'px',
-          format: [img.width, img.height]
+          format: [img.width, img.height],
         });
 
         pdf.addImage(imgData, 'JPEG', 0, 0, img.width, img.height);
@@ -215,7 +215,10 @@ export const compressPdf = async (file: File): Promise<Blob> => {
     try {
       return await backendCompressPdf(file);
     } catch (error) {
-      console.warn('Backend PDF compression failed, falling back to client-side processing:', error);
+      console.warn(
+        'Backend PDF compression failed, falling back to client-side processing:',
+        error
+      );
     }
   }
 
@@ -234,7 +237,10 @@ export const extractTextFromPdf = async (file: File): Promise<string> => {
     try {
       return await backendExtractTextFromPdf(file);
     } catch (error) {
-      console.warn('Backend PDF text extraction failed, falling back to client-side processing:', error);
+      console.warn(
+        'Backend PDF text extraction failed, falling back to client-side processing:',
+        error
+      );
     }
   }
 
@@ -249,9 +255,7 @@ export const extractTextFromPdf = async (file: File): Promise<string> => {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const textContent = await page.getTextContent();
-    const pageText = textContent.items
-      .map((item: any) => item.str)
-      .join(' ');
+    const pageText = textContent.items.map((item: any) => item.str).join(' ');
     fullText += pageText + '\n\n';
   }
 
@@ -296,7 +300,7 @@ export const pdfToImages = async (file: File, format: 'jpeg' | 'png' = 'jpeg'): 
 
     await page.render({
       canvasContext: context,
-      viewport: viewport
+      viewport: viewport,
     }).promise;
 
     const blob = await new Promise<Blob | null>(resolve =>

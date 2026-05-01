@@ -102,43 +102,58 @@ export const SignatureGenerator: React.FC<SignatureGeneratorProps> = ({ onBack }
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 flex flex-col items-center space-y-8">
         <div className="w-full flex justify-between items-center px-2">
-           <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Draw below</span>
-           <button onClick={clear} className="text-slate-400 hover:text-cyan-500 flex items-center text-xs font-bold transition-colors">
-              <Eraser size={14} className="mr-1" /> CLEAR PAD
-           </button>
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            Draw below
+          </span>
+          <button
+            onClick={clear}
+            className="text-slate-400 hover:text-cyan-500 flex items-center text-xs font-bold transition-colors"
+          >
+            <Eraser size={14} className="mr-1" /> CLEAR PAD
+          </button>
         </div>
 
         <div className="w-full h-80 bg-slate-50 border-4 border-dashed border-slate-100 rounded-3xl overflow-hidden relative cursor-crosshair">
-           <canvas
-             ref={canvasRef}
-             width={800}
-             height={320}
-             onMouseDown={startDrawing}
-             onMouseUp={stopDrawing}
-             onMouseMove={draw}
-             onMouseOut={stopDrawing}
-             onTouchStart={startDrawing}
-             onTouchEnd={stopDrawing}
-             onTouchMove={draw}
-             className="w-full h-full"
-           />
-           <div className="absolute bottom-10 left-10 right-10 h-px bg-slate-200 pointer-events-none opacity-50"></div>
+          <canvas
+            ref={canvasRef}
+            width={800}
+            height={320}
+            onMouseDown={startDrawing}
+            onMouseUp={stopDrawing}
+            onMouseMove={draw}
+            onMouseOut={stopDrawing}
+            onTouchStart={startDrawing}
+            onTouchEnd={stopDrawing}
+            onTouchMove={draw}
+            className="w-full h-full"
+          />
+          <div className="absolute bottom-10 left-10 right-10 h-px bg-slate-200 pointer-events-none opacity-50"></div>
         </div>
 
         <div className="flex space-x-4">
-           <Button onClick={download} disabled={isEmpty} className="bg-indigo-600 px-12 py-4" icon={<Download size={18} />}>
-             Download PNG
-           </Button>
+          <Button
+            onClick={download}
+            disabled={isEmpty}
+            className="bg-indigo-600 px-12 py-4"
+            icon={<Download size={18} />}
+          >
+            Download PNG
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full border-t border-slate-100 pt-8 mt-4">
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-sign'}>
+          <div
+            className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+            onClick={() => (window.location.href = '/tools/pdf/pdf-sign')}
+          >
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <FileSignature className="w-4 h-4 text-indigo-600" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Next Step?
+                </p>
                 <p className="text-sm text-slate-700 font-bold">Sign a PDF Document</p>
               </div>
             </div>
@@ -146,7 +161,8 @@ export const SignatureGenerator: React.FC<SignatureGeneratorProps> = ({ onBack }
         </div>
 
         <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 text-xs text-blue-800 leading-relaxed font-medium max-w-lg text-center">
-           Generated signatures have a transparent background and are perfect for inserting into PDF documents or digital contracts. All processing is done locally.
+          Generated signatures have a transparent background and are perfect for inserting into PDF
+          documents or digital contracts. All processing is done locally.
         </div>
       </div>
     </div>

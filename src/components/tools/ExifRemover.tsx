@@ -28,7 +28,7 @@ export const ExifRemover: React.FC<ExifRemoverProps> = ({ onBack }) => {
 
     try {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         try {
           const dataUrl = e.target?.result as string;
           // piexif.remove strips the exif from the data URL
@@ -114,7 +114,11 @@ export const ExifRemover: React.FC<ExifRemoverProps> = ({ onBack }) => {
               <Button onClick={() => setResultBlob(null)} variant="outline">
                 Clean Another
               </Button>
-              <Button onClick={handleDownload} className="bg-emerald-600" icon={<Download size={18} />}>
+              <Button
+                onClick={handleDownload}
+                className="bg-emerald-600"
+                icon={<Download size={18} />}
+              >
                 Download Protected Image
               </Button>
             </div>

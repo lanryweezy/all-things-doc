@@ -52,19 +52,23 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
       {!diffResult ? (
         <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
           <div className="flex flex-col">
-            <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Original Text</label>
+            <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+              Original Text
+            </label>
             <textarea
               value={text1}
-              onChange={(e) => setText1(e.target.value)}
+              onChange={e => setText1(e.target.value)}
               className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
               placeholder="Paste original version..."
             />
           </div>
           <div className="flex flex-col">
-            <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Changed Text</label>
+            <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+              Changed Text
+            </label>
             <textarea
               value={text2}
-              onChange={(e) => setText2(e.target.value)}
+              onChange={e => setText2(e.target.value)}
               className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
               placeholder="Paste modified version..."
             />
@@ -76,9 +80,11 @@ export const DiffChecker: React.FC<DiffCheckerProps> = ({ onBack }) => {
             <div
               key={index}
               className={`px-2 whitespace-pre-wrap ${
-                part.added ? 'bg-green-50 text-green-700 border-l-4 border-green-500' :
-                part.removed ? 'bg-cyan-50 text-cyan-700 border-l-4 border-cyan-500 line-through' :
-                'text-slate-600'
+                part.added
+                  ? 'bg-green-50 text-green-700 border-l-4 border-green-500'
+                  : part.removed
+                    ? 'bg-cyan-50 text-cyan-700 border-l-4 border-cyan-500 line-through'
+                    : 'text-slate-600'
               }`}
             >
               {part.value}

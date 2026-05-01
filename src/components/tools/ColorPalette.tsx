@@ -78,7 +78,10 @@ export const ColorPalette: React.FC<ColorPaletteProps> = ({ onBack }) => {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-8">
         <FileUpload
           accept="image/*"
-          onFileSelect={(f) => { setFile(f); extractPalette(f); }}
+          onFileSelect={f => {
+            setFile(f);
+            extractPalette(f);
+          }}
           label="Upload Image to Extract Palette"
         />
 
@@ -90,7 +93,7 @@ export const ColorPalette: React.FC<ColorPaletteProps> = ({ onBack }) => {
 
         {palette.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {palette.map((color) => (
+            {palette.map(color => (
               <div
                 key={color}
                 onClick={() => handleCopy(color)}

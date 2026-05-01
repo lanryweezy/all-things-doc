@@ -21,7 +21,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ onBack }) => {
   useEffect(() => {
     if (isRunning) {
       timerRef.current = setInterval(() => {
-        setTime((prev) => prev + 10);
+        setTime(prev => prev + 10);
       }, 10);
     } else {
       clearInterval(timerRef.current);
@@ -62,12 +62,12 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ onBack }) => {
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-10 flex flex-col items-center space-y-12">
         <div className="relative">
           <div className="w-80 h-80 rounded-full border-8 border-slate-50 flex items-center justify-center shadow-inner">
-             <div className="text-6xl font-mono font-black text-slate-900 tracking-tighter">
-               {formatTime(time)}
-             </div>
+            <div className="text-6xl font-mono font-black text-slate-900 tracking-tighter">
+              {formatTime(time)}
+            </div>
           </div>
           <div className="absolute -top-4 -right-4 bg-indigo-100 text-indigo-600 p-3 rounded-2xl animate-bounce">
-             <Timer size={32} />
+            <Timer size={32} />
           </div>
         </div>
 
@@ -99,7 +99,9 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ onBack }) => {
 
         {laps.length > 0 && (
           <div className="w-full max-w-md space-y-3">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">Lap Records</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">
+              Lap Records
+            </h3>
             <div className="bg-slate-50 rounded-2xl border border-slate-100 divide-y divide-slate-200 max-h-60 overflow-y-auto custom-scrollbar">
               {laps.map((lap, i) => (
                 <div key={i} className="flex justify-between p-4 font-mono text-sm">

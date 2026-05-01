@@ -43,7 +43,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
     try {
       const image = new Image();
       image.src = imageSrc;
-      await new Promise((resolve) => (image.onload = resolve));
+      await new Promise(resolve => (image.onload = resolve));
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -63,7 +63,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
         croppedAreaPixels.height
       );
 
-      canvas.toBlob((blob) => {
+      canvas.toBlob(blob => {
         if (blob) {
           setResultBlob(blob);
           setPreviewUrl(URL.createObjectURL(blob));
@@ -97,7 +97,11 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         {!imageSrc ? (
-          <FileUpload accept="image/*" onFileSelect={handleFileSelect} label="Upload Image to Crop" />
+          <FileUpload
+            accept="image/*"
+            onFileSelect={handleFileSelect}
+            label="Upload Image to Crop"
+          />
         ) : !resultBlob ? (
           <div className="space-y-6">
             <div className="relative h-96 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
@@ -123,7 +127,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
                     { label: '4:3', val: 4 / 3 },
                     { label: '16:9', val: 16 / 9 },
                     { label: 'Circle', val: 1 },
-                  ].map((preset) => (
+                  ].map(preset => (
                     <button
                       key={preset.label}
                       onClick={() => setAspect(preset.val)}
@@ -138,31 +142,54 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({ onBack }) => {
                   ))}
                 </div>
 
-                <label className="block text-sm font-bold text-slate-500 mb-2 uppercase">Zoom</label>
+                <label className="block text-sm font-bold text-slate-500 mb-2 uppercase">
+                  Zoom
+                </label>
                 <input
                   type="range"
                   value={zoom}
                   min={1}
                   max={3}
                   step={0.1}
-                  onChange={(e) => setZoom(parseFloat(e.target.value))}
+                  onChange={e => setZoom(parseFloat(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
               </div>
-              <Button onClick={getCroppedImg} isLoading={isProcessing} className="w-full md:w-auto min-w-[150px]" icon={<CropIcon size={18} />}>
+              <Button
+                onClick={getCroppedImg}
+                isLoading={isProcessing}
+                className="w-full md:w-auto min-w-[150px]"
+                icon={<CropIcon size={18} />}
+              >
                 Crop Image
               </Button>
-              <Button onClick={() => { setImageSrc(null); setFile(null); }} variant="outline">
+              <Button
+                onClick={() => {
+                  setImageSrc(null);
+                  setFile(null);
+                }}
+                variant="outline"
+              >
                 Cancel
               </Button>
             </div>
           </div>
         ) : (
           <div className="text-center space-y-6">
-            <img src={previewUrl!} alt="Cropped" className="max-w-full max-h-[400px] mx-auto rounded-lg shadow-md border border-slate-100" />
+            <img
+              src={previewUrl!}
+              alt="Cropped"
+              className="max-w-full max-h-[400px] mx-auto rounded-lg shadow-md border border-slate-100"
+            />
             <div className="flex justify-center space-x-4">
-              <Button onClick={() => setResultBlob(null)} variant="outline">Crop Again</Button>
-              <Button onClick={handleDownload} className="bg-emerald-600" icon={<Download size={18} />}>
+              <Button onClick={() => setResultBlob(null)} variant="outline">
+                Crop Again
+              </Button>
+              <Button
+                onClick={handleDownload}
+                className="bg-emerald-600"
+                icon={<Download size={18} />}
+              >
                 Download Cropped Image
               </Button>
             </div>

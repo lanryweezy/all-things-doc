@@ -94,7 +94,7 @@ export const BmiCalculator: React.FC<BmiCalculatorProps> = ({ onBack }) => {
               <input
                 type="number"
                 value={weight}
-                onChange={(e) => setWeight(e.target.value)}
+                onChange={e => setWeight(e.target.value)}
                 className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none text-2xl font-bold text-slate-900"
               />
             </div>
@@ -105,7 +105,7 @@ export const BmiCalculator: React.FC<BmiCalculatorProps> = ({ onBack }) => {
               <input
                 type="number"
                 value={height}
-                onChange={(e) => setHeight(e.target.value)}
+                onChange={e => setHeight(e.target.value)}
                 className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none text-2xl font-bold text-slate-900"
               />
             </div>
@@ -115,7 +115,9 @@ export const BmiCalculator: React.FC<BmiCalculatorProps> = ({ onBack }) => {
         <div className="space-y-6">
           {bmi ? (
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center animate-fade-in">
-              <div className="text-slate-400 font-bold uppercase tracking-widest text-sm mb-2">Your BMI</div>
+              <div className="text-slate-400 font-bold uppercase tracking-widest text-sm mb-2">
+                Your BMI
+              </div>
               <div className={`text-7xl font-black mb-4 ${color}`}>{bmi}</div>
               <div className={`text-2xl font-bold px-6 py-2 rounded-full bg-slate-50 ${color}`}>
                 {category}
@@ -146,7 +148,8 @@ export const BmiCalculator: React.FC<BmiCalculatorProps> = ({ onBack }) => {
             <Info className="text-blue-500 mt-1 flex-shrink-0" size={18} />
             <div className="text-sm text-blue-800 leading-relaxed">
               <p className="font-bold mb-1">About BMI</p>
-              Body Mass Index (BMI) is a simple index of weight-for-height that is commonly used to classify underweight, overweight and obesity in adults.
+              Body Mass Index (BMI) is a simple index of weight-for-height that is commonly used to
+              classify underweight, overweight and obesity in adults.
             </div>
           </div>
         </div>

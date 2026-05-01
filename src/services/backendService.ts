@@ -1,7 +1,8 @@
 // For Vercel deployment, the backend routes are handled by the same domain
 // The vercel.json routes /pdf/* and /ai/* to the Python backend
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ||
-                   (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000');
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000');
 
 interface ApiError {
   detail: string;
@@ -129,7 +130,10 @@ export const summarizeText = async (text: string): Promise<string> => {
   }
 };
 
-export const translateText = async (text: string, targetLanguage: string = 'es'): Promise<string> => {
+export const translateText = async (
+  text: string,
+  targetLanguage: string = 'es'
+): Promise<string> => {
   try {
     const response = await fetch(`${BACKEND_URL}/ai/translate`, {
       method: 'POST',

@@ -77,8 +77,7 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
       }
     } else if (toolId === ToolID.PDF_SPLIT) {
       if (!file || !paramValue) return; // Ensure file and split points are provided
-    }
-    else {
+    } else {
       if (!file) return;
     }
 
@@ -160,7 +159,9 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
         case ToolID.PDF_REDACT:
           if (file) {
             // For demo purposes, we'll redact a fixed area
-            result = await new Promise(resolve => setTimeout(() => resolve(new Uint8Array()), 1000));
+            result = await new Promise(resolve =>
+              setTimeout(() => resolve(new Uint8Array()), 1000)
+            );
             showToast('PDF Redact functionality is a placeholder.', 'info');
           }
           break;
@@ -280,21 +281,25 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
     let extension = 'pdf';
     let mimeType = 'application/pdf';
 
-    if (toolId === ToolID.PDF_SPLIT || (resultData.length > 0 && toolId === ToolID.PDF_TO_JPG && secondaryFiles.length > 0)) {
-       // This logic is a bit flawed because secondaryFiles isn't used for count here,
-       // but we know if it's a zip if toolId is split or if we have multiple pages in PDF_TO_JPG
+    if (
+      toolId === ToolID.PDF_SPLIT ||
+      (resultData.length > 0 && toolId === ToolID.PDF_TO_JPG && secondaryFiles.length > 0)
+    ) {
+      // This logic is a bit flawed because secondaryFiles isn't used for count here,
+      // but we know if it's a zip if toolId is split or if we have multiple pages in PDF_TO_JPG
     }
 
-    const isZip = toolId === ToolID.PDF_SPLIT ||
-                 (toolId === ToolID.PDF_TO_JPG && resultData.length > 0) ||
-                 (toolId === ToolID.PDF_TO_PNG && resultData.length > 0);
+    const isZip =
+      toolId === ToolID.PDF_SPLIT ||
+      (toolId === ToolID.PDF_TO_JPG && resultData.length > 0) ||
+      (toolId === ToolID.PDF_TO_PNG && resultData.length > 0);
 
     // Check if it's actually an image
     const isSingleImage = (toolId === ToolID.PDF_TO_JPG || toolId === ToolID.PDF_TO_PNG) && !isZip;
     // Actually our logic in handleProcess makes it a zip if > 1 page.
     // For simplicity, let's just detect if the first few bytes look like a ZIP
-    const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4B;
-    const isJpeg = resultData[0] === 0xFF && resultData[1] === 0xD8;
+    const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4b;
+    const isJpeg = resultData[0] === 0xff && resultData[1] === 0xd8;
     const isPng = resultData[0] === 0x89 && resultData[1] === 0x50;
 
     if (isActuallyZip) {
@@ -315,8 +320,8 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
   // Create download URL when resultData changes
   useEffect(() => {
     if (resultData) {
-      const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4B;
-      const isJpeg = resultData[0] === 0xFF && resultData[1] === 0xD8;
+      const isActuallyZip = resultData[0] === 0x50 && resultData[1] === 0x4b;
+      const isJpeg = resultData[0] === 0xff && resultData[1] === 0xd8;
       const isPng = resultData[0] === 0x89 && resultData[1] === 0x50;
 
       let mimeType = 'application/pdf';
@@ -490,14 +495,20 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
               onClick={() => setParamValue('Left')}
               className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Left' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
             >
-              <RotateCcw className={`mb-2 ${paramValue === 'Left' ? 'text-white' : 'text-slate-900'}`} size={24} />
+              <RotateCcw
+                className={`mb-2 ${paramValue === 'Left' ? 'text-white' : 'text-slate-900'}`}
+                size={24}
+              />
               <span className="text-sm font-medium">Left 90°</span>
             </button>
             <button
               onClick={() => setParamValue('Right')}
               className={`flex flex-col items-center p-4 border rounded-lg transition-all ${paramValue === 'Right' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 hover:bg-slate-50'}`}
             >
-              <RotateCw className={`mb-2 ${paramValue === 'Right' ? 'text-white' : 'text-slate-900'}`} size={24} />
+              <RotateCw
+                className={`mb-2 ${paramValue === 'Right' ? 'text-white' : 'text-slate-900'}`}
+                size={24}
+              />
               <span className="text-sm font-medium">Right 90°</span>
             </button>
           </div>
@@ -585,7 +596,9 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
               {file && (
                 <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm animate-fade-in">
                   <div className="flex items-center space-x-3 min-w-0">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-slate-900 text-white text-xs font-bold rounded-full">1</span>
+                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-slate-900 text-white text-xs font-bold rounded-full">
+                      1
+                    </span>
                     <span className="text-sm font-medium text-slate-700 truncate">{file.name}</span>
                   </div>
                   <button
@@ -610,7 +623,9 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
                   className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm animate-fade-in"
                 >
                   <div className="flex items-center space-x-3 min-w-0">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-slate-400 text-white text-xs font-bold rounded-full">{i + 2}</span>
+                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-slate-400 text-white text-xs font-bold rounded-full">
+                      {i + 2}
+                    </span>
                     <span className="text-sm font-medium text-slate-700 truncate">{f.name}</span>
                   </div>
                   <button
@@ -635,7 +650,11 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
               onFileSelect={handleSecondaryUpload}
               selectedFile={null}
               onClear={() => {}}
-              label={file ? `Add another ${toolId === ToolID.MERGE_WORD ? 'Word Doc' : 'PDF'}` : getUploadLabel()}
+              label={
+                file
+                  ? `Add another ${toolId === ToolID.MERGE_WORD ? 'Word Doc' : 'PDF'}`
+                  : getUploadLabel()
+              }
               className="mt-4"
             />
           </div>
@@ -797,25 +816,35 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto border-t border-slate-100 pt-8 mt-8">
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf-organize'}>
+          <div
+            className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+            onClick={() => (window.location.href = '/tools/pdf-organize')}
+          >
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <Layers className="w-4 h-4 text-fuchsia-600" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Next Step?
+                </p>
                 <p className="text-sm text-slate-700 font-bold">Organize PDF Pages</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/pdf/pdf-compress'}>
+          <div
+            className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+            onClick={() => (window.location.href = '/tools/pdf/pdf-compress')}
+          >
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <Minimize2 className="w-4 h-4 text-green-600" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Next Step?
+                </p>
                 <p className="text-sm text-slate-700 font-bold">Compress PDF</p>
               </div>
             </div>

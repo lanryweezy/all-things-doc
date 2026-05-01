@@ -72,10 +72,12 @@ LIMIT 10;`;
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 min-h-0">
         <div className="flex flex-col">
-          <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Input SQL</label>
+          <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
+            Input SQL
+          </label>
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="flex-grow w-full p-4 bg-white border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm"
             placeholder="SELECT * FROM users WHERE id = 1"
           />
@@ -84,8 +86,15 @@ LIMIT 10;`;
           <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex justify-between items-center">
             <span>Formatted SQL</span>
             {output && (
-              <button onClick={handleCopy} className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold">
-                {copied ? <Check size={14} className="mr-1" /> : <Copy size={14} className="mr-1" />}
+              <button
+                onClick={handleCopy}
+                className="text-cyan-600 hover:text-cyan-700 text-xs flex items-center font-semibold"
+              >
+                {copied ? (
+                  <Check size={14} className="mr-1" />
+                ) : (
+                  <Copy size={14} className="mr-1" />
+                )}
                 {copied ? 'Copied' : 'Copy'}
               </button>
             )}
@@ -102,7 +111,7 @@ LIMIT 10;`;
       <div className="mt-6 flex flex-wrap justify-center gap-4 flex-shrink-0">
         <select
           value={dialect}
-          onChange={(e) => setDialect(e.target.value)}
+          onChange={e => setDialect(e.target.value)}
           className="p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none font-bold text-slate-600"
         >
           <option value="sql">Standard SQL</option>
@@ -111,7 +120,12 @@ LIMIT 10;`;
           <option value="tsql">T-SQL (SQL Server)</option>
           <option value="mariadb">MariaDB</option>
         </select>
-        <Button onClick={handleFormat} disabled={!input.trim()} className="bg-slate-900 min-w-[150px]" icon={<Database size={18} />}>
+        <Button
+          onClick={handleFormat}
+          disabled={!input.trim()}
+          className="bg-slate-900 min-w-[150px]"
+          icon={<Database size={18} />}
+        >
           Format SQL
         </Button>
         <Button

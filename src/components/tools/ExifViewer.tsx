@@ -29,7 +29,7 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
   const handleFileSelect = (f: File) => {
     setFile(f);
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       const dataUrl = e.target?.result as string;
       setPreview(dataUrl);
       try {
@@ -41,7 +41,8 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
           for (const tag in exif[ifd]) {
             const tagName = piexif.TAGS[ifd][tag]?.name || tag;
             let val = exif[ifd][tag];
-            if (Array.isArray(val) && val.length > 50) val = `[Large Data Block: ${val.length} bytes]`;
+            if (Array.isArray(val) && val.length > 50)
+              val = `[Large Data Block: ${val.length} bytes]`;
             simplified[tagName] = val;
           }
         }
@@ -78,42 +79,65 @@ export const ExifViewer: React.FC<ExifViewerProps> = ({ onBack }) => {
 
       {!file ? (
         <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-           <FileUpload accept="image/jpeg" onFileSelect={handleFileSelect} label="Upload JPEG Image to View Metadata" />
-           <p className="mt-4 text-center text-xs text-slate-400">Note: EXIF data is most common in JPEG photos from cameras/phones.</p>
+          <FileUpload
+            accept="image/jpeg"
+            onFileSelect={handleFileSelect}
+            label="Upload JPEG Image to View Metadata"
+          />
+          <p className="mt-4 text-center text-xs text-slate-400">
+            Note: EXIF data is most common in JPEG photos from cameras/phones.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col items-center p-6">
-               <div className="w-full flex justify-between items-center mb-6">
-                 <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{file.name}</span>
-                 <button onClick={clear} className="text-slate-400 hover:text-cyan-500">
-                    <Trash2 size={18} />
-                 </button>
-               </div>
-               <img src={preview!} alt="Preview" className="max-w-full max-h-[400px] rounded-2xl shadow-lg object-contain" />
+              <div className="w-full flex justify-between items-center mb-6">
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                  {file.name}
+                </span>
+                <button onClick={clear} className="text-slate-400 hover:text-cyan-500">
+                  <Trash2 size={18} />
+                </button>
+              </div>
+              <img
+                src={preview!}
+                alt="Preview"
+                className="max-w-full max-h-[400px] rounded-2xl shadow-lg object-contain"
+              />
             </div>
           </div>
 
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-             <div className="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">Metadata Values</h3>
-                <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">
-                  {Object.keys(exifData || {}).length} Tags Found
-                </span>
-             </div>
-             <div className="flex-1 overflow-y-auto max-h-[600px] divide-y divide-slate-100 custom-scrollbar">
-                {exifData && Object.keys(exifData).length > 0 ? (
-                  Object.entries(exifData).map(([key, val]) => (
-                    <div key={key} className="p-4 hover:bg-slate-50 transition-colors flex justify-between items-start space-x-4">
-                       <span className="text-xs font-bold text-slate-500 w-1/3 truncate" title={key}>{key}</span>
-                       <span className="text-sm font-mono text-slate-900 text-right break-all">{String(val)}</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-20 text-center text-slate-300 italic">No EXIF tags found in this image.</div>
-                )}
-             </div>
+            <div className="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">
+                Metadata Values
+              </h3>
+              <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">
+                {Object.keys(exifData || {}).length} Tags Found
+              </span>
+            </div>
+            <div className="flex-1 overflow-y-auto max-h-[600px] divide-y divide-slate-100 custom-scrollbar">
+              {exifData && Object.keys(exifData).length > 0 ? (
+                Object.entries(exifData).map(([key, val]) => (
+                  <div
+                    key={key}
+                    className="p-4 hover:bg-slate-50 transition-colors flex justify-between items-start space-x-4"
+                  >
+                    <span className="text-xs font-bold text-slate-500 w-1/3 truncate" title={key}>
+                      {key}
+                    </span>
+                    <span className="text-sm font-mono text-slate-900 text-right break-all">
+                      {String(val)}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="p-20 text-center text-slate-300 italic">
+                  No EXIF tags found in this image.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

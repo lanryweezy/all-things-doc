@@ -40,23 +40,23 @@ export const SeoHelmet: React.FC<SeoHelmetProps> = ({ tool }) => {
     }
 
     const schemaData = {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": tool ? tool.title : "All Things Doc",
-      "operatingSystem": "Any",
-      "applicationCategory": tool ? "MultimediaApplication" : "UtilitiesApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0.00",
-        "priceCurrency": "USD"
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: tool ? tool.title : 'All Things Doc',
+      operatingSystem: 'Any',
+      applicationCategory: tool ? 'MultimediaApplication' : 'UtilitiesApplication',
+      offers: {
+        '@type': 'Offer',
+        price: '0.00',
+        priceCurrency: 'USD',
       },
-      "description": description,
-      "url": window.location.href,
-      "softwareVersion": "1.0",
-      "publisher": {
-        "@type": "Organization",
-        "name": "All Things Doc"
-      }
+      description: description,
+      url: window.location.href,
+      softwareVersion: '1.0',
+      publisher: {
+        '@type': 'Organization',
+        name: 'All Things Doc',
+      },
     };
     scriptTag.textContent = JSON.stringify(schemaData);
 

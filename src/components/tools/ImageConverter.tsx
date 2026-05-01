@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Download, RefreshCcw, Image as ImageIcon, Link, Maximize, Minimize2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Download,
+  RefreshCcw,
+  Image as ImageIcon,
+  Link,
+  Maximize,
+  Minimize2,
+} from 'lucide-react';
 import { Button } from '../ui/Button';
 import { FileUpload } from '../ui/FileUpload';
 import { convertImage } from '../../services/imageService';
@@ -166,10 +174,15 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                 {(targetFormat === 'jpeg' || targetFormat === 'webp') && (
                   <div className="border-t border-slate-200 pt-6">
                     <div className="flex justify-between items-center mb-3">
-                      <label htmlFor="quality-slider" className="text-sm font-medium text-slate-700">
+                      <label
+                        htmlFor="quality-slider"
+                        className="text-sm font-medium text-slate-700"
+                      >
                         Image Quality / Compression
                       </label>
-                      <span className="text-sm font-bold text-cyan-600">{Math.round(quality * 100)}%</span>
+                      <span className="text-sm font-bold text-cyan-600">
+                        {Math.round(quality * 100)}%
+                      </span>
                     </div>
                     <input
                       id="quality-slider"
@@ -178,7 +191,7 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
                       max="1.0"
                       step="0.05"
                       value={quality}
-                      onChange={(e) => setQuality(parseFloat(e.target.value))}
+                      onChange={e => setQuality(parseFloat(e.target.value))}
                       className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                     />
                     <div className="flex justify-between text-xs text-slate-400 mt-2 italic">
@@ -225,25 +238,35 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({ onBack }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/image-resizer'}>
+              <div
+                className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => (window.location.href = '/tools/image-resizer')}
+              >
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-white rounded-lg shadow-sm">
                     <Maximize className="w-4 h-4 text-teal-600" />
                   </div>
                   <div className="text-left">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Next Step?
+                    </p>
                     <p className="text-sm text-slate-700 font-bold">Resize this Image</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => window.location.href = '/tools/image-compressor'}>
+              <div
+                className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => (window.location.href = '/tools/image-compressor')}
+              >
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-white rounded-lg shadow-sm">
                     <Minimize2 className="w-4 h-4 text-teal-600" />
                   </div>
                   <div className="text-left">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Step?</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Next Step?
+                    </p>
                     <p className="text-sm text-slate-700 font-bold">Compress Image</p>
                   </div>
                 </div>

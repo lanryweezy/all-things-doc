@@ -659,7 +659,8 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   [ToolID.PRIVACY_REDACTOR]: {
     id: ToolID.PRIVACY_REDACTOR,
     title: 'Privacy Redactor',
-    description: 'Protect your sensitive data by automatically redacting emails, phones, and credit card numbers.',
+    description:
+      'Protect your sensitive data by automatically redacting emails, phones, and credit card numbers.',
     icon: Shield,
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
@@ -669,7 +670,8 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   [ToolID.EXIF_VIEWER]: {
     id: ToolID.EXIF_VIEWER,
     title: 'EXIF Viewer',
-    description: 'Inspect detailed camera metadata, GPS location, and technical info embedded in photos.',
+    description:
+      'Inspect detailed camera metadata, GPS location, and technical info embedded in photos.',
     icon: Tag,
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
@@ -679,7 +681,8 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   [ToolID.SIGNATURE_GENERATOR]: {
     id: ToolID.SIGNATURE_GENERATOR,
     title: 'Signature Pad',
-    description: 'Create a digital electronic signature with your mouse or touch screen for documents.',
+    description:
+      'Create a digital electronic signature with your mouse or touch screen for documents.',
     icon: PenTool,
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',
@@ -714,7 +717,14 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-100',
     category: ToolCategory.OFFICE_TOOLS,
-    keywords: ['convert units', 'metric to imperial', 'temperature converter', 'area', 'volume', 'pressure'],
+    keywords: [
+      'convert units',
+      'metric to imperial',
+      'temperature converter',
+      'area',
+      'volume',
+      'pressure',
+    ],
   },
   [ToolID.TEXT_CLEANER]: {
     id: ToolID.TEXT_CLEANER,
@@ -889,7 +899,8 @@ export const TOOLS: Record<ToolID, ToolConfig> = {
   [ToolID.NUMBER_TO_WORDS]: {
     id: ToolID.NUMBER_TO_WORDS,
     title: 'Number to Words',
-    description: 'Convert numbers into written words for checks, legal documents, or accessibility.',
+    description:
+      'Convert numbers into written words for checks, legal documents, or accessibility.',
     icon: Type,
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100',

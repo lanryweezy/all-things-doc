@@ -24,15 +24,60 @@ export const NumberToWords: React.FC<NumberToWordsProps> = ({ onBack }) => {
   };
 
   const numberToWords = (num: number): string => {
-    const a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const a = [
+      '',
+      'one',
+      'two',
+      'three',
+      'four',
+      'five',
+      'six',
+      'seven',
+      'eight',
+      'nine',
+      'ten',
+      'eleven',
+      'twelve',
+      'thirteen',
+      'fourteen',
+      'fifteen',
+      'sixteen',
+      'seventeen',
+      'eighteen',
+      'nineteen',
+    ];
+    const b = [
+      '',
+      '',
+      'twenty',
+      'thirty',
+      'forty',
+      'fifty',
+      'sixty',
+      'seventy',
+      'eighty',
+      'ninety',
+    ];
 
     const makeWords = (n: number): string => {
       if (n < 20) return a[n];
       if (n < 100) return b[Math.floor(n / 10)] + (n % 10 !== 0 ? '-' + a[n % 10] : '');
-      if (n < 1000) return a[Math.floor(n / 100)] + ' hundred' + (n % 100 !== 0 ? ' and ' + makeWords(n % 100) : '');
-      if (n < 1000000) return makeWords(Math.floor(n / 1000)) + ' thousand' + (n % 1000 !== 0 ? ' ' + makeWords(n % 1000) : '');
-      if (n < 1000000000) return makeWords(Math.floor(n / 1000000)) + ' million' + (n % 1000000 !== 0 ? ' ' + makeWords(n % 1000000) : '');
+      if (n < 1000)
+        return (
+          a[Math.floor(n / 100)] + ' hundred' + (n % 100 !== 0 ? ' and ' + makeWords(n % 100) : '')
+        );
+      if (n < 1000000)
+        return (
+          makeWords(Math.floor(n / 1000)) +
+          ' thousand' +
+          (n % 1000 !== 0 ? ' ' + makeWords(n % 1000) : '')
+        );
+      if (n < 1000000000)
+        return (
+          makeWords(Math.floor(n / 1000000)) +
+          ' million' +
+          (n % 1000000 !== 0 ? ' ' + makeWords(n % 1000000) : '')
+        );
       return 'Number too large';
     };
 
@@ -69,28 +114,35 @@ export const NumberToWords: React.FC<NumberToWordsProps> = ({ onBack }) => {
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-10 space-y-8">
         <div className="space-y-4">
-          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">Number Input</label>
+          <label className="text-sm font-bold text-slate-500 uppercase tracking-widest ml-1">
+            Number Input
+          </label>
           <input
             type="number"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="w-full p-6 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-4xl font-black text-slate-900"
           />
         </div>
 
         <div className="space-y-4">
           <div className="flex justify-between items-center px-1">
-             <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">In Words</label>
-             {output && (
-               <button onClick={handleCopy} className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center">
-                  <Copy size={14} className="mr-1" /> COPY
-               </button>
-             )}
+            <label className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+              In Words
+            </label>
+            {output && (
+              <button
+                onClick={handleCopy}
+                className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center"
+              >
+                <Copy size={14} className="mr-1" /> COPY
+              </button>
+            )}
           </div>
           <div className="w-full p-8 bg-indigo-50 border border-indigo-100 rounded-3xl min-h-[120px] flex items-center justify-center text-center">
-             <div className="text-2xl font-bold text-indigo-900 leading-relaxed capitalize">
-               {output || <span className="text-indigo-200 italic">Result will appear here...</span>}
-             </div>
+            <div className="text-2xl font-bold text-indigo-900 leading-relaxed capitalize">
+              {output || <span className="text-indigo-200 italic">Result will appear here...</span>}
+            </div>
           </div>
         </div>
       </div>

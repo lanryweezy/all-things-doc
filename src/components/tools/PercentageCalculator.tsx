@@ -83,14 +83,14 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <input
               type="number"
               value={s1X}
-              onChange={(e) => setS1X(e.target.value)}
+              onChange={e => setS1X(e.target.value)}
               className="w-24 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>% of</span>
             <input
               type="number"
               value={s1Y}
-              onChange={(e) => setS1Y(e.target.value)}
+              onChange={e => setS1Y(e.target.value)}
               className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>?</span>
@@ -102,7 +102,9 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <span className="text-red-400 font-bold uppercase tracking-wider">Result</span>
             <div className="flex items-center space-x-4">
               <span className="text-4xl font-black text-cyan-600">{s1Result}</span>
-              <div className="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">Click to copy</div>
+              <div className="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                Click to copy
+              </div>
             </div>
           </div>
         </div>
@@ -117,14 +119,14 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <input
               type="number"
               value={s2X}
-              onChange={(e) => setS2X(e.target.value)}
+              onChange={e => setS2X(e.target.value)}
               className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>is what % of</span>
             <input
               type="number"
               value={s2Y}
-              onChange={(e) => setS2Y(e.target.value)}
+              onChange={e => setS2Y(e.target.value)}
               className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>?</span>
@@ -136,7 +138,9 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <span className="text-red-400 font-bold uppercase tracking-wider">Result</span>
             <div className="flex items-center space-x-4">
               <span className="text-4xl font-black text-cyan-600">{s2Result}%</span>
-              <div className="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">Click to copy</div>
+              <div className="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                Click to copy
+              </div>
             </div>
           </div>
         </div>
@@ -152,14 +156,14 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             <input
               type="number"
               value={s3From}
-              onChange={(e) => setS3From(e.target.value)}
+              onChange={e => setS3From(e.target.value)}
               className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
             <span>to</span>
             <input
               type="number"
               value={s3To}
-              onChange={(e) => setS3To(e.target.value)}
+              onChange={e => setS3To(e.target.value)}
               className="w-32 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none text-center"
             />
           </div>
@@ -167,14 +171,20 @@ export const PercentageCalculator: React.FC<PercentageCalculatorProps> = ({ onBa
             onClick={() => handleCopy(s3Result)}
             className={`p-6 rounded-2xl border flex justify-between items-center cursor-pointer transition-colors group ${parseFloat(s3Result) >= 0 ? 'bg-emerald-50 border-emerald-100 hover:bg-emerald-100' : 'bg-rose-50 border-rose-100 hover:bg-rose-100'}`}
           >
-            <span className={`font-bold uppercase tracking-wider ${parseFloat(s3Result) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            <span
+              className={`font-bold uppercase tracking-wider ${parseFloat(s3Result) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}
+            >
               {parseFloat(s3Result) >= 0 ? 'Increase' : 'Decrease'}
             </span>
             <div className="flex items-center space-x-4">
-              <span className={`text-4xl font-black ${parseFloat(s3Result) >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+              <span
+                className={`text-4xl font-black ${parseFloat(s3Result) >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}
+              >
                 {Math.abs(parseFloat(s3Result))}%
               </span>
-              <div className="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">Click to copy</div>
+              <div className="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                Click to copy
+              </div>
             </div>
           </div>
         </div>

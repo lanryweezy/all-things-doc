@@ -68,10 +68,20 @@ export const LineUtils: React.FC<LineUtilsProps> = ({ onBack }) => {
           <Button onClick={handleSortAsc} variant="outline" size="sm" icon={<SortAsc size={16} />}>
             Sort A-Z
           </Button>
-          <Button onClick={handleSortDesc} variant="outline" size="sm" icon={<SortDesc size={16} />}>
+          <Button
+            onClick={handleSortDesc}
+            variant="outline"
+            size="sm"
+            icon={<SortDesc size={16} />}
+          >
             Sort Z-A
           </Button>
-          <Button onClick={handleRemoveDuplicates} variant="outline" size="sm" icon={<Trash2 size={16} />}>
+          <Button
+            onClick={handleRemoveDuplicates}
+            variant="outline"
+            size="sm"
+            icon={<Trash2 size={16} />}
+          >
             Unique
           </Button>
           <Button onClick={handleReverse} variant="outline" size="sm" icon={<Repeat size={16} />}>
@@ -85,7 +95,7 @@ export const LineUtils: React.FC<LineUtilsProps> = ({ onBack }) => {
         <div className="relative">
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="w-full h-96 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none font-mono text-sm leading-relaxed"
             placeholder="Paste your list or lines of text here..."
           />

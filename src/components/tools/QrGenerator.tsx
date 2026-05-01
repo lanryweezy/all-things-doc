@@ -123,10 +123,12 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Content (URL or Text)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Content (URL or Text)
+              </label>
               <textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={e => setInput(e.target.value)}
                 className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-600 outline-none resize-none text-sm"
                 placeholder="Enter link or text for the QR code..."
               />
@@ -134,7 +136,9 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="qr-size" className="block text-sm font-medium text-slate-700 mb-1">Size: {size}px</label>
+                <label htmlFor="qr-size" className="block text-sm font-medium text-slate-700 mb-1">
+                  Size: {size}px
+                </label>
                 <input
                   id="qr-size"
                   type="range"
@@ -142,19 +146,24 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
                   max="512"
                   step="32"
                   value={size}
-                  onChange={(e) => setSize(parseInt(e.target.value))}
+                  onChange={e => setSize(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
               </div>
               <div>
-                <label htmlFor="qr-margin" className="block text-sm font-medium text-slate-700 mb-1">Margin: {margin}</label>
+                <label
+                  htmlFor="qr-margin"
+                  className="block text-sm font-medium text-slate-700 mb-1"
+                >
+                  Margin: {margin}
+                </label>
                 <input
                   id="qr-margin"
                   type="range"
                   min="0"
                   max="10"
                   value={margin}
-                  onChange={(e) => setMargin(parseInt(e.target.value))}
+                  onChange={e => setMargin(parseInt(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
               </div>
@@ -186,21 +195,35 @@ export const QrGenerator: React.FC<QrGeneratorProps> = ({ onBack }) => {
                 className="flex items-center justify-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
                 title="Copy content"
               >
-                {copied ? <Check size={20} className="text-green-600" /> : <Copy size={20} className="text-slate-500" />}
+                {copied ? (
+                  <Check size={20} className="text-green-600" />
+                ) : (
+                  <Copy size={20} className="text-slate-500" />
+                )}
               </button>
             </div>
           </div>
         </div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 max-w-2xl mx-auto">
-          <FileUpload accept="image/*" onFileSelect={handleScan} label="Upload QR Code Image to Read" />
+          <FileUpload
+            accept="image/*"
+            onFileSelect={handleScan}
+            label="Upload QR Code Image to Read"
+          />
 
           {scanResult && (
             <div className="mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-200 relative animate-fade-in">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Scanned Content</h3>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+                Scanned Content
+              </h3>
               <div className="text-lg font-medium text-slate-700 break-all mb-4">{scanResult}</div>
               <div className="flex justify-end">
-                <Button onClick={() => handleCopy(scanResult)} variant="outline" icon={copied ? <Check size={18} /> : <Copy size={18} />}>
+                <Button
+                  onClick={() => handleCopy(scanResult)}
+                  variant="outline"
+                  icon={copied ? <Check size={18} /> : <Copy size={18} />}
+                >
                   {copied ? 'Copied!' : 'Copy Result'}
                 </Button>
               </div>

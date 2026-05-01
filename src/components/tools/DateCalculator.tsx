@@ -17,7 +17,12 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
   // Difference Mode
   const [date1, setDate1] = useState(new Date().toISOString().split('T')[0]);
   const [date2, setDate2] = useState(new Date().toISOString().split('T')[0]);
-  const [diffResult, setDiffResult] = useState<{ days: number, weeks: number, months: number, years: number } | null>(null);
+  const [diffResult, setDiffResult] = useState<{
+    days: number;
+    weeks: number;
+    months: number;
+    years: number;
+  } | null>(null);
 
   // Add/Subtract Mode
   const [baseDate, setBaseDate] = useState(new Date().toISOString().split('T')[0]);
@@ -46,7 +51,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
         days: diffDays,
         weeks: parseFloat((diffDays / 7).toFixed(1)),
         months: parseFloat((diffDays / 30.44).toFixed(1)),
-        years: parseFloat((diffDays / 365.25).toFixed(1))
+        years: parseFloat((diffDays / 365.25).toFixed(1)),
       });
     } else if (mode === 'add_subtract') {
       const d = new Date(baseDate);
@@ -82,10 +87,19 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
   }, [mode, date1, date2, baseDate, years, months, days, time, sourceTz, targetTz]);
 
   const commonTimezones = [
-    'UTC', 'America/New_York', 'America/Los_Angeles', 'America/Chicago',
-    'Europe/London', 'Europe/Paris', 'Europe/Berlin',
-    'Asia/Tokyo', 'Asia/Shanghai', 'Asia/Kolkata', 'Asia/Dubai',
-    'Australia/Sydney', 'Pacific/Auckland'
+    'UTC',
+    'America/New_York',
+    'America/Los_Angeles',
+    'America/Chicago',
+    'Europe/London',
+    'Europe/Paris',
+    'Europe/Berlin',
+    'Asia/Tokyo',
+    'Asia/Shanghai',
+    'Asia/Kolkata',
+    'Asia/Dubai',
+    'Australia/Sydney',
+    'Pacific/Auckland',
   ];
 
   return (
@@ -107,12 +121,14 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
             { id: 'difference', label: 'Days Between', icon: <Calendar size={16} /> },
             { id: 'add_subtract', label: 'Add/Subtract', icon: <Plus size={16} /> },
             { id: 'timezone', label: 'Timezones', icon: <Clock size={16} /> },
-          ].map((m) => (
+          ].map(m => (
             <button
               key={m.id}
               onClick={() => setMode(m.id as any)}
               className={`flex-1 flex items-center justify-center space-x-2 py-4 text-sm font-bold transition-all ${
-                mode === m.id ? 'bg-slate-50 text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:bg-slate-50'
+                mode === m.id
+                  ? 'bg-slate-50 text-indigo-600 border-b-2 border-indigo-600'
+                  : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
               {m.icon}
@@ -126,20 +142,24 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
             <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Start Date</label>
+                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    Start Date
+                  </label>
                   <input
                     type="date"
                     value={date1}
-                    onChange={(e) => setDate1(e.target.value)}
+                    onChange={e => setDate1(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">End Date</label>
+                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    End Date
+                  </label>
                   <input
                     type="date"
                     value={date2}
-                    onChange={(e) => setDate2(e.target.value)}
+                    onChange={e => setDate2(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   />
                 </div>
@@ -152,10 +172,15 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                     { label: 'Weeks', value: diffResult.weeks },
                     { label: 'Months', value: diffResult.months },
                     { label: 'Years', value: diffResult.years },
-                  ].map((stat) => (
-                    <div key={stat.label} className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100 text-center">
+                  ].map(stat => (
+                    <div
+                      key={stat.label}
+                      className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100 text-center"
+                    >
                       <div className="text-2xl font-black text-indigo-600">{stat.value}</div>
-                      <div className="text-xs font-bold text-indigo-400 uppercase mt-1">{stat.label}</div>
+                      <div className="text-xs font-bold text-indigo-400 uppercase mt-1">
+                        {stat.label}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -164,11 +189,13 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
           ) : mode === 'add_subtract' ? (
             <div className="space-y-8">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Base Date</label>
+                <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                  Base Date
+                </label>
                 <input
                   type="date"
                   value={baseDate}
-                  onChange={(e) => setBaseDate(e.target.value)}
+                  onChange={e => setBaseDate(e.target.value)}
                   className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                 />
               </div>
@@ -178,9 +205,11 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                   { label: 'Years', value: years, setter: setYears },
                   { label: 'Months', value: months, setter: setMonths },
                   { label: 'Days', value: days, setter: setDays },
-                ].map((field) => (
+                ].map(field => (
                   <div key={field.label} className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest px-2">{field.label}</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest px-2">
+                      {field.label}
+                    </label>
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => field.setter(v => v - 1)}
@@ -191,7 +220,7 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
                       <input
                         type="number"
                         value={field.value}
-                        onChange={(e) => field.setter(parseInt(e.target.value) || 0)}
+                        onChange={e => field.setter(parseInt(e.target.value) || 0)}
                         className="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-center font-bold text-slate-900 outline-none"
                       />
                       <button
@@ -207,7 +236,9 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
 
               {addResult && (
                 <div className="bg-indigo-600 p-8 rounded-2xl text-center text-white shadow-lg shadow-indigo-200 animate-fade-in">
-                  <div className="text-sm font-bold text-indigo-200 uppercase tracking-[0.2em] mb-2">Calculated Date</div>
+                  <div className="text-sm font-bold text-indigo-200 uppercase tracking-[0.2em] mb-2">
+                    Calculated Date
+                  </div>
                   <div className="text-3xl font-black">{addResult}</div>
                 </div>
               )}
@@ -216,40 +247,58 @@ export const DateCalculator: React.FC<DateCalculatorProps> = ({ onBack }) => {
             <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Time (Local)</label>
+                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    Time (Local)
+                  </label>
                   <input
                     type="time"
                     value={time}
-                    onChange={(e) => setTime(e.target.value)}
+                    onChange={e => setTime(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-slate-900"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">From Timezone</label>
+                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    From Timezone
+                  </label>
                   <select
                     value={sourceTz}
-                    onChange={(e) => setSourceTz(e.target.value)}
+                    onChange={e => setSourceTz(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   >
-                    <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>Local ({Intl.DateTimeFormat().resolvedOptions().timeZone})</option>
-                    {commonTimezones.map(tz => <option key={tz} value={tz}>{tz}</option>)}
+                    <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>
+                      Local ({Intl.DateTimeFormat().resolvedOptions().timeZone})
+                    </option>
+                    {commonTimezones.map(tz => (
+                      <option key={tz} value={tz}>
+                        {tz}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">To Timezone</label>
+                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    To Timezone
+                  </label>
                   <select
                     value={targetTz}
-                    onChange={(e) => setTargetTz(e.target.value)}
+                    onChange={e => setTargetTz(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-slate-900"
                   >
-                    {commonTimezones.map(tz => <option key={tz} value={tz}>{tz}</option>)}
+                    {commonTimezones.map(tz => (
+                      <option key={tz} value={tz}>
+                        {tz}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
 
               {tzResult && (
                 <div className="bg-indigo-600 p-8 rounded-2xl text-center text-white shadow-lg shadow-indigo-200 animate-fade-in">
-                  <div className="text-sm font-bold text-indigo-200 uppercase tracking-[0.2em] mb-2">Time in {targetTz}</div>
+                  <div className="text-sm font-bold text-indigo-200 uppercase tracking-[0.2em] mb-2">
+                    Time in {targetTz}
+                  </div>
                   <div className="text-5xl font-black">{tzResult}</div>
                 </div>
               )}

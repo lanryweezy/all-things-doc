@@ -65,12 +65,17 @@ export const RandomGenerator: React.FC<RandomGeneratorProps> = ({ onBack }) => {
             { id: 'number', label: 'Number', icon: <Hash size={16} /> },
             { id: 'list', label: 'From List', icon: <List size={16} /> },
             { id: 'coin', label: 'Coin Flip', icon: <Disc size={16} /> },
-          ].map((m) => (
+          ].map(m => (
             <button
               key={m.id}
-              onClick={() => { setMode(m.id as any); setResult(null); }}
+              onClick={() => {
+                setMode(m.id as any);
+                setResult(null);
+              }}
               className={`flex-1 flex items-center justify-center space-x-2 py-4 text-sm font-bold transition-all ${
-                mode === m.id ? 'bg-slate-50 text-amber-600 border-b-2 border-amber-600' : 'text-slate-500 hover:bg-slate-50'
+                mode === m.id
+                  ? 'bg-slate-50 text-amber-600 border-b-2 border-amber-600'
+                  : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
               {m.icon}
@@ -84,7 +89,9 @@ export const RandomGenerator: React.FC<RandomGeneratorProps> = ({ onBack }) => {
             {result !== null ? (
               <div className="text-center animate-bounce-in">
                 <div className="text-8xl font-black text-amber-600">{result}</div>
-                <div className="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Random Result</div>
+                <div className="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Random Result
+                </div>
               </div>
             ) : (
               <div className="text-slate-300 text-lg italic">Ready to generate?</div>
@@ -99,7 +106,7 @@ export const RandomGenerator: React.FC<RandomGeneratorProps> = ({ onBack }) => {
                   <input
                     type="number"
                     value={min}
-                    onChange={(e) => setMin(e.target.value)}
+                    onChange={e => setMin(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none font-bold"
                   />
                 </div>
@@ -108,7 +115,7 @@ export const RandomGenerator: React.FC<RandomGeneratorProps> = ({ onBack }) => {
                   <input
                     type="number"
                     value={max}
-                    onChange={(e) => setMax(e.target.value)}
+                    onChange={e => setMax(e.target.value)}
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none font-bold"
                   />
                 </div>
@@ -118,13 +125,17 @@ export const RandomGenerator: React.FC<RandomGeneratorProps> = ({ onBack }) => {
             {mode === 'list' && (
               <textarea
                 value={list}
-                onChange={(e) => setList(e.target.value)}
+                onChange={e => setList(e.target.value)}
                 className="w-full h-40 p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none resize-none font-medium"
                 placeholder="Enter options (one per line)..."
               />
             )}
 
-            <Button onClick={generate} className="w-full bg-amber-600 py-6 text-lg font-black" icon={<RefreshCw size={20} />}>
+            <Button
+              onClick={generate}
+              className="w-full bg-amber-600 py-6 text-lg font-black"
+              icon={<RefreshCw size={20} />}
+            >
               GENERATE
             </Button>
           </div>

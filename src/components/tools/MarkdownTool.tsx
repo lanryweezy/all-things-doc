@@ -13,7 +13,9 @@ interface MarkdownToolProps {
 }
 
 export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
-  const [input, setInput] = useState('# Hello Markdown\n\nEdit this text to see the preview.\n\n- Lists\n- **Bold**\n- [Links](https://google.com)');
+  const [input, setInput] = useState(
+    '# Hello Markdown\n\nEdit this text to see the preview.\n\n- Lists\n- **Bold**\n- [Links](https://google.com)'
+  );
   const [view, setView] = useState<'edit' | 'preview' | 'split'>('split');
   const [copied, setCopied] = useState(false);
 
@@ -75,7 +77,7 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
           <div className="flex-1 flex flex-col min-w-0">
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               className="flex-grow w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-sm resize-none focus:ring-2 focus:ring-cyan-600 outline-none"
               placeholder="Type markdown here..."
             />
@@ -92,7 +94,11 @@ export const MarkdownTool: React.FC<MarkdownToolProps> = ({ onBack }) => {
       </div>
 
       <div className="mt-4 flex-shrink-0 flex justify-center space-x-4">
-        <Button onClick={handleCopy} variant="outline" icon={copied ? <Check size={18} /> : <Copy size={18} />}>
+        <Button
+          onClick={handleCopy}
+          variant="outline"
+          icon={copied ? <Check size={18} /> : <Copy size={18} />}
+        >
           {copied ? 'Copied!' : 'Copy Markdown'}
         </Button>
         <Button onClick={handleDownload} className="bg-slate-900" icon={<Download size={18} />}>
