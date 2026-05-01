@@ -87,7 +87,6 @@ export const HashGenerator: React.FC<HashGeneratorProps> = ({ onBack }) => {
               onChange={e => setAlgo(e.target.value)}
               className="w-full md:w-64 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-600 outline-none"
             >
-              <option value="SHA-1">SHA-1</option>
               <option value="SHA-256">SHA-256</option>
               <option value="SHA-384">SHA-384</option>
               <option value="SHA-512">SHA-512</option>

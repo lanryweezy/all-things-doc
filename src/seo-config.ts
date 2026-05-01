@@ -300,12 +300,12 @@ export const TOOL_SEO_DATA = {
   },
 
   [ToolID.HASH_GENERATOR]: {
-    title: 'Hash Generator - MD5, SHA256, SHA512 Online Free | All Things Doc',
+    title: 'Hash Generator - SHA256, SHA512 Online Free | All Things Doc',
     description:
-      'Generate MD5, SHA256, SHA512, and other hash values online for free. Create cryptographic hashes for text and files.',
+      'Generate secure SHA256, SHA512, and other cryptographic hash values online for free. Create secure hashes for text and files.',
     longDescription:
-      'Generate cryptographic hash values for text and files. Support for MD5, SHA1, SHA256, SHA512, and other popular hash algorithms. Perfect for data integrity verification and password hashing.',
-    h1: 'Hash Generator - MD5, SHA256, SHA512',
+      'Generate secure cryptographic hash values for text and files. Support for SHA256, SHA384, SHA512, and other secure hash algorithms. Perfect for data integrity verification and secure hashing.',
+    h1: 'Hash Generator - SHA256, SHA512',
     h2: 'Free Online Cryptographic Hash Tool',
   },
 
