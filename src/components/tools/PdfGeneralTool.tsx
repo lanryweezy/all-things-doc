@@ -209,7 +209,59 @@ export const PdfGeneralTool: React.FC<PdfGeneralToolProps> = ({ toolId, onBack }
             div.style.position = 'absolute';
             div.style.left = '-9999px';
             div.style.width = '800px';
-            div.innerHTML = paramValue;
+
+            // Sanitize HTML to prevent XSS before rendering for PDF
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(paramValue, 'text/html');
+
+            // 1. Remove all script tags
+            doc.querySelectorAll('script').forEach(s => s.remove());
+
+            // 2. Remove all event handlers and dangerous URI schemes
+            const allElements = doc.querySelectorAll('*');
+            allElements.forEach(el => {
+              const attrs = el.attributes;
+              for (let i = attrs.length - 1; i >= 0; i--) {
+                const attrName = attrs[i].name.toLowerCase();
+                if (attrName.startsWith('on')) {
+                  el.removeAttribute(attrName);
+                }
+              }
+
+              // Clean href and src of javascript: or other dangerous protocols
+              const dangerousProtocols = ['javascript:', 'data:', 'vbscript:'];
+              ['href', 'src', 'action', 'formaction', 'xlink:href'].forEach(attr => {
+                if (el.hasAttribute(attr)) {
+                  const val = el.getAttribute(attr)?.trim().toLowerCase() || '';
+                  if (dangerousProtocols.some(proto => val.startsWith(proto))) {
+                    el.removeAttribute(attr);
+                  }
+                }
+              });
+            });
+
+            // 3. Remove other dangerous elements
+            doc.querySelectorAll('iframe, object, embed, base, link, meta').forEach(el => el.remove());
+
+            // 4. Move sanitized head elements (like styles) and body elements to our rendering div
+            // We want to keep styles but avoid dangerous head elements like <base> or <meta>
+            const headElements = doc.head.childNodes;
+            for (let i = 0; i < headElements.length; i++) {
+              const node = headElements[i];
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const el = node as Element;
+                const tag = el.tagName.toLowerCase();
+                if (tag === 'style') {
+                  div.appendChild(el.cloneNode(true));
+                }
+              }
+            }
+
+            const bodyElements = doc.body.childNodes;
+            for (let i = 0; i < bodyElements.length; i++) {
+              div.appendChild(bodyElements[i].cloneNode(true));
+            }
+
             document.body.appendChild(div);
 
             const canvas = await html2canvas(div);
