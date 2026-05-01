@@ -29,15 +29,17 @@ export const FileHasher: React.FC<FileHasherProps> = ({ onBack }) => {
     setFile(f);
     try {
       const buffer = await f.arrayBuffer();
-      const hashResults: Record<string, string> = {};
       const algorithms = ['SHA-1', 'SHA-256', 'SHA-512'];
+      const hashResults: Record<string, string> = {};
 
-      for (const algo of algorithms) {
-        const hashBuffer = await crypto.subtle.digest(algo, buffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        hashResults[algo] = hashHex;
-      }
+      await Promise.all(
+        algorithms.map(async (algo) => {
+          const hashBuffer = await crypto.subtle.digest(algo, buffer);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+          hashResults[algo] = hashHex;
+        })
+      );
 
       setHashes(hashResults);
       showToast('Checksums calculated');
