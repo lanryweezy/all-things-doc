@@ -11,7 +11,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <button
           onClick={onBack}
-          className="flex items-center text-doc-red hover:text-red-700 mb-8 transition-colors"
+          className="flex items-center text-cyan-600 hover:text-cyan-700 mb-8 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
           Back to Tools

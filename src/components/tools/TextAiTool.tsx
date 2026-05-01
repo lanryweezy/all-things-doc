@@ -4,6 +4,8 @@ import { Button } from '../ui/Button';
 import { ResultDisplay } from '../ui/ResultDisplay';
 import { TOOLS, LANGUAGES, CODING_LANGUAGES } from '../../constants';
 import { ToolID } from '../../types';
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import * as GeminiService from '../../services/geminiService';
 
 interface TextAiToolProps {
@@ -62,11 +64,11 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
     if (toolId === ToolID.UNIVERSAL_TRANSLATOR) {
       return (
         <div className="mb-4">
-          <label className="block text-sm font-medium text-doc-slate mb-2">Target Language</label>
+          <label className="block text-sm font-medium text-slate-900 mb-2">Target Language</label>
           <select
             value={configValue}
             onChange={e => setConfigValue(e.target.value)}
-            className="w-full md:w-64 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-doc-red outline-none"
+            className="w-full md:w-64 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-600 outline-none"
           >
             {LANGUAGES.map(lang => (
               <option key={lang} value={lang}>
@@ -80,7 +82,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
     if (toolId === ToolID.CODE_MORPH) {
       return (
         <div className="mb-4">
-          <label className="block text-sm font-medium text-doc-slate mb-2">
+          <label className="block text-sm font-medium text-slate-900 mb-2">
             Convert to Language
           </label>
           <select
@@ -102,10 +104,11 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo} />
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -113,14 +116,14 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
           <div className={`p-2 rounded-lg ${toolInfo.bgColor}`}>
             <toolInfo.icon className={`w-6 h-6 ${toolInfo.color}`} />
           </div>
-          <h1 className="text-3xl font-bold text-doc-slate">{toolInfo.title}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{toolInfo.title}</h1>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-doc-slate mb-2">
+            <label className="block text-sm font-medium text-slate-900 mb-2">
               {toolId === ToolID.CODE_MORPH ? 'Paste Code Snippet' : 'Enter Text'}
             </label>
             <textarea
@@ -129,7 +132,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
                   ? 'focus:ring-amber-500'
                   : toolId === ToolID.UNIVERSAL_TRANSLATOR
                     ? 'focus:ring-purple-500'
-                    : 'focus:ring-doc-red'
+                    : 'focus:ring-cyan-600'
               }`}
               placeholder={
                 toolId === ToolID.CODE_MORPH
@@ -171,6 +174,7 @@ export const TextAiTool: React.FC<TextAiToolProps> = ({ toolId, onBack }) => {
           <ResultDisplay title="Result" content={result} isCode={toolId === ToolID.CODE_MORPH} />
         )}
       </div>
+      <AboutTool toolId={toolId} />
     </div>
   );
 };

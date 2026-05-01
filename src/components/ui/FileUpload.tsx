@@ -51,7 +51,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     return (
       <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 animate-fade-in relative overflow-hidden">
         <div className="flex items-start space-x-4">
-          <div className="w-12 h-12 bg-red-100 text-doc-red rounded-lg flex-shrink-0 flex items-center justify-center">
+          <div className="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-lg flex-shrink-0 flex items-center justify-center">
             <FileIcon size={24} />
           </div>
 
@@ -88,7 +88,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-2">
                   <div
-                    className="bg-doc-red h-2 rounded-full transition-all duration-300 ease-out"
+                    className="bg-cyan-600 h-2 rounded-full transition-all duration-300 ease-out"
                     style={{ width: `${processingProgress}%` }}
                   />
                 </div>
@@ -111,7 +111,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         flex flex-col items-center justify-center min-h-[200px]
         ${
           isDragging
-            ? 'border-doc-red bg-red-50 scale-[1.01]'
+            ? 'border-cyan-600 bg-cyan-50 scale-[1.01]'
             : 'border-slate-300 hover:border-red-300 hover:bg-slate-50'
         }
       `}
@@ -125,7 +125,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         capture={capture}
       />
       <div
-        className={`p-4 rounded-full mb-4 ${isDragging ? 'bg-red-100 text-doc-red' : 'bg-slate-100 text-slate-500'}`}
+        className={`p-4 rounded-full mb-4 ${isDragging ? 'bg-cyan-100 text-cyan-600' : 'bg-slate-100 text-slate-500'}`}
       >
         <UploadCloud size={32} />
       </div>

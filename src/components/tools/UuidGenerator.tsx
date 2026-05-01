@@ -1,3 +1,5 @@
+import { AboutTool } from '../ui/AboutTool';
+import { SeoHelmet } from '../SeoHelmet';
 import React, { useState } from 'react';
 import { ArrowLeft, Copy, Check, RefreshCw, Hash } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -65,10 +67,11 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <SeoHelmet tool={toolInfo as any} />
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="flex items-center text-slate-500 hover:text-doc-slate transition-colors mb-4"
+          className="flex items-center text-slate-500 hover:text-slate-900 transition-colors mb-4"
         >
           <ArrowLeft size={16} className="mr-1" /> Back to Tools
         </button>
@@ -81,7 +84,7 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
             )}
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-doc-slate">UUID Generator</h1>
+            <h1 className="text-3xl font-bold text-slate-900">UUID Generator</h1>
             <p className="text-slate-600">Generate Version 4 UUIDs instantly.</p>
           </div>
         </div>
@@ -91,7 +94,7 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
         {/* Settings Panel */}
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-            <h2 className="text-lg font-semibold text-doc-slate mb-4">Settings</h2>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Settings</h2>
 
             <div className="space-y-4">
               <div>
@@ -147,7 +150,7 @@ export const UuidGenerator: React.FC<UuidGeneratorProps> = ({ onBack }) => {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-doc-slate">Generated UUIDs</h2>
+              <h2 className="text-lg font-semibold text-slate-900">Generated UUIDs</h2>
               <Button
                 variant="outline"
                 size="sm"

@@ -4,13 +4,11 @@ import {
   compressPdf as backendCompressPdf,
   extractTextFromPdf as backendExtractTextFromPdf,
 } from './backendService';
-
-// Check if we have a backend available
-const BACKEND_AVAILABLE = !!import.meta.env.VITE_BACKEND_URL;
+import { isBackendAvailable } from './apiCheck';
 
 // Use backend for PDF operations if available, otherwise client-side
 export const mergePdfs = async (files: File[]): Promise<Blob> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendMergePdfs(files);
     } catch (error) {
@@ -33,7 +31,7 @@ export const mergePdfs = async (files: File[]): Promise<Blob> => {
 };
 
 export const splitPdf = async (file: File, splitPoints: number[]): Promise<Blob> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendSplitPdf(file, splitPoints);
     } catch (error) {
@@ -78,6 +76,18 @@ export const rotatePdf = async (file: File, rotation: number): Promise<Uint8Arra
   });
 
   return await pdfDoc.save();
+};
+
+export const reorderPdfPages = async (file: File, pageIndices: number[]): Promise<Uint8Array> => {
+  const { PDFDocument } = await import('pdf-lib');
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const newPdf = await PDFDocument.create();
+
+  const copiedPages = await newPdf.copyPages(pdfDoc, pageIndices);
+  copiedPages.forEach(page => newPdf.addPage(page));
+
+  return await newPdf.save();
 };
 
 export const imageToPdf = async (file: File): Promise<Uint8Array> => {
@@ -201,7 +211,7 @@ export const watermarkPdf = async (file: File, text: string): Promise<Uint8Array
 };
 
 export const compressPdf = async (file: File): Promise<Blob> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendCompressPdf(file);
     } catch (error) {
@@ -209,15 +219,21 @@ export const compressPdf = async (file: File): Promise<Blob> => {
         'Backend PDF compression failed, falling back to client-side processing:',
         error
       );
-      throw error;
     }
   }
 
-  throw new Error('Backend service not available and client-side processing not implemented');
+  // Basic Client-side "Compression" by re-saving with optimization
+  const { PDFDocument } = await import('pdf-lib');
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+  // pdf-lib's save() performs basic optimization by default
+  const pdfBytes = await pdfDoc.save();
+  return new Blob([pdfBytes], { type: 'application/pdf' });
 };
 
 export const extractTextFromPdf = async (file: File): Promise<string> => {
-  if (BACKEND_AVAILABLE) {
+  if (isBackendAvailable()) {
     try {
       return await backendExtractTextFromPdf(file);
     } catch (error) {
@@ -244,4 +260,55 @@ export const extractTextFromPdf = async (file: File): Promise<string> => {
   }
 
   return fullText;
+};
+
+export const wordToText = async (file: File): Promise<string> => {
+  const mammoth = await import('mammoth');
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+  return result.value;
+};
+
+export const excelToCsv = async (file: File): Promise<string> => {
+  const XLSX = await import('xlsx');
+  const arrayBuffer = await file.arrayBuffer();
+  const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+  const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+  return XLSX.utils.sheet_to_csv(worksheet);
+};
+
+export const pdfToImages = async (file: File, format: 'jpeg' | 'png' = 'jpeg'): Promise<Blob[]> => {
+  const pdfjs = await import('pdfjs-dist');
+  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+
+  const arrayBuffer = await file.arrayBuffer();
+  const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+  const pdf = await loadingTask.promise;
+  const images: Blob[] = [];
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const viewport = page.getViewport({ scale: 2.0 });
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) continue;
+
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    await page.render({
+      canvasContext: context,
+      viewport: viewport,
+    }).promise;
+
+    const blob = await new Promise<Blob | null>(resolve =>
+      canvas.toBlob(resolve, `image/${format}`, 0.95)
+    );
+
+    if (blob) images.push(blob);
+  }
+
+  return images;
 };
