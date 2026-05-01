@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest';
-
-// Fix relative paths - src/test/tools.test.ts to src/constants.ts is just ../constants
 import { TOOLS } from '../constants';
 import { ToolID } from '../types';
+import { processPdf } from '../services/geminiService';
 
 describe('Tool Registry', () => {
   it('should have File Hasher registered', () => {
@@ -15,8 +14,6 @@ describe('Tool Registry', () => {
     expect(TOOLS[ToolID.JWT_DECODER].title).toBe('JWT Decoder');
   });
 });
-
-import { processPdf } from '../services/geminiService';
 
 describe('Gemini Service', () => {
   it('should export processPdf function', () => {
