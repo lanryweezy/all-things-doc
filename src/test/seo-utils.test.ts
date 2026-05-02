@@ -46,18 +46,18 @@ describe('SEO Utils', () => {
     });
 
     it('should include tool title in keywords', () => {
-      const keywords = generateMetaKeywords(ToolID.JWT_DECODER);
+      const keywords = generateMetaKeywords(ToolID.JWT_SECRET_GENERATOR);
       expect(keywords).toContain('jwt');
-      expect(keywords).toContain('decoder');
+      expect(keywords).toContain('secret');
     });
 
     it('should include additional keywords', () => {
-      const keywords = generateMetaKeywords(ToolID.JWT_DECODER, ['custom-keyword']);
+      const keywords = generateMetaKeywords(ToolID.JWT_SECRET_GENERATOR, ['custom-keyword']);
       expect(keywords).toContain('custom-keyword');
     });
 
     it('should deduplicate keywords', () => {
-      const keywords = generateMetaKeywords(ToolID.JWT_DECODER, ['jwt', 'decoder']);
+      const keywords = generateMetaKeywords(ToolID.JWT_SECRET_GENERATOR, ['jwt', 'secret']);
       const jwtOccurrences = keywords.filter(k => k === 'jwt').length;
       expect(jwtOccurrences).toBe(1);
     });

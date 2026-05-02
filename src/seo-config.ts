@@ -1,6 +1,8 @@
 // SEO Optimization for All Things Doc Tools
 // This file contains SEO-optimized titles and descriptions for each tool
 
+import { ToolID } from './types';
+
 export const TOOL_SEO_DATA = {
   // AI Intelligence Tools
   [ToolID.CHAT_WITH_DOC]: {
