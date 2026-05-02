@@ -10,7 +10,7 @@ describe('Button Component', () => {
 
   it('applies correct variant classes', () => {
     const { container } = render(<Button variant="primary">Primary Button</Button>);
-    expect(container.firstChild).toHaveClass('bg-doc-red');
+    expect(container.firstChild).toHaveClass('bg-cyan-600');
   });
 
   it('handles click events', () => {

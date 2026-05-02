@@ -223,7 +223,6 @@ const TermsOfUse = lazy(() =>
 const Sitemap = lazy(() =>
   import('./components/legal/Sitemap').then(module => ({ default: module.Sitemap }))
 );
-const PricingPage = lazy(() => import('./components/pages/PricingPage'));
 
 // Loading fallback
 const PageLoader = () => (
